@@ -1,0 +1,368 @@
+CC1:
+
+Registers:
+$0: 0
+$1: 9
+$2: 8
+$3: 7
+$4: 1
+$5: 2
+$6: 3
+$7: 4
+$8: 5
+$9: 6
+
+Data memory:
+0x00: 5
+0x04: 9
+0x08: 4
+0x0C: 8
+0x10: 7
+
+IF/ID :
+PC		4
+Instruction	00000000011001100001000000100010
+
+ID/EX :
+ReadData1	0
+ReadData2	0
+sign_ext	0
+Rs		0
+Rt		0
+Rd		0
+Control Signals	000000000
+
+EX/MEM :
+ALUout		0
+WriteData	0
+Rt/Rd		0
+Control Signals	00000
+
+MEM/WB :
+ReadData	0
+ALUout		0
+Rt/Rd		0
+Control Signals	00
+=================================================================
+CC2:
+
+Registers:
+$0: 0
+$1: 9
+$2: 8
+$3: 7
+$4: 1
+$5: 2
+$6: 3
+$7: 4
+$8: 5
+$9: 6
+
+Data memory:
+0x00: 5
+0x04: 9
+0x08: 4
+0x0C: 8
+0x10: 7
+
+IF/ID :
+PC		8
+Instruction	00000000010001100100100000100000
+
+ID/EX :
+ReadData1	7
+ReadData2	3
+sign_ext	4130
+Rs		3
+Rt		6
+Rd		2
+Control Signals	110000010
+
+EX/MEM :
+ALUout		0
+WriteData	0
+Rt/Rd		0
+Control Signals	00000
+
+MEM/WB :
+ReadData	0
+ALUout		0
+Rt/Rd		0
+Control Signals	00
+=================================================================
+CC3:
+
+Registers:
+$0: 0
+$1: 9
+$2: 8
+$3: 7
+$4: 1
+$5: 2
+$6: 3
+$7: 4
+$8: 5
+$9: 6
+
+Data memory:
+0x00: 5
+0x04: 9
+0x08: 4
+0x0C: 8
+0x10: 7
+
+IF/ID :
+PC		12
+Instruction	10101100010001010000000000000100
+
+ID/EX :
+ReadData1	8
+ReadData2	3
+sign_ext	18464
+Rs		2
+Rt		6
+Rd		9
+Control Signals	110000010
+
+EX/MEM :
+ALUout		4
+WriteData	3
+Rt/Rd		2
+Control Signals	00010
+
+MEM/WB :
+ReadData	0
+ALUout		0
+Rt/Rd		0
+Control Signals	00
+=================================================================
+CC4:
+
+Registers:
+$0: 0
+$1: 9
+$2: 8
+$3: 7
+$4: 1
+$5: 2
+$6: 3
+$7: 4
+$8: 5
+$9: 6
+
+Data memory:
+0x00: 5
+0x04: 9
+0x08: 4
+0x0C: 8
+0x10: 7
+
+IF/ID :
+PC		16
+Instruction	00000000010010010001100000101010
+
+ID/EX :
+ReadData1	8
+ReadData2	2
+sign_ext	4
+Rs		2
+Rt		5
+Rd		0
+Control Signals	000100100
+
+EX/MEM :
+ALUout		7
+WriteData	3
+Rt/Rd		9
+Control Signals	00010
+
+MEM/WB :
+ReadData	0
+ALUout		4
+Rt/Rd		2
+Control Signals	10
+=================================================================
+CC5:
+
+Registers:
+$0: 0
+$1: 9
+$2: 4
+$3: 7
+$4: 1
+$5: 2
+$6: 3
+$7: 4
+$8: 5
+$9: 6
+
+Data memory:
+0x00: 5
+0x04: 9
+0x08: 4
+0x0C: 8
+0x10: 7
+
+IF/ID :
+PC		20
+Instruction	00000000000000000000000000000000
+
+ID/EX :
+ReadData1	4
+ReadData2	6
+sign_ext	6186
+Rs		2
+Rt		9
+Rd		3
+Control Signals	110000010
+
+EX/MEM :
+ALUout		8
+WriteData	2
+Rt/Rd		5
+Control Signals	00100
+
+MEM/WB :
+ReadData	0
+ALUout		7
+Rt/Rd		9
+Control Signals	10
+=================================================================
+CC6:
+
+Registers:
+$0: 0
+$1: 9
+$2: 4
+$3: 7
+$4: 1
+$5: 2
+$6: 3
+$7: 4
+$8: 5
+$9: 7
+
+Data memory:
+0x00: 5
+0x04: 9
+0x08: 2
+0x0C: 8
+0x10: 7
+
+IF/ID :
+PC		24
+Instruction	00000000000000000000000000000000
+
+ID/EX :
+ReadData1	0
+ReadData2	0
+sign_ext	0
+Rs		0
+Rt		0
+Rd		0
+Control Signals	000000000
+
+EX/MEM :
+ALUout		1
+WriteData	7
+Rt/Rd		3
+Control Signals	00010
+
+MEM/WB :
+ReadData	0
+ALUout		8
+Rt/Rd		5
+Control Signals	00
+=================================================================
+CC7:
+
+Registers:
+$0: 0
+$1: 9
+$2: 4
+$3: 7
+$4: 1
+$5: 2
+$6: 3
+$7: 4
+$8: 5
+$9: 7
+
+Data memory:
+0x00: 5
+0x04: 9
+0x08: 2
+0x0C: 8
+0x10: 7
+
+IF/ID :
+PC		28
+Instruction	00000000000000000000000000000000
+
+ID/EX :
+ReadData1	0
+ReadData2	0
+sign_ext	0
+Rs		0
+Rt		0
+Rd		0
+Control Signals	000000000
+
+EX/MEM :
+ALUout		0
+WriteData	0
+Rt/Rd		0
+Control Signals	00000
+
+MEM/WB :
+ReadData	0
+ALUout		1
+Rt/Rd		3
+Control Signals	10
+=================================================================
+CC8:
+
+Registers:
+$0: 0
+$1: 9
+$2: 4
+$3: 1
+$4: 1
+$5: 2
+$6: 3
+$7: 4
+$8: 5
+$9: 7
+
+Data memory:
+0x00: 5
+0x04: 9
+0x08: 2
+0x0C: 8
+0x10: 7
+
+IF/ID :
+PC		32
+Instruction	00000000000000000000000000000000
+
+ID/EX :
+ReadData1	0
+ReadData2	0
+sign_ext	0
+Rs		0
+Rt		0
+Rd		0
+Control Signals	000000000
+
+EX/MEM :
+ALUout		0
+WriteData	0
+Rt/Rd		0
+Control Signals	00000
+
+MEM/WB :
+ReadData	0
+ALUout		0
+Rt/Rd		0
+Control Signals	00
+=================================================================
