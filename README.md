@@ -13,3 +13,5 @@ This is the assignment of *Computer Organization* in NCU CSIE, Taiwan.
 (from course *Computer Organization* in NCU CSIE)
 * [105-2 Computer Organization MIPS Simulator Homework](COHW105-pipeline_ver2.pdf) (Traditional Chinese)
 * [Output Description](COHW105-pipeline_ver2.pdf) (Traditional Chinese)
+## Installation
+Compile [104502551_pipeline.cpp](104502551_pipeline.cpp).
