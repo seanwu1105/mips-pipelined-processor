@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
 }
 
 group 'io.github.seanwu1105'
@@ -17,3 +18,12 @@ dependencies {
     implementation 'org.jetbrains:annotations:16.0.2'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.6.0'
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport
