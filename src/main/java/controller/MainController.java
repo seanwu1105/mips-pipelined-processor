@@ -30,5 +30,9 @@ public class MainController {
         AluOp(@NotNull String raw) {
             this.raw = raw;
         }
+
+        public @NotNull String getRaw() {
+            return raw;
+        }
     }
 }

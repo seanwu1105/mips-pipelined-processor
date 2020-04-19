@@ -18,11 +18,21 @@ public class Instruction {
         return raw.length() == 32;
     }
 
+    @NotNull
     public OpCode getOpCode() {
         for (OpCode opCode : OpCode.values())
             if (opCode.getRaw().equals(raw.substring(0, 6)))
                 return opCode;
 
         throw new IllegalStateException("Unknown OP code.");
+    }
+
+    @NotNull
+    public FunctionCode getFunctionCode() {
+        for (FunctionCode functionCode : FunctionCode.values())
+            if (functionCode.getRaw().equals(raw.substring(26, 32)))
+                return functionCode;
+
+        throw new IllegalStateException("Unknown function code.");
     }
 }
