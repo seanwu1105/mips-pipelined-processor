@@ -8,6 +8,7 @@ import signal.Signal;
 public class MainController {
     private Instruction instruction;
 
+    @NotNull
     public AluOperation getAluOperation() {
         switch (instruction.getOpCode()) {
             case LOAD_WORD:
@@ -20,42 +21,49 @@ public class MainController {
         }
     }
 
+    @NotNull
     public AluSource getAluSource() {
         if (getAluOperation() == AluOperation.MEMORY_REFERENCE)
             return AluSource.IMMEDIATE;
         return AluSource.REGISTER;
     }
 
+    @NotNull
     public MemoryRead getMemoryRead() {
         if (instruction.getOpCode() == OpCode.LOAD_WORD)
             return MemoryRead.TRUE;
         return MemoryRead.FALSE;
     }
 
+    @NotNull
     public MemoryWrite getMemoryWrite() {
         if (instruction.getOpCode() == OpCode.SAVE_WORD)
             return MemoryWrite.TRUE;
         return MemoryWrite.FALSE;
     }
 
+    @NotNull
     public MemoryToRegister getMemoryToRegister() {
         if (instruction.getOpCode() == OpCode.LOAD_WORD)
             return MemoryToRegister.FROM_MEMORY;
         return MemoryToRegister.FROM_ALU_RESULT;
     }
 
+    @NotNull
     public RegisterDestination getRegisterDestination() {
         if (getAluOperation() == AluOperation.R_TYPE)
             return RegisterDestination.RD;
         return RegisterDestination.RT;
     }
 
+    @NotNull
     public RegisterWrite getRegisterWrite() {
         if (instruction.getOpCode() == OpCode.BRANCH_ON_EQUAL || instruction.getOpCode() == OpCode.SAVE_WORD)
             return RegisterWrite.FALSE;
         return RegisterWrite.TRUE;
     }
 
+    @NotNull
     public Branch getBranch() {
         if (getAluOperation() == AluOperation.BRANCH)
             return Branch.TRUE;
@@ -64,10 +72,6 @@ public class MainController {
 
     public void setInstruction(Instruction instruction) {
         this.instruction = instruction;
-    }
-
-    public Instruction getInstruction() {
-        return instruction;
     }
 
     public enum AluOperation implements Signal {

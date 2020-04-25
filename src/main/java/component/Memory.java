@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class Memory {
 
+    @NotNull
     private final Map<Integer, Integer> data = new HashMap<>();
     private int address;
 
