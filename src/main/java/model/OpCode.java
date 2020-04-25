@@ -16,7 +16,9 @@ public enum OpCode implements Signal {
         this.raw = raw.replaceAll("\\s", "");
     }
 
-    public @NotNull String getRaw() {
+    @NotNull
+    @Override
+    public String getRaw() {
         return raw;
     }
 }

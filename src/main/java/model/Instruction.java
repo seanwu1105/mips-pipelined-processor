@@ -19,6 +19,7 @@ public class Instruction implements Signal {
     }
 
     @NotNull
+    @Override
     public String getRaw() {
         return raw;
     }

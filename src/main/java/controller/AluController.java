@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 public class AluController {
 
     @NotNull
-    static public AluControl getAluControl(MainController.AluOp aluOp, FunctionCode functionCode) {
-        switch (aluOp) {
+    static public AluControl getAluControl(MainController.AluOperation aluOperation, FunctionCode functionCode) {
+        switch (aluOperation) {
             case R_TYPE:
                 switch (functionCode) {
                     case ADD:

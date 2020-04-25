@@ -17,6 +17,7 @@ public enum AluControl implements Signal {
     }
 
     @NotNull
+    @Override
     public String getRaw() {
         return raw;
     }

@@ -16,7 +16,9 @@ public enum FunctionCode implements Signal {
         this.raw = raw;
     }
 
-    public @NotNull String getRaw() {
+    @NotNull
+    @Override
+    public String getRaw() {
         return raw;
     }
 }

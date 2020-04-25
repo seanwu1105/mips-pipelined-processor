@@ -4,7 +4,7 @@ import model.AluControl;
 import model.FunctionCode;
 import org.junit.jupiter.api.Test;
 
-import static controller.MainController.AluOp.*;
+import static controller.MainController.AluOperation.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AluControllerTest {
