@@ -3,39 +3,31 @@ package component;
 import org.jetbrains.annotations.NotNull;
 import signal.Signal;
 
-public class Alu implements Component {
+public class Alu {
 
     @NotNull
     private AluControl control = AluControl.ADD;
-    private int operand1, operand2, result;
+    private int operand1, operand2;
 
     public void setControl(@NotNull AluControl control) {
         this.control = control;
     }
 
-    @Override
-    public void run() {
+    public int getResult() {
         switch (control) {
             case ADD:
-                result = operand1 + operand2;
-                break;
+                return operand1 + operand2;
             case SUBTRACT:
-                result = operand1 - operand2;
-                break;
+                return operand1 - operand2;
             case AND:
-                result = operand1 & operand2;
-                break;
+                return operand1 & operand2;
             case OR:
-                result = operand1 | operand2;
-                break;
+                return operand1 | operand2;
             case SET_ON_LESS_THAN:
-                result = operand1 < operand2 ? 1 : 0;
-                break;
+                return operand1 < operand2 ? 1 : 0;
+            default:
+                throw new IllegalStateException("Unknown ALU control.");
         }
-    }
-
-    public int getResult() {
-        return result;
     }
 
     public void setOperand1(int operand1) {
