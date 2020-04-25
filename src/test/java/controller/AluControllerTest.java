@@ -1,6 +1,6 @@
 package controller;
 
-import signal.AluControl;
+import component.Alu;
 import signal.FunctionCode;
 import org.junit.jupiter.api.Test;
 
@@ -11,13 +11,13 @@ public class AluControllerTest {
 
     @Test
     void testGetAluControl() {
-        assertEquals(AluControl.ADD, AluController.getAluControl(R_TYPE, FunctionCode.ADD));
-        assertEquals(AluControl.SUBTRACT, AluController.getAluControl(R_TYPE, FunctionCode.SUBTRACT));
-        assertEquals(AluControl.AND, AluController.getAluControl(R_TYPE, FunctionCode.AND));
-        assertEquals(AluControl.OR, AluController.getAluControl(R_TYPE, FunctionCode.OR));
-        assertEquals(AluControl.SET_ON_LESS_THAN, AluController.getAluControl(R_TYPE, FunctionCode.SET_ON_LESS_THAN));
-        assertEquals(AluControl.ADD, AluController.getAluControl(MEMORY_REFERENCE, FunctionCode.OR /* don't care */));
-        assertEquals(AluControl.ADD, AluController.getAluControl(MEMORY_REFERENCE, FunctionCode.OR /* don't care */));
-        assertEquals(AluControl.SUBTRACT, AluController.getAluControl(BRANCH, FunctionCode.OR /* don't care */));
+        assertEquals(Alu.AluControl.ADD, AluController.getAluControl(R_TYPE, FunctionCode.ADD));
+        assertEquals(Alu.AluControl.SUBTRACT, AluController.getAluControl(R_TYPE, FunctionCode.SUBTRACT));
+        assertEquals(Alu.AluControl.AND, AluController.getAluControl(R_TYPE, FunctionCode.AND));
+        assertEquals(Alu.AluControl.OR, AluController.getAluControl(R_TYPE, FunctionCode.OR));
+        assertEquals(Alu.AluControl.SET_ON_LESS_THAN, AluController.getAluControl(R_TYPE, FunctionCode.SET_ON_LESS_THAN));
+        assertEquals(Alu.AluControl.ADD, AluController.getAluControl(MEMORY_REFERENCE, FunctionCode.OR /* don't care */));
+        assertEquals(Alu.AluControl.ADD, AluController.getAluControl(MEMORY_REFERENCE, FunctionCode.OR /* don't care */));
+        assertEquals(Alu.AluControl.SUBTRACT, AluController.getAluControl(BRANCH, FunctionCode.OR /* don't care */));
     }
 }

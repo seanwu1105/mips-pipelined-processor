@@ -1,6 +1,6 @@
 package component;
 
-public class ProgramCounter {
+public class ProgramCounter implements Component {
 
     private int counter = 0;
 
@@ -10,5 +10,9 @@ public class ProgramCounter {
 
     public void setCounter(int counter) {
         this.counter = counter;
+    }
+
+    @Override
+    public void run() {
     }
 }
