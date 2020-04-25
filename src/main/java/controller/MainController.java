@@ -1,8 +1,8 @@
 package controller;
 
-import model.Instruction;
-import model.OpCode;
-import model.Signal;
+import signal.Instruction;
+import signal.OpCode;
+import signal.Signal;
 import org.jetbrains.annotations.NotNull;
 
 public class MainController {

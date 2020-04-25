@@ -1,7 +1,7 @@
 package controller;
 
-import model.AluControl;
-import model.FunctionCode;
+import signal.AluControl;
+import signal.FunctionCode;
 import org.junit.jupiter.api.Test;
 
 import static controller.MainController.AluOperation.*;

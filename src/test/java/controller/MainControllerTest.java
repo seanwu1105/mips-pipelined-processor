@@ -1,6 +1,6 @@
 package controller;
 
-import model.Instruction;
+import signal.Instruction;
 import org.junit.jupiter.api.Test;
 
 import static controller.MainController.AluOperation.*;

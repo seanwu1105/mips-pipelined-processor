@@ -1,9 +1,9 @@
-package model;
+package signal;
 
 import org.junit.jupiter.api.Test;
 
-import static model.FunctionCode.*;
-import static model.OpCode.*;
+import static signal.FunctionCode.*;
+import static signal.OpCode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

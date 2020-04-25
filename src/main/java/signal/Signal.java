@@ -1,4 +1,4 @@
-package model;
+package signal;
 
 public interface Signal {
     String getRaw();
