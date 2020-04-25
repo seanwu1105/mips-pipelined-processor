@@ -2,7 +2,7 @@ package model;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum AluControl {
+public enum AluControl implements Signal {
     AND("000"),
     OR("001"),
     ADD("010"),

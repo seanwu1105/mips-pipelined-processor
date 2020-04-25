@@ -2,7 +2,7 @@ package model;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum FunctionCode {
+public enum FunctionCode implements Signal {
     ADD("100000"),
     SUBTRACT("100010"),
     AND("100100"),

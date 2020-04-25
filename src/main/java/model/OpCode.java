@@ -2,7 +2,7 @@ package model;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum OpCode {
+public enum OpCode implements Signal {
     R_TYPE("000000"),
     LOAD_WORD("100011"),
     SAVE_WORD("101011"),

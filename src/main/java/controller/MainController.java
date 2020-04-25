@@ -1,6 +1,7 @@
 package controller;
 
 import model.Instruction;
+import model.Signal;
 import org.jetbrains.annotations.NotNull;
 
 public class MainController {
@@ -19,7 +20,7 @@ public class MainController {
         }
     }
 
-    public enum AluOp {
+    public enum AluOp implements Signal {
         R_TYPE("10"),
         MEMORY_REFERENCE("00"),
         BRANCH("01");

@@ -2,7 +2,7 @@ package model;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Instruction {
+public class Instruction implements Signal {
 
     @NotNull
     private final String raw;
@@ -16,6 +16,11 @@ public class Instruction {
 
     private boolean isLengthCorrect() {
         return raw.length() == 32;
+    }
+
+    @NotNull
+    public String getRaw() {
+        return raw;
     }
 
     @NotNull
