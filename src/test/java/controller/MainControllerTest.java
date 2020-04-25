@@ -1,7 +1,8 @@
 package controller;
 
-import signal.Instruction;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import signal.Instruction;
 
 import static controller.MainController.AluOperation.*;
 import static controller.MainController.AluSource.IMMEDIATE;
@@ -14,80 +15,117 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MainControllerTest {
 
-    final String add_signal = "000000 00000000000000000000 100000";
-    final String subtract_signal = "000000 00000000000000000000 100010";
-    final String load_word_signal = "100011 00000000000000000000 000000";
-    final String save_word_signal = "101011 00000000000000000000 000000";
-    final String branch_on_equal_signal = "000100 00000000000000000000 000000";
+    private final Instruction add_signal = new Instruction("000000 00000000000000000000 100000");
+    private final Instruction subtract_signal = new Instruction("000000 00000000000000000000 100010");
+    private final Instruction load_word_signal = new Instruction("100011 00000000000000000000 000000");
+    private final Instruction save_word_signal = new Instruction("101011 00000000000000000000 000000");
+    private final Instruction branch_on_equal_signal = new Instruction("000100 00000000000000000000 000000");
+    private MainController mainController;
+
+    @BeforeEach
+    void buildUp() {
+        mainController = new MainController();
+    }
 
     @Test
     void testGetAluOp() {
-        Instruction instruction = new Instruction(add_signal);
-        assertEquals(R_TYPE, new MainController(instruction).getAluOperation());
-        instruction = new Instruction(load_word_signal);
-        assertEquals(MEMORY_REFERENCE, new MainController(instruction).getAluOperation());
-        instruction = new Instruction(save_word_signal);
-        assertEquals(MEMORY_REFERENCE, new MainController(instruction).getAluOperation());
-        instruction = new Instruction(branch_on_equal_signal);
-        assertEquals(BRANCH, new MainController(instruction).getAluOperation());
+        mainController.setInstruction(add_signal);
+        assertEquals(R_TYPE, mainController.getAluOperation());
+        mainController.setInstruction(load_word_signal);
+        assertEquals(MEMORY_REFERENCE, mainController.getAluOperation());
+        mainController.setInstruction(save_word_signal);
+        assertEquals(MEMORY_REFERENCE, mainController.getAluOperation());
+        mainController.setInstruction(branch_on_equal_signal);
+        assertEquals(BRANCH, mainController.getAluOperation());
     }
 
     @Test
     void testGetAluSource() {
-        assertEquals(REGISTER, new MainController(new Instruction(add_signal)).getAluSource());
-        assertEquals(REGISTER, new MainController(new Instruction(subtract_signal)).getAluSource());
-        assertEquals(IMMEDIATE, new MainController(new Instruction(load_word_signal)).getAluSource());
-        assertEquals(IMMEDIATE, new MainController(new Instruction(save_word_signal)).getAluSource());
-        assertEquals(REGISTER, new MainController(new Instruction(branch_on_equal_signal)).getAluSource());
+        mainController.setInstruction(add_signal);
+        assertEquals(REGISTER, mainController.getAluSource());
+        mainController.setInstruction(subtract_signal);
+        assertEquals(REGISTER, mainController.getAluSource());
+        mainController.setInstruction(load_word_signal);
+        assertEquals(IMMEDIATE, mainController.getAluSource());
+        mainController.setInstruction(save_word_signal);
+        assertEquals(IMMEDIATE, mainController.getAluSource());
+        mainController.setInstruction(branch_on_equal_signal);
+        assertEquals(REGISTER, mainController.getAluSource());
     }
 
     @Test
     void testGetMemoryRead() {
-        assertEquals(MainController.MemoryRead.FALSE, new MainController(new Instruction(add_signal)).getMemoryRead());
-        assertEquals(MainController.MemoryRead.FALSE, new MainController(new Instruction(subtract_signal)).getMemoryRead());
-        assertEquals(MainController.MemoryRead.TRUE, new MainController(new Instruction(load_word_signal)).getMemoryRead());
-        assertEquals(MainController.MemoryRead.FALSE, new MainController(new Instruction(save_word_signal)).getMemoryRead());
-        assertEquals(MainController.MemoryRead.FALSE, new MainController(new Instruction(branch_on_equal_signal)).getMemoryRead());
+        mainController.setInstruction(add_signal);
+        assertEquals(MainController.MemoryRead.FALSE, mainController.getMemoryRead());
+        mainController.setInstruction(subtract_signal);
+        assertEquals(MainController.MemoryRead.FALSE, mainController.getMemoryRead());
+        mainController.setInstruction(load_word_signal);
+        assertEquals(MainController.MemoryRead.TRUE, mainController.getMemoryRead());
+        mainController.setInstruction(save_word_signal);
+        assertEquals(MainController.MemoryRead.FALSE, mainController.getMemoryRead());
+        mainController.setInstruction(branch_on_equal_signal);
+        assertEquals(MainController.MemoryRead.FALSE, mainController.getMemoryRead());
     }
 
     @Test
     void testGetMemoryWrite() {
-        assertEquals(MainController.MemoryWrite.FALSE, new MainController(new Instruction(add_signal)).getMemoryWrite());
-        assertEquals(MainController.MemoryWrite.FALSE, new MainController(new Instruction(subtract_signal)).getMemoryWrite());
-        assertEquals(MainController.MemoryWrite.FALSE, new MainController(new Instruction(load_word_signal)).getMemoryWrite());
-        assertEquals(MainController.MemoryWrite.TRUE, new MainController(new Instruction(save_word_signal)).getMemoryWrite());
-        assertEquals(MainController.MemoryWrite.FALSE, new MainController(new Instruction(branch_on_equal_signal)).getMemoryWrite());
+        mainController.setInstruction(add_signal);
+        assertEquals(MainController.MemoryWrite.FALSE, mainController.getMemoryWrite());
+        mainController.setInstruction(subtract_signal);
+        assertEquals(MainController.MemoryWrite.FALSE, mainController.getMemoryWrite());
+        mainController.setInstruction(load_word_signal);
+        assertEquals(MainController.MemoryWrite.FALSE, mainController.getMemoryWrite());
+        mainController.setInstruction(save_word_signal);
+        assertEquals(MainController.MemoryWrite.TRUE, mainController.getMemoryWrite());
+        mainController.setInstruction(branch_on_equal_signal);
+        assertEquals(MainController.MemoryWrite.FALSE, mainController.getMemoryWrite());
     }
 
     @Test
     void testGetMemoryToRegister() {
-        assertEquals(FROM_ALU_RESULT, new MainController(new Instruction(add_signal)).getMemoryToRegister());
-        assertEquals(FROM_ALU_RESULT, new MainController(new Instruction(subtract_signal)).getMemoryToRegister());
-        assertEquals(FROM_MEMORY, new MainController(new Instruction(load_word_signal)).getMemoryToRegister());
+        mainController.setInstruction(add_signal);
+        assertEquals(FROM_ALU_RESULT, mainController.getMemoryToRegister());
+        mainController.setInstruction(subtract_signal);
+        assertEquals(FROM_ALU_RESULT, mainController.getMemoryToRegister());
+        mainController.setInstruction(load_word_signal);
+        assertEquals(FROM_MEMORY, mainController.getMemoryToRegister());
     }
 
     @Test
     void testGetRegisterDestination() {
-        assertEquals(RD, new MainController(new Instruction(add_signal)).getRegisterDestination());
-        assertEquals(RD, new MainController(new Instruction(subtract_signal)).getRegisterDestination());
-        assertEquals(RT, new MainController(new Instruction(load_word_signal)).getRegisterDestination());
+        mainController.setInstruction(add_signal);
+        assertEquals(RD, mainController.getRegisterDestination());
+        mainController.setInstruction(subtract_signal);
+        assertEquals(RD, mainController.getRegisterDestination());
+        mainController.setInstruction(load_word_signal);
+        assertEquals(RT, mainController.getRegisterDestination());
     }
 
     @Test
     void testGetRegisterWrite() {
-        assertEquals(MainController.RegisterWrite.TRUE, new MainController(new Instruction(add_signal)).getRegisterWrite());
-        assertEquals(MainController.RegisterWrite.TRUE, new MainController(new Instruction(subtract_signal)).getRegisterWrite());
-        assertEquals(MainController.RegisterWrite.TRUE, new MainController(new Instruction(load_word_signal)).getRegisterWrite());
-        assertEquals(MainController.RegisterWrite.FALSE, new MainController(new Instruction(save_word_signal)).getRegisterWrite());
-        assertEquals(MainController.RegisterWrite.FALSE, new MainController(new Instruction(branch_on_equal_signal)).getRegisterWrite());
+        mainController.setInstruction(add_signal);
+        assertEquals(MainController.RegisterWrite.TRUE, mainController.getRegisterWrite());
+        mainController.setInstruction(subtract_signal);
+        assertEquals(MainController.RegisterWrite.TRUE, mainController.getRegisterWrite());
+        mainController.setInstruction(load_word_signal);
+        assertEquals(MainController.RegisterWrite.TRUE, mainController.getRegisterWrite());
+        mainController.setInstruction(save_word_signal);
+        assertEquals(MainController.RegisterWrite.FALSE, mainController.getRegisterWrite());
+        mainController.setInstruction(branch_on_equal_signal);
+        assertEquals(MainController.RegisterWrite.FALSE, mainController.getRegisterWrite());
     }
 
     @Test
     void testGetBranch() {
-        assertEquals(MainController.Branch.FALSE, new MainController(new Instruction(add_signal)).getBranch());
-        assertEquals(MainController.Branch.FALSE, new MainController(new Instruction(subtract_signal)).getBranch());
-        assertEquals(MainController.Branch.FALSE, new MainController(new Instruction(load_word_signal)).getBranch());
-        assertEquals(MainController.Branch.FALSE, new MainController(new Instruction(save_word_signal)).getBranch());
-        assertEquals(MainController.Branch.TRUE, new MainController(new Instruction(branch_on_equal_signal)).getBranch());
+        mainController.setInstruction(add_signal);
+        assertEquals(MainController.Branch.FALSE, mainController.getBranch());
+        mainController.setInstruction(subtract_signal);
+        assertEquals(MainController.Branch.FALSE, mainController.getBranch());
+        mainController.setInstruction(load_word_signal);
+        assertEquals(MainController.Branch.FALSE, mainController.getBranch());
+        mainController.setInstruction(save_word_signal);
+        assertEquals(MainController.Branch.FALSE, mainController.getBranch());
+        mainController.setInstruction(branch_on_equal_signal);
+        assertEquals(MainController.Branch.TRUE, mainController.getBranch());
     }
 }

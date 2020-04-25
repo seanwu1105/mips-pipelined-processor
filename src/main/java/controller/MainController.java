@@ -1,16 +1,12 @@
 package controller;
 
+import org.jetbrains.annotations.NotNull;
 import signal.Instruction;
 import signal.OpCode;
 import signal.Signal;
-import org.jetbrains.annotations.NotNull;
 
 public class MainController {
-    private final Instruction instruction;
-
-    public MainController(Instruction instruction) {
-        this.instruction = instruction;
-    }
+    private Instruction instruction;
 
     public AluOperation getAluOperation() {
         switch (instruction.getOpCode()) {
@@ -64,6 +60,14 @@ public class MainController {
         if (getAluOperation() == AluOperation.BRANCH)
             return Branch.TRUE;
         return Branch.FALSE;
+    }
+
+    public void setInstruction(Instruction instruction) {
+        this.instruction = instruction;
+    }
+
+    public Instruction getInstruction() {
+        return instruction;
     }
 
     public enum AluOperation implements Signal {
