@@ -1,57 +1,54 @@
 package component;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AluTest {
 
+    private Alu alu;
+    private final int operand1 = 1;
+    private final int operand2 = 2;
+
+    @BeforeEach
+    void buildUp() {
+        Alu alu = new Alu();
+        alu.setOperand1(operand1);
+        alu.setOperand2(operand2);
+    }
+
     @Test
     void testAdd() {
-        Alu alu = new Alu();
         alu.setControl(Alu.AluControl.ADD);
-        alu.setOperand1(1);
-        alu.setOperand2(2);
         alu.run();
-        assertEquals(1 + 2, alu.getResult());
+        assertEquals(operand1 + operand2, alu.getResult());
     }
 
     @Test
     void testSubtract() {
-        Alu alu = new Alu();
         alu.setControl(Alu.AluControl.SUBTRACT);
-        alu.setOperand1(1);
-        alu.setOperand2(2);
         alu.run();
-        assertEquals(1 - 2, alu.getResult());
+        assertEquals(operand1 - operand2, alu.getResult());
     }
 
     @Test
     void testAnd() {
-        Alu alu = new Alu();
         alu.setControl(Alu.AluControl.AND);
-        alu.setOperand1(1);
-        alu.setOperand2(2);
         alu.run();
-        assertEquals(1 & 2, alu.getResult());
+        assertEquals(operand1 & operand2, alu.getResult());
     }
 
     @Test
     void testOr() {
-        Alu alu = new Alu();
         alu.setControl(Alu.AluControl.OR);
-        alu.setOperand1(1);
-        alu.setOperand2(2);
         alu.run();
-        assertEquals(1 | 2, alu.getResult());
+        assertEquals(operand1 | operand2, alu.getResult());
     }
 
     @Test
     void testSetOnLessThan() {
-        Alu alu = new Alu();
         alu.setControl(Alu.AluControl.SET_ON_LESS_THAN);
-        alu.setOperand1(1);
-        alu.setOperand2(2);
         alu.run();
         assertEquals(1, alu.getResult());
     }
