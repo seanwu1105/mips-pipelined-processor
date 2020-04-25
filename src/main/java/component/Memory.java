@@ -22,6 +22,13 @@ public class Memory {
         this.memoryWrite = memoryWrite;
     }
 
+    public void setMemoryRead(@NotNull MainController.MemoryRead memoryRead) {
+        if (memoryRead == MainController.MemoryRead.TRUE)
+            memoryWrite = MainController.MemoryWrite.FALSE;
+        else
+            memoryWrite = MainController.MemoryWrite.TRUE;
+    }
+
     public void write(int value) {
         if (memoryWrite != MainController.MemoryWrite.TRUE)
             throw new IllegalStateException("Memory is read-only.");
