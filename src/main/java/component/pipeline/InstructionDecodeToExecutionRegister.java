@@ -33,6 +33,8 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     @Nullable
     private MainController.MemoryToRegister memoryToRegister;
 
+    private int newProgramCounter, registerData1, registerData2, immediate, rt, rd;
+
     public InstructionDecodeToExecutionRegister(@NotNull InstructionDecode instructionDecode) {
         this.instructionDecode = instructionDecode;
     }
@@ -47,6 +49,13 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
         memoryWrite = instructionDecode.getMemoryWrite();
         registerWrite = instructionDecode.getRegisterWrite();
         memoryToRegister = instructionDecode.getMemoryToRegister();
+
+        newProgramCounter = instructionDecode.getNewProgramCounter();
+        registerData1 = instructionDecode.getRegisterData1();
+        registerData2 = instructionDecode.getRegisterData2();
+        immediate = instructionDecode.getImmediate();
+        rt = instructionDecode.getRt();
+        rd = instructionDecode.getRd();
     }
 
     @Nullable
@@ -87,5 +96,29 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     @Nullable
     public MainController.MemoryToRegister getMemoryToRegister() {
         return memoryToRegister;
+    }
+
+    public int getNewProgramCounter() {
+        return newProgramCounter;
+    }
+
+    public int getRegisterData1() {
+        return registerData1;
+    }
+
+    public int getRegisterData2() {
+        return registerData2;
+    }
+
+    public int getImmediate() {
+        return immediate;
+    }
+
+    public int getRt() {
+        return rt;
+    }
+
+    public int getRd() {
+        return rd;
     }
 }

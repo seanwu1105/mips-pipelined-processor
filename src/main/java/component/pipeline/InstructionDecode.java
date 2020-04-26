@@ -43,4 +43,28 @@ public class InstructionDecode implements Stage {
     public MainController.MemoryToRegister getMemoryToRegister() {
         return null;
     }
+
+    public int getNewProgramCounter() {
+        return 0;
+    }
+
+    public int getRegisterData1() {
+        return 0;
+    }
+
+    public int getRegisterData2() {
+        return 0;
+    }
+
+    public int getImmediate() {
+        return 0;
+    }
+
+    public int getRt() {
+        return 0;
+    }
+
+    public int getRd() {
+        return 0;
+    }
 }

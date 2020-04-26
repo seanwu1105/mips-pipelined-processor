@@ -66,6 +66,30 @@ class PipelineRegisterTest {
 
     @Test
     void testGetInstructionDecodeToExecutionRegisterProperties() {
+        int expectedNewProgramCounter = 12;
+        int expectedRegisterData1 = 4;
+        int expectedRegisterData2 = 5;
+        int expectedImmediate = 10;
+        int expectedRt = 6;
+        int expectedRd = 7;
+
+        InstructionDecode instructionDecode = mock(InstructionDecode.class);
+        when(instructionDecode.getNewProgramCounter()).thenReturn(expectedNewProgramCounter);
+        when(instructionDecode.getRegisterData1()).thenReturn(expectedRegisterData1);
+        when(instructionDecode.getRegisterData2()).thenReturn(expectedRegisterData2);
+        when(instructionDecode.getImmediate()).thenReturn(expectedImmediate);
+        when(instructionDecode.getRt()).thenReturn(expectedRt);
+        when(instructionDecode.getRd()).thenReturn(expectedRd);
+
+        InstructionDecodeToExecutionRegister idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
+        idExe.update();
+
+        assertEquals(expectedNewProgramCounter, idExe.getNewProgramCounter());
+        assertEquals(expectedRegisterData1, idExe.getRegisterData1());
+        assertEquals(expectedRegisterData2, idExe.getRegisterData2());
+        assertEquals(expectedImmediate, idExe.getImmediate());
+        assertEquals(expectedRt, idExe.getRt());
+        assertEquals(expectedRd, idExe.getRd());
     }
 
     @Test
