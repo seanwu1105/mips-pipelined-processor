@@ -22,7 +22,8 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
         return newProgramCounter;
     }
 
-    public @Nullable Instruction getInstruction() {
+    @Nullable
+    public Instruction getInstruction() {
         return instruction;
     }
 
