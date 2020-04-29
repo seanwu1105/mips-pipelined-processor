@@ -3,12 +3,16 @@ package component.pipeline;
 import component.Memory;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import signal.Instruction;
 
 public class InstructionFetch implements Stage {
 
     @NotNull
     final private Memory instructionMemory;
+
+    @Nullable
+    private ExecutionToMemoryAccessRegister exeMem;
 
     private int programCounter = 0;
 
@@ -20,6 +24,10 @@ public class InstructionFetch implements Stage {
         this.instructionMemory.setMemoryRead(MainController.MemoryRead.TRUE);
         this.instructionMemory.setAddress(programCounter);
         currentInstruction = this.instructionMemory.readInstruction();
+    }
+
+    public void setExecutionToMemoryAccessRegister(@NotNull ExecutionToMemoryAccessRegister exeMem) {
+        this.exeMem = exeMem;
     }
 
     public int getProgramCounter() {
@@ -35,6 +43,10 @@ public class InstructionFetch implements Stage {
     public void run() {
         instructionMemory.setAddress(programCounter);
         currentInstruction = instructionMemory.readInstruction();
-        programCounter += 4;
+
+        if (exeMem != null && exeMem.getBranch() == MainController.Branch.TRUE)
+            programCounter = exeMem.getBranchResult();
+        else
+            programCounter += 4;
     }
 }

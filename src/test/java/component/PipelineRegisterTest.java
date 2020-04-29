@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-// TODO: This TestSuite violates encapsulation of all PipelineRegister. Thus, should be rewritten.
+// XXX: This TestSuite violates encapsulation of all PipelineRegister.
 
 class PipelineRegisterTest {
 
