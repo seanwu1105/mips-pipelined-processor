@@ -38,14 +38,10 @@ public class Register {
     }
 
     public int readData1() {
-        if (registerWrite == MainController.RegisterWrite.TRUE)
-            throw new IllegalStateException("The register is write-only.");
         return data.get(readAddress1);
     }
 
     public int readData2() {
-        if (registerWrite == MainController.RegisterWrite.TRUE)
-            throw new IllegalStateException("The register is write-only.");
         return data.get(readAddress2);
     }
 }

@@ -42,16 +42,6 @@ class RegisterTest {
     }
 
     @Test
-    void testReadOnWriteOnlyRegister() {
-        int address = 0;
-        register.setRegisterWrite(MainController.RegisterWrite.TRUE);
-        register.setWriteAddress(address);
-        register.write(10);
-        register.setReadAddress1(address);
-        assertThrows(IllegalStateException.class, () -> register.readData1());
-    }
-
-    @Test
     void testReadUnwrittenData() {
         register.setRegisterWrite(MainController.RegisterWrite.FALSE);
         register.setReadAddress1(0);
