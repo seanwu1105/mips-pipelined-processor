@@ -73,16 +73,17 @@ class InstructionFetchTest {
         InstructionFetch instructionFetch = new InstructionFetch(instructionMemory);
         instructionFetch.setExecutionToMemoryAccessRegister(exeMem);
 
+        int expectedBranchResult = 8;
         when(exeMem.getBranch()).thenReturn(MainController.Branch.TRUE);
-        when(exeMem.getBranchResult()).thenReturn(8);
+        when(exeMem.getBranchResult()).thenReturn(expectedBranchResult);
         instructionFetch.run();
-        assertEquals(8, instructionFetch.getProgramCounter());
+        assertEquals(expectedBranchResult, instructionFetch.getProgramCounter());
         assertEquals(instructions.get(0), instructionFetch.getInstruction());
 
         when(exeMem.getBranch()).thenReturn(MainController.Branch.FALSE);
         instructionFetch.run();
-        assertEquals(12, instructionFetch.getProgramCounter());
-        assertEquals(instructions.get(2), instructionFetch.getInstruction());
+        assertEquals(expectedBranchResult + 4, instructionFetch.getProgramCounter());
+        assertEquals(instructions.get(expectedBranchResult / 4), instructionFetch.getInstruction());
     }
 
     @AfterEach
