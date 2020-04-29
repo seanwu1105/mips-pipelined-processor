@@ -24,6 +24,8 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
     @Nullable
     private MainController.MemoryWrite memoryWrite;
 
+    private int branchResult, aluResult, registerData2, writeRegisterAddress;
+
     public ExecutionToMemoryAccessRegister(@NotNull Execution execution) {
         this.execution = execution;
     }
@@ -53,6 +55,22 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
         return memoryWrite;
     }
 
+    public int getBranchResult() {
+        return branchResult;
+    }
+
+    public int getAluResult() {
+        return aluResult;
+    }
+
+    public int getRegisterData2() {
+        return registerData2;
+    }
+
+    public int getWriteRegisterAddress() {
+        return writeRegisterAddress;
+    }
+
     @Override
     public void update() {
         registerWrite = execution.getRegisterWrite();
@@ -60,5 +78,9 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
         branch = execution.getBranch();
         memoryRead = execution.getMemoryRead();
         memoryWrite = execution.getMemoryWrite();
+        branchResult = execution.getBranchResult();
+        aluResult = execution.getAluResult();
+        registerData2 = execution.getRegisterData2();
+        writeRegisterAddress = execution.getWriteRegisterAddress();
     }
 }

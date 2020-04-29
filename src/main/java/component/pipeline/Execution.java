@@ -27,6 +27,22 @@ public class Execution implements Stage {
         return null;
     }
 
+    public int getBranchResult() {
+        return 0;
+    }
+
+    public int getAluResult() {
+        return 0;
+    }
+
+    public int getRegisterData2() {
+        return 0;
+    }
+
+    public int getWriteRegisterAddress() {
+        return 0;
+    }
+
     @Override
     public void run() {
 

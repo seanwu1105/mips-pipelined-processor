@@ -63,7 +63,7 @@ class PipelineRegisterTest {
 
     @Test
     void testGetInstructionDecodeToExecutionRegisterProperties() {
-        int expectedNewProgramCounter = 12;
+        int expectedProgramCounter = 12;
         int expectedRegisterData1 = 4;
         int expectedRegisterData2 = 5;
         int expectedImmediate = 10;
@@ -71,7 +71,7 @@ class PipelineRegisterTest {
         int expectedRd = 7;
 
         InstructionDecode instructionDecode = mock(InstructionDecode.class);
-        when(instructionDecode.getProgramCounter()).thenReturn(expectedNewProgramCounter);
+        when(instructionDecode.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(instructionDecode.getRegisterData1()).thenReturn(expectedRegisterData1);
         when(instructionDecode.getRegisterData2()).thenReturn(expectedRegisterData2);
         when(instructionDecode.getImmediate()).thenReturn(expectedImmediate);
@@ -81,7 +81,7 @@ class PipelineRegisterTest {
         InstructionDecodeToExecutionRegister idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
         idExe.update();
 
-        assertEquals(expectedNewProgramCounter, idExe.getProgramCounter());
+        assertEquals(expectedProgramCounter, idExe.getProgramCounter());
         assertEquals(expectedRegisterData1, idExe.getRegisterData1());
         assertEquals(expectedRegisterData2, idExe.getRegisterData2());
         assertEquals(expectedImmediate, idExe.getImmediate());
@@ -116,6 +116,24 @@ class PipelineRegisterTest {
 
     @Test
     void testGetExecutionToMemoryAccessRegisterProperties() {
+        int expectedBranchResult = 5 * 4 + 12;
+        int expectedAluResult = 6;
+        int expectedRegisterData2 = 7;
+        int expectedWriteRegisterAddress = 2;
+
+        Execution execution = mock(Execution.class);
+        when(execution.getBranchResult()).thenReturn(expectedBranchResult);
+        when(execution.getAluResult()).thenReturn(expectedAluResult);
+        when(execution.getRegisterData2()).thenReturn(expectedRegisterData2);
+        when(execution.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
+
+        ExecutionToMemoryAccessRegister exeMem = new ExecutionToMemoryAccessRegister(execution);
+        exeMem.update();
+
+        assertEquals(expectedBranchResult, exeMem.getBranchResult());
+        assertEquals(expectedAluResult, exeMem.getAluResult());
+        assertEquals(expectedRegisterData2, exeMem.getRegisterData2());
+        assertEquals(expectedWriteRegisterAddress, exeMem.getWriteRegisterAddress());
     }
 
     @Test
