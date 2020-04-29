@@ -137,6 +137,22 @@ class PipelineRegisterTest {
     }
 
     @Test
+    void testGetMemoryAccessToWriteBackRegisterControlSignals() {
+        MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
+        MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
+
+        MemoryAccess memoryAccess = mock(MemoryAccess.class);
+        when(memoryAccess.getRegisterWrite()).thenReturn(expectedRegisterWrite);
+        when(memoryAccess.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
+
+        MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
+        memWb.update();
+
+        assertEquals(expectedRegisterWrite, memWb.getRegisterWrite());
+        assertEquals(expectedMemoryToRegister, memWb.getMemoryToRegister());
+    }
+
+    @Test
     void testGetMemoryAccessToWriteBackRegisterProperties() {
     }
 }
