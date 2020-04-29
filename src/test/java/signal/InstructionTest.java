@@ -11,15 +11,15 @@ class InstructionTest {
 
     @Test
     void testFromLong() {
-        Instruction expect = new Instruction("11111111111111111111111111111111");
-        Instruction instruction = new Instruction(4294967295L);
+        Instruction expect = new Instruction("00000000000000000000000000000001");
+        Instruction instruction = new Instruction(1);
         assertEquals(expect, instruction);
     }
 
     @Test
-    void testToLong() {
+    void testToInt() {
         Instruction instruction = new Instruction("11111111111111111111111111111111");
-        assertEquals(4294967295L, instruction.toLong());
+        assertEquals(Integer.parseUnsignedInt("11111111111111111111111111111111", 2), instruction.toInt());
     }
 
     @Test

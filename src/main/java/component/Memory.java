@@ -10,7 +10,7 @@ import java.util.Map;
 public class Memory {
 
     @NotNull
-    private final Map<Integer, Long> data = new HashMap<>();
+    private final Map<Integer, Integer> data = new HashMap<>();
     private int address;
 
     @NotNull
@@ -31,17 +31,17 @@ public class Memory {
         this.memoryRead = memoryRead;
     }
 
-    public void write(long value) {
+    public void write(int value) {
         if (memoryWrite == MainController.MemoryWrite.FALSE)
             throw new IllegalStateException("Memory cannot be written.");
         data.put(address, value);
     }
 
     public void write(Instruction instruction) {
-        write(instruction.toLong());
+        write(instruction.toInt());
     }
 
-    public long read() {
+    public int read() {
         if (memoryRead == MainController.MemoryRead.FALSE)
             throw new IllegalStateException("Memory cannot be read.");
         return data.get(address);

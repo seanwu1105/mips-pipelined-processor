@@ -14,8 +14,8 @@ public class Instruction implements Signal {
         }
     }
 
-    public Instruction(long value) {
-        this(Long.toBinaryString(value));
+    public Instruction(int value) {
+        this(String.format("%32s", Integer.toBinaryString(value)).replace(' ', '0'));
     }
 
     private boolean isLengthCorrect() {
@@ -46,8 +46,8 @@ public class Instruction implements Signal {
         throw new IllegalStateException("Unknown function code.");
     }
 
-    public long toLong() {
-        return Long.parseLong(raw, 2);
+    public int toInt() {
+        return Integer.parseUnsignedInt(raw, 2);
     }
 
     @Override
