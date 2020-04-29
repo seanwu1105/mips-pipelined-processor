@@ -18,7 +18,7 @@ class MemoryTest {
     }
 
     @Test
-    void testWriteReadDataWithMemoryWrite() {
+    void testWriteReadInteger() {
         int expect = 9;
         memory.setMemoryWrite(MainController.MemoryWrite.TRUE);
         memory.write(expect);
@@ -30,12 +30,13 @@ class MemoryTest {
     void testReadToWriteOnlyMemory() {
         memory.setMemoryWrite(MainController.MemoryWrite.TRUE);
         memory.write(5);
+        memory.setMemoryRead(MainController.MemoryRead.FALSE);
         assertThrows(IllegalStateException.class, () -> memory.read());
     }
 
     @Test
     void testWriteToReadOnlyMemory() {
-        memory.setMemoryRead(MainController.MemoryRead.TRUE);
+        memory.setMemoryWrite(MainController.MemoryWrite.FALSE);
         assertThrows(IllegalStateException.class, () -> memory.write(5));
     }
 

@@ -15,6 +15,9 @@ public class Memory {
     @NotNull
     private MainController.MemoryWrite memoryWrite = MainController.MemoryWrite.FALSE;
 
+    @NotNull
+    private MainController.MemoryRead memoryRead = MainController.MemoryRead.FALSE;
+
     public void setAddress(int address) {
         this.address = address;
     }
@@ -24,21 +27,18 @@ public class Memory {
     }
 
     public void setMemoryRead(@NotNull MainController.MemoryRead memoryRead) {
-        if (memoryRead == MainController.MemoryRead.TRUE)
-            memoryWrite = MainController.MemoryWrite.FALSE;
-        else
-            memoryWrite = MainController.MemoryWrite.TRUE;
+        this.memoryRead = memoryRead;
     }
 
     public void write(int value) {
-        if (memoryWrite != MainController.MemoryWrite.TRUE)
-            throw new IllegalStateException("Memory is read-only.");
+        if (memoryWrite == MainController.MemoryWrite.FALSE)
+            throw new IllegalStateException("Memory cannot be written.");
         data.put(address, value);
     }
 
     public int read() {
-        if (memoryWrite == MainController.MemoryWrite.TRUE)
-            throw new IllegalStateException("Memory is write-only.");
+        if (memoryRead == MainController.MemoryRead.FALSE)
+            throw new IllegalStateException("Memory cannot be read.");
         return data.get(address);
     }
 }
