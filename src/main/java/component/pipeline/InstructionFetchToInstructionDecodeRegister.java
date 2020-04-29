@@ -9,7 +9,7 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
     @NotNull
     private final InstructionFetch instructionFetch;
 
-    private int newProgramCounter;
+    private int programCounter;
 
     @Nullable
     private Instruction instruction;
@@ -18,8 +18,8 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
         this.instructionFetch = instructionFetch;
     }
 
-    public int getNewProgramCounter() {
-        return newProgramCounter;
+    public int getProgramCounter() {
+        return programCounter;
     }
 
     @Nullable
@@ -29,7 +29,7 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
 
     @Override
     public void update() {
-        newProgramCounter = instructionFetch.getNewProgramCounter();
+        programCounter = instructionFetch.getProgramCounter();
         instruction = instructionFetch.getInstruction();
     }
 }

@@ -44,7 +44,7 @@ public class InstructionDecode implements Stage {
         return null;
     }
 
-    public int getNewProgramCounter() {
+    public int getProgramCounter() {
         return 0;
     }
 

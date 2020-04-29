@@ -20,13 +20,13 @@ class PipelineRegisterTest {
         Instruction expectedInstruction = new Instruction("00000000000000000000000000000000");
 
         InstructionFetch instructionFetch = mock(InstructionFetch.class);
-        when(instructionFetch.getNewProgramCounter()).thenReturn(expectedProgramCounter);
+        when(instructionFetch.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(instructionFetch.getInstruction()).thenReturn(expectedInstruction);
 
         InstructionFetchToInstructionDecodeRegister ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
         ifId.update();
 
-        assertEquals(expectedProgramCounter, ifId.getNewProgramCounter());
+        assertEquals(expectedProgramCounter, ifId.getProgramCounter());
         assertEquals(expectedInstruction, ifId.getInstruction());
     }
 
@@ -74,7 +74,7 @@ class PipelineRegisterTest {
         int expectedRd = 7;
 
         InstructionDecode instructionDecode = mock(InstructionDecode.class);
-        when(instructionDecode.getNewProgramCounter()).thenReturn(expectedNewProgramCounter);
+        when(instructionDecode.getProgramCounter()).thenReturn(expectedNewProgramCounter);
         when(instructionDecode.getRegisterData1()).thenReturn(expectedRegisterData1);
         when(instructionDecode.getRegisterData2()).thenReturn(expectedRegisterData2);
         when(instructionDecode.getImmediate()).thenReturn(expectedImmediate);
@@ -84,7 +84,7 @@ class PipelineRegisterTest {
         InstructionDecodeToExecutionRegister idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
         idExe.update();
 
-        assertEquals(expectedNewProgramCounter, idExe.getNewProgramCounter());
+        assertEquals(expectedNewProgramCounter, idExe.getProgramCounter());
         assertEquals(expectedRegisterData1, idExe.getRegisterData1());
         assertEquals(expectedRegisterData2, idExe.getRegisterData2());
         assertEquals(expectedImmediate, idExe.getImmediate());

@@ -5,7 +5,7 @@ import signal.Instruction;
 
 public class InstructionFetch implements Stage {
 
-    public int getNewProgramCounter() {
+    public int getProgramCounter() {
         return 0;
     }
 
