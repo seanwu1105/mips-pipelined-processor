@@ -14,6 +14,10 @@ public class Instruction implements Signal {
         }
     }
 
+    public Instruction(long value) {
+        this(Long.toBinaryString(value));
+    }
+
     private boolean isLengthCorrect() {
         return raw.length() == 32;
     }
@@ -40,5 +44,24 @@ public class Instruction implements Signal {
                 return functionCode;
 
         throw new IllegalStateException("Unknown function code.");
+    }
+
+    public long toLong() {
+        return Long.parseLong(raw, 2);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Instruction that = (Instruction) o;
+
+        return raw.equals(that.raw);
+    }
+
+    @Override
+    public int hashCode() {
+        return raw.hashCode();
     }
 }

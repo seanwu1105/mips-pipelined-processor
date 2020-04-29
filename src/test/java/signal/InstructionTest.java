@@ -2,16 +2,38 @@ package signal;
 
 import org.junit.jupiter.api.Test;
 
-import static signal.FunctionCode.*;
-import static signal.OpCode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static signal.FunctionCode.*;
+import static signal.OpCode.*;
 
 class InstructionTest {
 
     @Test
+    void testFromLong() {
+        Instruction expect = new Instruction("11111111111111111111111111111111");
+        Instruction instruction = new Instruction(4294967295L);
+        assertEquals(expect, instruction);
+    }
+
+    @Test
+    void testToLong() {
+        Instruction instruction = new Instruction("11111111111111111111111111111111");
+        assertEquals(4294967295L, instruction.toLong());
+    }
+
+    @Test
     void testIncorrectLength() {
         assertThrows(IllegalArgumentException.class, () -> new Instruction("0           0                  0"));
+    }
+
+    @Test
+    void testEquals() {
+        String raw = "00000000000000000000000000000000";
+        Instruction a = new Instruction(raw);
+        Instruction b = new Instruction(raw);
+        assertEquals(a, b);
+        assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test

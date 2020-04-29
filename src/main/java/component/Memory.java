@@ -2,6 +2,7 @@ package component;
 
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
+import signal.Instruction;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,7 @@ import java.util.Map;
 public class Memory {
 
     @NotNull
-    private final Map<Integer, Integer> data = new HashMap<>();
+    private final Map<Integer, Long> data = new HashMap<>();
     private int address;
 
     @NotNull
@@ -30,15 +31,24 @@ public class Memory {
         this.memoryRead = memoryRead;
     }
 
-    public void write(int value) {
+    public void write(long value) {
         if (memoryWrite == MainController.MemoryWrite.FALSE)
             throw new IllegalStateException("Memory cannot be written.");
         data.put(address, value);
     }
 
-    public int read() {
+    public void write(Instruction instruction) {
+        write(instruction.toLong());
+    }
+
+    public long read() {
         if (memoryRead == MainController.MemoryRead.FALSE)
             throw new IllegalStateException("Memory cannot be read.");
         return data.get(address);
+    }
+
+    @NotNull
+    public Instruction readInstruction() {
+        return new Instruction(read());
     }
 }
