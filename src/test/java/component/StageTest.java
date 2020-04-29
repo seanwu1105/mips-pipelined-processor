@@ -25,9 +25,10 @@ class StageTest {
     @Test
     void testInstructionFetchRun() {
         int initProgramCounter = 0, number = 0;
-        Instruction firstInstruction = new Instruction("10001101000000010000000000000011");
-        Instruction secondInstruction = new Instruction("00000000000000100001100000100000");
-        List<Instruction> instructions = List.of(firstInstruction, secondInstruction);
+        List<Instruction> instructions = List.of(
+                new Instruction("10001101000000010000000000000011"),
+                new Instruction("00000000000000100001100000100000")
+        );
 
         for (Instruction instruction : instructions) {
             instructionMemory.setAddress(initProgramCounter + number * 4);
