@@ -154,5 +154,20 @@ class PipelineRegisterTest {
 
     @Test
     void testGetMemoryAccessToWriteBackRegisterProperties() {
+        int expectedMemoryReadData = 2;
+        int expectedAluResult = 3;
+        int expectedWriteRegisterAddress = 4;
+
+        MemoryAccess memoryAccess = mock(MemoryAccess.class);
+        when(memoryAccess.getMemoryReadData()).thenReturn(expectedMemoryReadData);
+        when(memoryAccess.getAluResult()).thenReturn(expectedAluResult);
+        when(memoryAccess.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
+
+        MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
+        memWb.update();
+
+        assertEquals(expectedMemoryReadData, memWb.getMemoryReadData());
+        assertEquals(expectedAluResult, memWb.getAluResult());
+        assertEquals(expectedWriteRegisterAddress, memWb.getWriteRegisterAddress());
     }
 }

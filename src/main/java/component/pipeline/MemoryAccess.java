@@ -19,4 +19,16 @@ public class MemoryAccess implements Stage {
     public MainController.MemoryToRegister getMemoryToRegister() {
         return null;
     }
+
+    public int getMemoryReadData() {
+        return 0;
+    }
+
+    public int getAluResult() {
+        return 0;
+    }
+
+    public int getWriteRegisterAddress() {
+        return 0;
+    }
 }
