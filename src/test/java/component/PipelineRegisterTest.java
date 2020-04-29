@@ -1,9 +1,6 @@
 package component;
 
-import component.pipeline.InstructionDecode;
-import component.pipeline.InstructionDecodeToExecutionRegister;
-import component.pipeline.InstructionFetch;
-import component.pipeline.InstructionFetchToInstructionDecodeRegister;
+import component.pipeline.*;
 import controller.MainController;
 import org.junit.jupiter.api.Test;
 import signal.Instruction;
@@ -90,6 +87,31 @@ class PipelineRegisterTest {
         assertEquals(expectedImmediate, idExe.getImmediate());
         assertEquals(expectedRt, idExe.getRt());
         assertEquals(expectedRd, idExe.getRd());
+    }
+
+    @Test
+    void testGetExecutionToMemoryAccessRegisterControlSignals() {
+        MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
+        MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
+        MainController.Branch expectedBranch = MainController.Branch.FALSE;
+        MainController.MemoryRead expectedMemoryRead = MainController.MemoryRead.TRUE;
+        MainController.MemoryWrite expectedMemoryWrite = MainController.MemoryWrite.FALSE;
+
+        Execution execution = mock(Execution.class);
+        when(execution.getRegisterWrite()).thenReturn(expectedRegisterWrite);
+        when(execution.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
+        when(execution.getBranch()).thenReturn(expectedBranch);
+        when(execution.getMemoryRead()).thenReturn(expectedMemoryRead);
+        when(execution.getMemoryWrite()).thenReturn(expectedMemoryWrite);
+
+        ExecutionToMemoryAccessRegister exeMem = new ExecutionToMemoryAccessRegister(execution);
+        exeMem.update();
+
+        assertEquals(expectedRegisterWrite, exeMem.getRegisterWrite());
+        assertEquals(expectedMemoryToRegister, exeMem.getMemoryToRegister());
+        assertEquals(expectedBranch, exeMem.getBranch());
+        assertEquals(expectedMemoryRead, exeMem.getMemoryRead());
+        assertEquals(expectedMemoryWrite, exeMem.getMemoryWrite());
     }
 
     @Test
