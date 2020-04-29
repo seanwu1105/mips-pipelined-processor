@@ -1,16 +1,25 @@
 package controller;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import signal.Instruction;
 import signal.OpCode;
 import signal.Signal;
 
+import java.util.Objects;
+
 public class MainController {
+
+    @Nullable
     private Instruction instruction;
+
+    public void setInstruction(@Nullable Instruction instruction) {
+        this.instruction = instruction;
+    }
 
     @NotNull
     public AluOperation getAluOperation() {
-        switch (instruction.getOpCode()) {
+        switch (Objects.requireNonNull(instruction).getOpCode()) {
             case LOAD_WORD:
             case SAVE_WORD:
                 return AluOperation.MEMORY_REFERENCE;
@@ -30,21 +39,21 @@ public class MainController {
 
     @NotNull
     public MemoryRead getMemoryRead() {
-        if (instruction.getOpCode() == OpCode.LOAD_WORD)
+        if (Objects.requireNonNull(instruction).getOpCode() == OpCode.LOAD_WORD)
             return MemoryRead.TRUE;
         return MemoryRead.FALSE;
     }
 
     @NotNull
     public MemoryWrite getMemoryWrite() {
-        if (instruction.getOpCode() == OpCode.SAVE_WORD)
+        if (Objects.requireNonNull(instruction).getOpCode() == OpCode.SAVE_WORD)
             return MemoryWrite.TRUE;
         return MemoryWrite.FALSE;
     }
 
     @NotNull
     public MemoryToRegister getMemoryToRegister() {
-        if (instruction.getOpCode() == OpCode.LOAD_WORD)
+        if (Objects.requireNonNull(instruction).getOpCode() == OpCode.LOAD_WORD)
             return MemoryToRegister.FROM_MEMORY;
         return MemoryToRegister.FROM_ALU_RESULT;
     }
@@ -58,6 +67,7 @@ public class MainController {
 
     @NotNull
     public RegisterWrite getRegisterWrite() {
+        assert instruction != null;
         if (instruction.getOpCode() == OpCode.BRANCH_ON_EQUAL || instruction.getOpCode() == OpCode.SAVE_WORD)
             return RegisterWrite.FALSE;
         return RegisterWrite.TRUE;
@@ -68,10 +78,6 @@ public class MainController {
         if (getAluOperation() == AluOperation.BRANCH)
             return Branch.TRUE;
         return Branch.FALSE;
-    }
-
-    public void setInstruction(Instruction instruction) {
-        this.instruction = instruction;
     }
 
     public enum AluOperation implements Signal {

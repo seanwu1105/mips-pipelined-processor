@@ -55,6 +55,14 @@ class InstructionTest {
     }
 
     @Test
+    void testGetRsAndRtAndRd() {
+        Instruction instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $0 $1 $2
+        assertEquals(0, instruction.getRs());
+        assertEquals(1, instruction.getRt());
+        assertEquals(2, instruction.getRd());
+    }
+
+    @Test
     void testGetFunctionCode() {
         Instruction instruction = new Instruction("00000000000000000000000000 100000");
         assertEquals(ADD, instruction.getFunctionCode());
@@ -71,5 +79,11 @@ class InstructionTest {
     @Test
     void testGetUnknownFunctionCode() {
         assertThrows(IllegalStateException.class, () -> new Instruction("00000000000000000000000000 000000").getFunctionCode());
+    }
+
+    @Test
+    void testGetImmediate() {
+        Instruction instruction = new Instruction("100011 00001 00010 0000000000000001"); // lw $1 1($2)
+        assertEquals(1, instruction.getImmediate());
     }
 }

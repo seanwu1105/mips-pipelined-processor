@@ -3,6 +3,7 @@ package component.pipeline;
 import component.Register;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import signal.Instruction;
@@ -26,7 +27,11 @@ class InstructionDecodeTest {
     @BeforeEach
     void buildUp() {
         register = new Register();
-        // initialize register contents
+        register.setRegisterWrite(MainController.RegisterWrite.TRUE);
+        registerValues.forEach((key, value) -> {
+            register.setWriteAddress(key);
+            register.write(value);
+        });
     }
 
     @Test
@@ -37,7 +42,7 @@ class InstructionDecodeTest {
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        InstructionDecode instructionDecode = new InstructionDecode(ifId, register);
+        InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.RegisterDestination.RD, instructionDecode.getRegisterDestination());
@@ -80,5 +85,10 @@ class InstructionDecodeTest {
 
     @Test
     void testDecodeBranchOnEqual() {
+    }
+
+    @AfterEach
+    void tearDown() {
+        register.setRegisterWrite(MainController.RegisterWrite.FALSE);
     }
 }

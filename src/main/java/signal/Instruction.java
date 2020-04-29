@@ -37,6 +37,21 @@ public class Instruction implements Signal {
         throw new IllegalStateException("Unknown OP code.");
     }
 
+    public int getRs() {
+        String rsRaw = raw.substring(6, 11);
+        return Integer.parseInt(rsRaw, 2);
+    }
+
+    public int getRt() {
+        String rtRaw = raw.substring(11, 16);
+        return Integer.parseInt(rtRaw, 2);
+    }
+
+    public int getRd() {
+        String rdRaw = raw.substring(16, 21);
+        return Integer.parseInt(rdRaw, 2);
+    }
+
     @NotNull
     public FunctionCode getFunctionCode() {
         for (FunctionCode functionCode : FunctionCode.values())
@@ -44,6 +59,11 @@ public class Instruction implements Signal {
                 return functionCode;
 
         throw new IllegalStateException("Unknown function code.");
+    }
+
+    public int getImmediate() {
+        String immediateRaw = raw.substring(16, 32);
+        return Integer.parseInt(immediateRaw, 2);
     }
 
     public int toInt() {
