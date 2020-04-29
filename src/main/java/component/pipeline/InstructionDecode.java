@@ -1,10 +1,12 @@
 package component.pipeline;
 
+import component.Register;
 import controller.MainController;
+import org.jetbrains.annotations.NotNull;
 
 public class InstructionDecode implements Stage {
 
-    public InstructionDecode(InstructionFetchToInstructionDecodeRegister ifId) {
+    public InstructionDecode(InstructionFetchToInstructionDecodeRegister ifId, Register register) {
     }
 
     @Override
@@ -12,34 +14,42 @@ public class InstructionDecode implements Stage {
 
     }
 
+    @NotNull
     public MainController.RegisterDestination getRegisterDestination() {
         return null;
     }
 
+    @NotNull
     public MainController.AluOperation getAluOperation() {
         return null;
     }
 
+    @NotNull
     public MainController.AluSource getAluSource() {
         return null;
     }
 
+    @NotNull
     public MainController.Branch getBranch() {
         return null;
     }
 
+    @NotNull
     public MainController.MemoryRead getMemoryRead() {
         return null;
     }
 
+    @NotNull
     public MainController.MemoryWrite getMemoryWrite() {
         return null;
     }
 
+    @NotNull
     public MainController.RegisterWrite getRegisterWrite() {
         return null;
     }
 
+    @NotNull
     public MainController.MemoryToRegister getMemoryToRegister() {
         return null;
     }
