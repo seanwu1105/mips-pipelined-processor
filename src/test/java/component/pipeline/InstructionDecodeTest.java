@@ -16,10 +16,12 @@ import static org.mockito.Mockito.when;
 
 class InstructionDecodeTest {
 
+    private final int expectedProgramCounter = 0;
     Map<Integer, Integer> registerValues = Map.of(
-            0, 10,
+            0, 0,
             1, 11,
-            2, 12
+            2, 12,
+            3, 13
     );
     @NotNull
     private Register register;
@@ -35,9 +37,8 @@ class InstructionDecodeTest {
     }
 
     @Test
-    void testDecodeAdd() {
-        int expectedProgramCounter = 0;
-        Instruction instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $0 $1 $2
+    void testDecodeRType() {
+        Instruction instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $2, $0, $1
         InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
@@ -60,31 +61,71 @@ class InstructionDecodeTest {
     }
 
     @Test
-    void testDecodeSubtract() {
-    }
-
-    @Test
-    void testDecodeAnd() {
-    }
-
-    @Test
-    void testDecodeOr() {
-    }
-
-    @Test
-    void testDecodeSetOnLessThan() {
-    }
-
-    @Test
     void testDecodeLoadWord() {
+        Instruction instruction = new Instruction("100011 00001 00010 0000000000010100"); // lw $2, 20($1)
+        InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+        instructionDecode.run();
+
+        assertEquals(MainController.RegisterDestination.RT, instructionDecode.getRegisterDestination());
+        assertEquals(MainController.AluOperation.MEMORY_REFERENCE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.IMMEDIATE, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.TRUE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.TRUE, instructionDecode.getRegisterWrite());
+        assertEquals(MainController.MemoryToRegister.FROM_MEMORY, instructionDecode.getMemoryToRegister());
+        assertEquals(expectedProgramCounter, instructionDecode.getProgramCounter());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData1());
+        assertEquals(20, instructionDecode.getImmediate());
+        assertEquals(2, instructionDecode.getRt());
     }
 
     @Test
     void testDecodeSaveWord() {
+        Instruction instruction = new Instruction("101011 00001 00010 0000000000010100"); // sw $2, 20($1)
+        InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+        instructionDecode.run();
+
+        assertEquals(MainController.AluOperation.MEMORY_REFERENCE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.IMMEDIATE, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.TRUE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.FALSE, instructionDecode.getRegisterWrite());
+        assertEquals(expectedProgramCounter, instructionDecode.getProgramCounter());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData1());
+        assertEquals(registerValues.get(2), instructionDecode.getRegisterData2());
+        assertEquals(20, instructionDecode.getImmediate());
     }
 
     @Test
     void testDecodeBranchOnEqual() {
+        Instruction instruction = new Instruction("000100 00001 00010 0000000000010100"); // beq $1, $2, 20
+        InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+        instructionDecode.run();
+
+        assertEquals(MainController.AluOperation.BRANCH, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.TRUE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.FALSE, instructionDecode.getRegisterWrite());
+        assertEquals(expectedProgramCounter, instructionDecode.getProgramCounter());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData1());
+        assertEquals(registerValues.get(2), instructionDecode.getRegisterData2());
+        assertEquals(20, instructionDecode.getImmediate());
     }
 
     @AfterEach
