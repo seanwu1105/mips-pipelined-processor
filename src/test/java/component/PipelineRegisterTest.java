@@ -3,6 +3,7 @@ package component;
 import component.pipeline.*;
 import controller.MainController;
 import org.junit.jupiter.api.Test;
+import signal.FunctionCode;
 import signal.Instruction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -69,6 +70,7 @@ class PipelineRegisterTest {
         int expectedRegisterData1 = 4;
         int expectedRegisterData2 = 5;
         int expectedImmediate = 10;
+        FunctionCode expectedFunctionCode = FunctionCode.OR;
         int expectedRt = 6;
         int expectedRd = 7;
 
@@ -77,6 +79,7 @@ class PipelineRegisterTest {
         when(instructionDecode.getRegisterData1()).thenReturn(expectedRegisterData1);
         when(instructionDecode.getRegisterData2()).thenReturn(expectedRegisterData2);
         when(instructionDecode.getImmediate()).thenReturn(expectedImmediate);
+        when(instructionDecode.getFunctionCode()).thenReturn(expectedFunctionCode);
         when(instructionDecode.getRt()).thenReturn(expectedRt);
         when(instructionDecode.getRd()).thenReturn(expectedRd);
 
@@ -87,6 +90,7 @@ class PipelineRegisterTest {
         assertEquals(expectedRegisterData1, idExe.getRegisterData1());
         assertEquals(expectedRegisterData2, idExe.getRegisterData2());
         assertEquals(expectedImmediate, idExe.getImmediate());
+        assertEquals(expectedFunctionCode, idExe.getFunctionCode());
         assertEquals(expectedRt, idExe.getRt());
         assertEquals(expectedRd, idExe.getRd());
     }

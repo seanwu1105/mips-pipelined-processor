@@ -1,13 +1,16 @@
 package controller;
 
 import component.Alu;
-import signal.FunctionCode;
 import org.jetbrains.annotations.NotNull;
+import signal.FunctionCode;
 
 public class AluController {
 
     @NotNull
-    static public Alu.AluControl getAluControl(MainController.AluOperation aluOperation, FunctionCode functionCode) {
+    static public Alu.AluControl getAluControl(
+            @NotNull MainController.AluOperation aluOperation,
+            @NotNull FunctionCode functionCode
+    ) {
         switch (aluOperation) {
             case R_TYPE:
                 switch (functionCode) {

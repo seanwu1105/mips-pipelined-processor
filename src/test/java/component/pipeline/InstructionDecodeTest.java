@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import signal.FunctionCode;
 import signal.Instruction;
 
 import java.util.Map;
@@ -57,6 +58,7 @@ class InstructionDecodeTest {
         assertEquals(expectedProgramCounter, instructionDecode.getProgramCounter());
         assertEquals(registerValues.get(0), instructionDecode.getRegisterData1());
         assertEquals(registerValues.get(1), instructionDecode.getRegisterData2());
+        assertEquals(FunctionCode.ADD, instructionDecode.getFunctionCode());
         assertEquals(2, instructionDecode.getRd());
     }
 

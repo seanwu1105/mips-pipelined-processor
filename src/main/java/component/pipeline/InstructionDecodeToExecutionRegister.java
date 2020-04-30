@@ -3,6 +3,7 @@ package component.pipeline;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import signal.FunctionCode;
 
 public class InstructionDecodeToExecutionRegister implements PipelineRegister {
 
@@ -34,6 +35,7 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     private MainController.MemoryToRegister memoryToRegister;
 
     private int programCounter, registerData1, registerData2, immediate, rt, rd;
+    private FunctionCode functionCode;
 
     public InstructionDecodeToExecutionRegister(@NotNull InstructionDecode instructionDecode) {
         this.instructionDecode = instructionDecode;
@@ -54,6 +56,7 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
         registerData1 = instructionDecode.getRegisterData1();
         registerData2 = instructionDecode.getRegisterData2();
         immediate = instructionDecode.getImmediate();
+        functionCode = instructionDecode.getFunctionCode();
         rt = instructionDecode.getRt();
         rd = instructionDecode.getRd();
     }
@@ -112,6 +115,10 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
 
     public int getImmediate() {
         return immediate;
+    }
+
+    public FunctionCode getFunctionCode() {
+        return functionCode;
     }
 
     public int getRt() {
