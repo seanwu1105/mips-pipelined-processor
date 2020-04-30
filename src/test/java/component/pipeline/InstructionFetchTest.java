@@ -1,5 +1,6 @@
-package component;
+package component.pipeline;
 
+import component.Memory;
 import component.pipeline.ExecutionToMemoryAccessRegister;
 import component.pipeline.InstructionFetch;
 import controller.MainController;
