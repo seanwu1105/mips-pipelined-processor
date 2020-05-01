@@ -2,18 +2,17 @@ package component.pipeline;
 
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class MemoryAccessToWriteBackRegister implements PipelineRegister {
 
     @NotNull
     private final MemoryAccess memoryAccess;
 
-    @Nullable
-    private MainController.RegisterWrite registerWrite;
+    @NotNull
+    private MainController.RegisterWrite registerWrite = MainController.RegisterWrite.FALSE;
 
-    @Nullable
-    private MainController.MemoryToRegister memoryToRegister;
+    @NotNull
+    private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
     private int memoryReadData, aluResult, writeRegisterAddress;
 
@@ -30,12 +29,12 @@ public class MemoryAccessToWriteBackRegister implements PipelineRegister {
         writeRegisterAddress = memoryAccess.getWriteRegisterAddress();
     }
 
-    @Nullable
+    @NotNull
     public MainController.RegisterWrite getRegisterWrite() {
         return registerWrite;
     }
 
-    @Nullable
+    @NotNull
     public MainController.MemoryToRegister getMemoryToRegister() {
         return memoryToRegister;
     }

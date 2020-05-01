@@ -1,25 +1,22 @@
 package controller;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import signal.Instruction;
 import signal.OpCode;
 import signal.Signal;
 
-import java.util.Objects;
-
 public class MainController {
 
-    @Nullable
-    private Instruction instruction;
+    @NotNull
+    private Instruction instruction = Instruction.NOP;
 
-    public void setInstruction(@Nullable Instruction instruction) {
+    public void setInstruction(@NotNull Instruction instruction) {
         this.instruction = instruction;
     }
 
     @NotNull
     public AluOperation getAluOperation() {
-        switch (Objects.requireNonNull(instruction).getOpCode()) {
+        switch (instruction.getOpCode()) {
             case LOAD_WORD:
             case SAVE_WORD:
                 return AluOperation.MEMORY_REFERENCE;
@@ -39,21 +36,21 @@ public class MainController {
 
     @NotNull
     public MemoryRead getMemoryRead() {
-        if (Objects.requireNonNull(instruction).getOpCode() == OpCode.LOAD_WORD)
+        if (instruction.getOpCode() == OpCode.LOAD_WORD)
             return MemoryRead.TRUE;
         return MemoryRead.FALSE;
     }
 
     @NotNull
     public MemoryWrite getMemoryWrite() {
-        if (Objects.requireNonNull(instruction).getOpCode() == OpCode.SAVE_WORD)
+        if (instruction.getOpCode() == OpCode.SAVE_WORD)
             return MemoryWrite.TRUE;
         return MemoryWrite.FALSE;
     }
 
     @NotNull
     public MemoryToRegister getMemoryToRegister() {
-        if (Objects.requireNonNull(instruction).getOpCode() == OpCode.LOAD_WORD)
+        if (instruction.getOpCode() == OpCode.LOAD_WORD)
             return MemoryToRegister.FROM_MEMORY;
         return MemoryToRegister.FROM_ALU_RESULT;
     }
@@ -67,7 +64,6 @@ public class MainController {
 
     @NotNull
     public RegisterWrite getRegisterWrite() {
-        assert instruction != null;
         if (instruction.getOpCode() == OpCode.BRANCH_ON_EQUAL || instruction.getOpCode() == OpCode.SAVE_WORD)
             return RegisterWrite.FALSE;
         return RegisterWrite.TRUE;

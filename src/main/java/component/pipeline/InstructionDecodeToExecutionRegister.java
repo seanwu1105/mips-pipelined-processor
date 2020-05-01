@@ -2,7 +2,6 @@ package component.pipeline;
 
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import signal.FunctionCode;
 
 public class InstructionDecodeToExecutionRegister implements PipelineRegister {
@@ -10,32 +9,34 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     @NotNull
     private final InstructionDecode instructionDecode;
 
-    @Nullable
-    private MainController.RegisterDestination registerDestination;
+    @NotNull
+    private MainController.RegisterDestination registerDestination = MainController.RegisterDestination.RT;
 
-    @Nullable
-    private MainController.AluOperation aluOperation;
+    @NotNull
+    private MainController.AluOperation aluOperation = MainController.AluOperation.MEMORY_REFERENCE;
 
-    @Nullable
-    private MainController.AluSource aluSource;
+    @NotNull
+    private MainController.AluSource aluSource = MainController.AluSource.REGISTER;
 
-    @Nullable
-    private MainController.Branch branch;
+    @NotNull
+    private MainController.Branch branch = MainController.Branch.FALSE;
 
-    @Nullable
-    private MainController.MemoryRead memoryRead;
+    @NotNull
+    private MainController.MemoryRead memoryRead = MainController.MemoryRead.FALSE;
 
-    @Nullable
-    private MainController.MemoryWrite memoryWrite;
+    @NotNull
+    private MainController.MemoryWrite memoryWrite = MainController.MemoryWrite.FALSE;
 
-    @Nullable
-    private MainController.RegisterWrite registerWrite;
+    @NotNull
+    private MainController.RegisterWrite registerWrite = MainController.RegisterWrite.FALSE;
 
-    @Nullable
-    private MainController.MemoryToRegister memoryToRegister;
+    @NotNull
+    private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
     private int programCounter, registerData1, registerData2, immediate, rt, rd;
-    private FunctionCode functionCode;
+
+    @NotNull
+    private FunctionCode functionCode = FunctionCode.NOP;
 
     public InstructionDecodeToExecutionRegister(@NotNull InstructionDecode instructionDecode) {
         this.instructionDecode = instructionDecode;
@@ -61,42 +62,42 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
         rd = instructionDecode.getRd();
     }
 
-    @Nullable
+    @NotNull
     public MainController.RegisterDestination getRegisterDestination() {
         return registerDestination;
     }
 
-    @Nullable
+    @NotNull
     public MainController.AluOperation getAluOperation() {
         return aluOperation;
     }
 
-    @Nullable
+    @NotNull
     public MainController.AluSource getAluSource() {
         return aluSource;
     }
 
-    @Nullable
+    @NotNull
     public MainController.Branch getBranch() {
         return branch;
     }
 
-    @Nullable
+    @NotNull
     public MainController.MemoryRead getMemoryRead() {
         return memoryRead;
     }
 
-    @Nullable
+    @NotNull
     public MainController.MemoryWrite getMemoryWrite() {
         return memoryWrite;
     }
 
-    @Nullable
+    @NotNull
     public MainController.RegisterWrite getRegisterWrite() {
         return registerWrite;
     }
 
-    @Nullable
+    @NotNull
     public MainController.MemoryToRegister getMemoryToRegister() {
         return memoryToRegister;
     }
@@ -117,6 +118,7 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
         return immediate;
     }
 
+    @NotNull
     public FunctionCode getFunctionCode() {
         return functionCode;
     }

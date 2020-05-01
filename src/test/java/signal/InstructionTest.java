@@ -78,7 +78,7 @@ class InstructionTest {
 
     @Test
     void testGetUnknownFunctionCode() {
-        assertThrows(IllegalStateException.class, () -> new Instruction("00000000000000000000000000 000000").getFunctionCode());
+        assertThrows(IllegalStateException.class, () -> new Instruction("00000000000000000000000000 111111").getFunctionCode());
     }
 
     @Test

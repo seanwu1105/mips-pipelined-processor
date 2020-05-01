@@ -7,7 +7,8 @@ public enum FunctionCode implements Signal {
     SUBTRACT("100010"),
     AND("100100"),
     OR("100101"),
-    SET_ON_LESS_THAN("101010");
+    SET_ON_LESS_THAN("101010"),
+    NOP("000000");
 
     @NotNull
     private final String raw;

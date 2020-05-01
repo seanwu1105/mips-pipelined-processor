@@ -4,8 +4,6 @@ import component.Register;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public class WriteBack implements Stage {
 
     @NotNull
@@ -21,13 +19,18 @@ public class WriteBack implements Stage {
 
     @Override
     public void run() {
-        register.setRegisterWrite(Objects.requireNonNull(memWb.getRegisterWrite()));
-        if (memWb.getRegisterWrite() == MainController.RegisterWrite.TRUE)
+        register.setRegisterWrite(memWb.getRegisterWrite());
+        if (memWb.getRegisterWrite() == MainController.RegisterWrite.TRUE) {
             register.setWriteAddress(memWb.getWriteRegisterAddress());
+            if (memWb.getMemoryToRegister() == MainController.MemoryToRegister.FROM_ALU_RESULT)
+                register.write(memWb.getAluResult());
+            else if (memWb.getMemoryToRegister() == MainController.MemoryToRegister.FROM_MEMORY)
+                register.write(memWb.getMemoryReadData());
+        }
+    }
 
-        if (memWb.getMemoryToRegister() == MainController.MemoryToRegister.FROM_ALU_RESULT)
-            register.write(memWb.getAluResult());
-        else if (memWb.getMemoryToRegister() == MainController.MemoryToRegister.FROM_MEMORY)
-            register.write(memWb.getMemoryReadData());
+    @Override
+    public boolean hasInstruction() {
+        return memWb.getRegisterWrite() != MainController.RegisterWrite.FALSE;
     }
 }

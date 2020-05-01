@@ -4,9 +4,7 @@ import component.Alu;
 import controller.AluController;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
+import signal.FunctionCode;
 
 public class Execution implements Stage {
 
@@ -19,20 +17,20 @@ public class Execution implements Stage {
     @NotNull
     private final Alu branchAdder;
 
-    @Nullable
-    private MainController.RegisterWrite registerWrite;
+    @NotNull
+    private MainController.RegisterWrite registerWrite = MainController.RegisterWrite.FALSE;
 
-    @Nullable
-    private MainController.MemoryToRegister memoryToRegister;
+    @NotNull
+    private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
-    @Nullable
-    private MainController.Branch branch;
+    @NotNull
+    private MainController.Branch branch = MainController.Branch.FALSE;
 
-    @Nullable
-    private MainController.MemoryRead memoryRead;
+    @NotNull
+    private MainController.MemoryRead memoryRead = MainController.MemoryRead.FALSE;
 
-    @Nullable
-    private MainController.MemoryWrite memoryWrite;
+    @NotNull
+    private MainController.MemoryWrite memoryWrite = MainController.MemoryWrite.FALSE;
 
     private int registerData2, writeRegisterAddress;
 
@@ -49,27 +47,27 @@ public class Execution implements Stage {
 
     @NotNull
     public MainController.RegisterWrite getRegisterWrite() {
-        return Objects.requireNonNull(registerWrite);
+        return registerWrite;
     }
 
     @NotNull
     public MainController.MemoryToRegister getMemoryToRegister() {
-        return Objects.requireNonNull(memoryToRegister);
+        return memoryToRegister;
     }
 
     @NotNull
     public MainController.Branch getBranch() {
-        return Objects.requireNonNull(branch);
+        return branch;
     }
 
     @NotNull
     public MainController.MemoryRead getMemoryRead() {
-        return Objects.requireNonNull(memoryRead);
+        return memoryRead;
     }
 
     @NotNull
     public MainController.MemoryWrite getMemoryWrite() {
-        return Objects.requireNonNull(memoryWrite);
+        return memoryWrite;
     }
 
     public int getBranchResult() {
@@ -90,13 +88,20 @@ public class Execution implements Stage {
 
     @Override
     public void run() {
-        passControlSignals();
-        configAlu();
-        configBranchAdder();
-        registerData2 = idExe.getRegisterData2();
-        if (idExe.getRegisterDestination() == MainController.RegisterDestination.RT)
-            writeRegisterAddress = idExe.getRt();
-        else writeRegisterAddress = idExe.getRd();
+        if (idExe.getFunctionCode() != FunctionCode.NOP) {
+            passControlSignals();
+            configAlu();
+            configBranchAdder();
+            registerData2 = idExe.getRegisterData2();
+            if (idExe.getRegisterDestination() == MainController.RegisterDestination.RT)
+                writeRegisterAddress = idExe.getRt();
+            else writeRegisterAddress = idExe.getRd();
+        }
+    }
+
+    @Override
+    public boolean hasInstruction() {
+        return idExe.getFunctionCode() != FunctionCode.NOP;
     }
 
     private void passControlSignals() {
@@ -108,8 +113,7 @@ public class Execution implements Stage {
     }
 
     private void configAlu() {
-        MainController.AluOperation aluOperation = Objects.requireNonNull(idExe.getAluOperation());
-        alu.setControl(AluController.getAluControl(aluOperation, idExe.getFunctionCode()));
+        alu.setControl(AluController.getAluControl(idExe.getAluOperation(), idExe.getFunctionCode()));
         alu.setOperand1(idExe.getRegisterData1());
 
         if (idExe.getAluSource() == MainController.AluSource.REGISTER)

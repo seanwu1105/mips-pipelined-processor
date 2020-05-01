@@ -3,11 +3,8 @@ package component.pipeline;
 import component.Register;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import signal.FunctionCode;
 import signal.Instruction;
-
-import java.util.Objects;
 
 public class InstructionDecode implements Stage {
 
@@ -22,8 +19,8 @@ public class InstructionDecode implements Stage {
 
     private int programCounter;
 
-    @Nullable
-    private Instruction currentInstruction;
+    @NotNull
+    private Instruction currentInstruction = Instruction.NOP;
 
     public InstructionDecode(
             @NotNull InstructionFetchToInstructionDecodeRegister ifId,
@@ -40,6 +37,11 @@ public class InstructionDecode implements Stage {
         currentInstruction = ifId.getInstruction();
         mainController.setInstruction(currentInstruction);
         programCounter = ifId.getProgramCounter();
+    }
+
+    @Override
+    public boolean hasInstruction() {
+        return currentInstruction != Instruction.NOP;
     }
 
     @NotNull
@@ -87,28 +89,28 @@ public class InstructionDecode implements Stage {
     }
 
     public int getRegisterData1() {
-        register.setReadAddress1(Objects.requireNonNull(currentInstruction).getRs());
+        register.setReadAddress1(currentInstruction.getRs());
         return register.readData1();
     }
 
     public int getRegisterData2() {
-        register.setReadAddress2(Objects.requireNonNull(currentInstruction).getRt());
+        register.setReadAddress2(currentInstruction.getRt());
         return register.readData2();
     }
 
     public int getImmediate() {
-        return Objects.requireNonNull(currentInstruction).getImmediate();
+        return currentInstruction.getImmediate();
     }
 
     public FunctionCode getFunctionCode() {
-        return Objects.requireNonNull(currentInstruction).getFunctionCode();
+        return currentInstruction.getFunctionCode();
     }
 
     public int getRt() {
-        return Objects.requireNonNull(currentInstruction).getRt();
+        return currentInstruction.getRt();
     }
 
     public int getRd() {
-        return Objects.requireNonNull(currentInstruction).getRd();
+        return currentInstruction.getRd();
     }
 }

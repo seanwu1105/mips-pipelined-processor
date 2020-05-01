@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Instruction implements Signal {
 
+    static public final Instruction NOP = new Instruction("00000000000000000000000000000000");
+
     @NotNull
     private final String raw;
 

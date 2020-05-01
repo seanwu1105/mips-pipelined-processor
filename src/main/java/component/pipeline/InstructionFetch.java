@@ -17,13 +17,11 @@ public class InstructionFetch implements Stage {
     private int programCounter = 0;
 
     @NotNull
-    private Instruction currentInstruction;
+    private Instruction currentInstruction = Instruction.NOP;
 
     public InstructionFetch(@NotNull Memory instructionMemory) {
         this.instructionMemory = instructionMemory;
         this.instructionMemory.setMemoryRead(MainController.MemoryRead.TRUE);
-        this.instructionMemory.setAddress(programCounter);
-        currentInstruction = this.instructionMemory.readInstruction();
     }
 
     public void setExecutionToMemoryAccessRegister(@NotNull ExecutionToMemoryAccessRegister exeMem) {
@@ -42,11 +40,24 @@ public class InstructionFetch implements Stage {
     @Override
     public void run() {
         instructionMemory.setAddress(programCounter);
-        currentInstruction = instructionMemory.readInstruction();
+        updateCurrentInstruction();
 
         if (exeMem != null && exeMem.shouldBranch())
             programCounter = exeMem.getBranchResult();
         else
             programCounter += 4;
+    }
+
+    private void updateCurrentInstruction() {
+        try {
+            currentInstruction = instructionMemory.readInstruction();
+        } catch (NullPointerException e) {
+            currentInstruction = Instruction.NOP;
+        }
+    }
+
+    @Override
+    public boolean hasInstruction() {
+        return currentInstruction != Instruction.NOP;
     }
 }

@@ -1,7 +1,6 @@
 package component.pipeline;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import signal.Instruction;
 
 public class InstructionFetchToInstructionDecodeRegister implements PipelineRegister {
@@ -11,8 +10,8 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
 
     private int programCounter;
 
-    @Nullable
-    private Instruction instruction;
+    @NotNull
+    private Instruction instruction = Instruction.NOP;
 
     public InstructionFetchToInstructionDecodeRegister(@NotNull InstructionFetch instructionFetch) {
         this.instructionFetch = instructionFetch;
@@ -22,7 +21,7 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
         return programCounter;
     }
 
-    @Nullable
+    @NotNull
     public Instruction getInstruction() {
         return instruction;
     }

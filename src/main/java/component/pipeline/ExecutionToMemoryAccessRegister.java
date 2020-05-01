@@ -2,27 +2,26 @@ package component.pipeline;
 
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ExecutionToMemoryAccessRegister implements PipelineRegister {
 
     @NotNull
     private final Execution execution;
 
-    @Nullable
-    private MainController.RegisterWrite registerWrite;
+    @NotNull
+    private MainController.RegisterWrite registerWrite = MainController.RegisterWrite.FALSE;
 
-    @Nullable
-    private MainController.MemoryToRegister memoryToRegister;
+    @NotNull
+    private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
-    @Nullable
-    private MainController.Branch branch;
+    @NotNull
+    private MainController.Branch branch = MainController.Branch.FALSE;
 
-    @Nullable
-    private MainController.MemoryRead memoryRead;
+    @NotNull
+    private MainController.MemoryRead memoryRead = MainController.MemoryRead.FALSE;
 
-    @Nullable
-    private MainController.MemoryWrite memoryWrite;
+    @NotNull
+    private MainController.MemoryWrite memoryWrite = MainController.MemoryWrite.FALSE;
 
     private int branchResult, aluResult, registerData2, writeRegisterAddress;
 
@@ -30,12 +29,12 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
         this.execution = execution;
     }
 
-    @Nullable
+    @NotNull
     public MainController.RegisterWrite getRegisterWrite() {
         return registerWrite;
     }
 
-    @Nullable
+    @NotNull
     public MainController.MemoryToRegister getMemoryToRegister() {
         return memoryToRegister;
     }
@@ -44,12 +43,12 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
         return branch == MainController.Branch.TRUE && getAluResult() == 0;
     }
 
-    @Nullable
+    @NotNull
     public MainController.MemoryRead getMemoryRead() {
         return memoryRead;
     }
 
-    @Nullable
+    @NotNull
     public MainController.MemoryWrite getMemoryWrite() {
         return memoryWrite;
     }

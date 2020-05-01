@@ -3,9 +3,6 @@ package component.pipeline;
 import component.Memory;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 public class MemoryAccess implements Stage {
 
@@ -15,11 +12,11 @@ public class MemoryAccess implements Stage {
     @NotNull
     private final Memory dataMemory;
 
-    @Nullable
-    private MainController.RegisterWrite registerWrite;
+    @NotNull
+    private MainController.RegisterWrite registerWrite = MainController.RegisterWrite.FALSE;
 
-    @Nullable
-    private MainController.MemoryToRegister memoryToRegister;
+    @NotNull
+    private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
     private int memoryReadData, aluResult, writeRegisterAddress;
 
@@ -37,6 +34,11 @@ public class MemoryAccess implements Stage {
         accessMemory();
     }
 
+    @Override
+    public boolean hasInstruction() {
+        return exeMem.getMemoryWrite() != MainController.MemoryWrite.FALSE || exeMem.getMemoryRead() != MainController.MemoryRead.FALSE || exeMem.shouldBranch();
+    }
+
     private void passProperties() {
         registerWrite = exeMem.getRegisterWrite();
         memoryToRegister = exeMem.getMemoryToRegister();
@@ -46,20 +48,20 @@ public class MemoryAccess implements Stage {
 
     private void accessMemory() {
         dataMemory.setAddress(exeMem.getAluResult());
-        dataMemory.setMemoryRead(Objects.requireNonNull(exeMem.getMemoryRead()));
-        dataMemory.setMemoryWrite(Objects.requireNonNull(exeMem.getMemoryWrite()));
+        dataMemory.setMemoryRead(exeMem.getMemoryRead());
+        dataMemory.setMemoryWrite(exeMem.getMemoryWrite());
         if (exeMem.getMemoryRead() == MainController.MemoryRead.TRUE)
             memoryReadData = dataMemory.read();
         else if (exeMem.getMemoryWrite() == MainController.MemoryWrite.TRUE)
             dataMemory.write(exeMem.getRegisterData2());
     }
 
-    @Nullable
+    @NotNull
     public MainController.RegisterWrite getRegisterWrite() {
         return registerWrite;
     }
 
-    @Nullable
+    @NotNull
     public MainController.MemoryToRegister getMemoryToRegister() {
         return memoryToRegister;
     }
