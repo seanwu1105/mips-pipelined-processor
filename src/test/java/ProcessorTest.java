@@ -126,6 +126,18 @@ class ProcessorTest {
         assertEquals(registerValues.get(1) < registerValues.get(2) ? 1 : 0, register.readData1());
     }
 
+    @Test
+    void testLoadWord() {
+        List<Instruction> instructions = List.of(
+                new Instruction("100011 00010 00001 0000000000000100") // lw $1, 4($2)
+        );
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(1);
+        assertEquals(dataMemoryValues.get(registerValues.get(2) + 4), register.readData1());
+    }
+
     private void buildProcessorAndRun(List<Instruction> instructions) {
         Processor processor = processorBuilder
                 .setInstructions(instructions)

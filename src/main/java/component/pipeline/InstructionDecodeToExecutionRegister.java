@@ -2,6 +2,7 @@ package component.pipeline;
 
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import signal.FunctionCode;
 
 public class InstructionDecodeToExecutionRegister implements PipelineRegister {
@@ -35,7 +36,7 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
 
     private int programCounter, registerData1, registerData2, immediate, rt, rd;
 
-    @NotNull
+    @Nullable
     private FunctionCode functionCode = FunctionCode.NOP;
 
     public InstructionDecodeToExecutionRegister(@NotNull InstructionDecode instructionDecode) {
@@ -118,7 +119,7 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
         return immediate;
     }
 
-    @NotNull
+    @Nullable
     public FunctionCode getFunctionCode() {
         return functionCode;
     }

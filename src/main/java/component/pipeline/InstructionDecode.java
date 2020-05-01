@@ -3,6 +3,7 @@ package component.pipeline;
 import component.Register;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import signal.FunctionCode;
 import signal.Instruction;
 
@@ -102,8 +103,13 @@ public class InstructionDecode implements Stage {
         return currentInstruction.getImmediate();
     }
 
+    @Nullable
     public FunctionCode getFunctionCode() {
-        return currentInstruction.getFunctionCode();
+        try {
+            return currentInstruction.getFunctionCode();
+        } catch (IllegalStateException e) {
+            return null;
+        }
     }
 
     public int getRt() {

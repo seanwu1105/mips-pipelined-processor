@@ -2,18 +2,21 @@ package controller;
 
 import component.Alu;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import signal.FunctionCode;
+
+import java.util.Objects;
 
 public class AluController {
 
     @NotNull
     static public Alu.AluControl getAluControl(
             @NotNull MainController.AluOperation aluOperation,
-            @NotNull FunctionCode functionCode
+            @Nullable FunctionCode functionCode
     ) {
         switch (aluOperation) {
             case R_TYPE:
-                switch (functionCode) {
+                switch (Objects.requireNonNull(functionCode)) {
                     case ADD:
                         return Alu.AluControl.ADD;
                     case SUBTRACT:
