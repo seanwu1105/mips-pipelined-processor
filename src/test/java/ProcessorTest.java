@@ -152,6 +152,35 @@ class ProcessorTest {
         dataMemory.setMemoryRead(MainController.MemoryRead.FALSE);
     }
 
+    // TODO: Implement branch hazard resolver.
+//    @Test
+//    void testBranchOnEqualFalse() {
+//        List<Instruction> instructions = List.of(
+//                new Instruction("000100 00001 00010 0000000000000001"), // beq $1, $2, 1
+//                new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
+//                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
+//        );
+//
+//        buildProcessorAndRun(instructions);
+//
+//        register.setReadAddress1(5);
+//        assertEquals(registerValues.get(1) + registerValues.get(2) - registerValues.get(4), register.readData1());
+//    }
+//
+//    @Test
+//    void testBranchOnEqualTrue() {
+//        List<Instruction> instructions = List.of(
+//                new Instruction("000100 00001 00001 0000000000000001"), // beq $1, $1, 1
+//                new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
+//                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
+//        );
+//
+//        buildProcessorAndRun(instructions);
+//
+//        register.setReadAddress1(5);
+//        assertEquals(registerValues.get(3) - registerValues.get(4), register.readData1());
+//    }
+
     private void buildProcessorAndRun(List<Instruction> instructions) {
         Processor processor = processorBuilder
                 .setInstructions(instructions)
