@@ -8,17 +8,12 @@ import signal.Instruction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class Processor {
 
-    private final Logger logger = Logger.getLogger(Processor.class.getName());
-
-    @NotNull
     private final List<Stage> stages = new ArrayList<>();
-
-    @NotNull
     private final List<PipelineRegister> pipelineRegisters = new ArrayList<>();
+    private final List<ProcessorPrinter> printers = new ArrayList<>();
 
     private Processor(
             @NotNull InstructionFetch instructionFetch,
@@ -43,12 +38,10 @@ public class Processor {
     }
 
     public void run() {
-        int cc = 0;
         do {
-            logger.info("cc = " + cc);
             stages.forEach(Stage::run);
             pipelineRegisters.forEach(PipelineRegister::update);
-            cc++;
+            printers.forEach(printer -> printer.onClockCycleFinished(this));
         } while (hasUnfinishedInstructions());
     }
 
@@ -56,6 +49,10 @@ public class Processor {
         for (Stage stage : stages)
             if (stage.hasInstruction()) return true;
         return false;
+    }
+
+    public void addPrinter(ProcessorPrinter printer) {
+        printers.add(printer);
     }
 
     static public class Builder {

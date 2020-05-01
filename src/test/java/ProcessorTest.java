@@ -13,24 +13,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProcessorTest {
 
-    private final Map<Integer, Integer> registerValues = Map.of(
+    static public final Map<Integer, Integer> registerValues = Map.of(
             0, 0,
-            1, 11,
-            2, 12,
-            3, 13,
-            4, 14,
-            5, 15,
-            6, 16,
-            7, 17,
-            8, 18,
-            9, 19
+            1, 9,
+            2, 8,
+            3, 7,
+            4, 1,
+            5, 2,
+            6, 3,
+            7, 4,
+            8, 5,
+            9, 6
     );
-    private final Map<Integer, Integer> dataMemoryValues = Map.of(
-            0x00, 101,
-            0x04, 104,
-            0x08, 108,
-            0x0C, 112,
-            0x10, 116
+    static public final Map<Integer, Integer> dataMemoryValues = Map.of(
+            0x00, 5,
+            0x04, 9,
+            0x08, 4,
+            0x0C, 8,
+            0x10, 7
     );
     @NotNull
     private Processor.Builder processorBuilder;
@@ -185,6 +185,21 @@ class ProcessorTest {
         Processor processor = processorBuilder
                 .setInstructions(instructions)
                 .build();
+        processor.run();
+    }
+
+    @Test
+    void testProcessorPrinter() {
+        ProcessorPrinter printer = new ProcessorPrinter();
+
+        List<Instruction> instructions = List.of(
+                new Instruction("000000 00001 00010 00011 00000 100100") // and $3, $1, $2
+        );
+
+        Processor processor = processorBuilder
+                .setInstructions(instructions)
+                .build();
+        processor.addPrinter(printer);
         processor.run();
     }
 }
