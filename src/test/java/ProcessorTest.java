@@ -71,12 +71,65 @@ class ProcessorTest {
         List<Instruction> instructions = List.of(
                 new Instruction("000000 00001 00010 00011 00000 100000") // add $3, $1, $2
         );
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(3);
+        assertEquals(registerValues.get(1) + registerValues.get(2), register.readData1());
+    }
+
+    @Test
+    void testSubtract() {
+        List<Instruction> instructions = List.of(
+                new Instruction("000000 00001 00010 00011 00000 100010") // sub $3, $1, $2
+        );
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(3);
+        assertEquals(registerValues.get(1) - registerValues.get(2), register.readData1());
+    }
+
+    @Test
+    void testAnd() {
+        List<Instruction> instructions = List.of(
+                new Instruction("000000 00001 00010 00011 00000 100100") // and $3, $1, $2
+        );
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(3);
+        assertEquals(registerValues.get(1) & registerValues.get(2), register.readData1());
+    }
+
+    @Test
+    void testOr() {
+        List<Instruction> instructions = List.of(
+                new Instruction("000000 00001 00010 00011 00000 100101") // or $3, $1, $2
+        );
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(3);
+        assertEquals(registerValues.get(1) | registerValues.get(2), register.readData1());
+    }
+
+    @Test
+    void testSetOnLessThan() {
+        List<Instruction> instructions = List.of(
+                new Instruction("000000 00001 00010 00011 00000 101010") // slt $3, $1, $2
+        );
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(3);
+        assertEquals(registerValues.get(1) < registerValues.get(2) ? 1 : 0, register.readData1());
+    }
+
+    private void buildProcessorAndRun(List<Instruction> instructions) {
         Processor processor = processorBuilder
                 .setInstructions(instructions)
                 .build();
         processor.run();
-
-        register.setReadAddress1(3);
-        assertEquals(registerValues.get(1) + registerValues.get(2), register.readData1());
     }
 }
