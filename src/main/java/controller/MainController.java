@@ -16,20 +16,20 @@ public class MainController {
 
     @NotNull
     public AluOperation getAluOperation() {
+        if (instruction == Instruction.NOP) return AluOperation.MEMORY_REFERENCE;
         switch (instruction.getOpCode()) {
-            case LOAD_WORD:
-            case SAVE_WORD:
-                return AluOperation.MEMORY_REFERENCE;
+            case R_TYPE:
+                return AluOperation.R_TYPE;
             case BRANCH_ON_EQUAL:
                 return AluOperation.BRANCH;
             default:
-                return AluOperation.R_TYPE;
+                return AluOperation.MEMORY_REFERENCE;
         }
     }
 
     @NotNull
     public AluSource getAluSource() {
-        if (getAluOperation() == AluOperation.MEMORY_REFERENCE)
+        if (getAluOperation() == AluOperation.MEMORY_REFERENCE && instruction != Instruction.NOP)
             return AluSource.IMMEDIATE;
         return AluSource.REGISTER;
     }
@@ -57,6 +57,7 @@ public class MainController {
 
     @NotNull
     public RegisterDestination getRegisterDestination() {
+        if (instruction == Instruction.NOP) return RegisterDestination.RT;
         if (getAluOperation() == AluOperation.R_TYPE)
             return RegisterDestination.RD;
         return RegisterDestination.RT;
@@ -64,9 +65,10 @@ public class MainController {
 
     @NotNull
     public RegisterWrite getRegisterWrite() {
-        if (instruction.getOpCode() == OpCode.BRANCH_ON_EQUAL || instruction.getOpCode() == OpCode.SAVE_WORD)
-            return RegisterWrite.FALSE;
-        return RegisterWrite.TRUE;
+        if (instruction == Instruction.NOP) return RegisterWrite.FALSE;
+        if (instruction.getOpCode() == OpCode.R_TYPE || instruction.getOpCode() == OpCode.LOAD_WORD)
+            return RegisterWrite.TRUE;
+        return RegisterWrite.FALSE;
     }
 
     @NotNull

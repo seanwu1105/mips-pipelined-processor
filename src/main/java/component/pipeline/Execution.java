@@ -88,8 +88,8 @@ public class Execution implements Stage {
 
     @Override
     public void run() {
+        passControlSignals();
         if (idExe.getFunctionCode() != FunctionCode.NOP) {
-            passControlSignals();
             configAlu();
             configBranchAdder();
             registerData2 = idExe.getRegisterData2();

@@ -36,7 +36,10 @@ public class MemoryAccess implements Stage {
 
     @Override
     public boolean hasInstruction() {
-        return exeMem.getMemoryWrite() != MainController.MemoryWrite.FALSE || exeMem.getMemoryRead() != MainController.MemoryRead.FALSE || exeMem.shouldBranch();
+        return exeMem.getRegisterWrite() == MainController.RegisterWrite.TRUE
+                || exeMem.getMemoryWrite() == MainController.MemoryWrite.TRUE
+                || exeMem.getMemoryRead() == MainController.MemoryRead.TRUE
+                || exeMem.shouldBranch();
     }
 
     private void passProperties() {

@@ -8,8 +8,11 @@ import signal.Instruction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Processor {
+
+    private final Logger logger = Logger.getLogger(Processor.class.getName());
 
     @NotNull
     private final List<Stage> stages = new ArrayList<>();
@@ -40,16 +43,19 @@ public class Processor {
     }
 
     public void run() {
+        int cc = 0;
         do {
+            logger.info("cc = " + cc);
             stages.forEach(Stage::run);
             pipelineRegisters.forEach(PipelineRegister::update);
+            cc++;
         } while (hasUnfinishedInstructions());
     }
 
     private boolean hasUnfinishedInstructions() {
         for (Stage stage : stages)
-            if (!stage.hasInstruction()) return false;
-        return true;
+            if (stage.hasInstruction()) return true;
+        return false;
     }
 
     static public class Builder {
