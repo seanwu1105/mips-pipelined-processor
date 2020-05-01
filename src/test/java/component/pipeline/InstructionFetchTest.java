@@ -1,8 +1,6 @@
 package component.pipeline;
 
 import component.Memory;
-import component.pipeline.ExecutionToMemoryAccessRegister;
-import component.pipeline.InstructionFetch;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
@@ -29,21 +27,16 @@ class InstructionFetchTest {
 
     @Test
     void testInstructionFetchRun() {
-        int initProgramCounter = 0, number = 0;
         List<Instruction> instructions = List.of(
                 new Instruction("10001101000000010000000000000011"),
                 new Instruction("00000000000000100001100000100000")
         );
 
-        for (Instruction instruction : instructions) {
-            instructionMemory.setAddress(initProgramCounter + number * 4);
-            instructionMemory.write(instruction);
-            number++;
-        }
+        setInstructions(instructions);
 
         InstructionFetch instructionFetch = new InstructionFetch(instructionMemory);
 
-        number = 0;
+        int number = 0;
         for (Instruction instruction : instructions) {
             instructionFetch.run();
             assertEquals((number + 1) * 4, instructionFetch.getProgramCounter());
@@ -54,7 +47,6 @@ class InstructionFetchTest {
 
     @Test
     void testInstructionFetchRunOnBranch() {
-        int initProgramCounter = 0, number = 0;
         List<Instruction> instructions = List.of(
                 new Instruction("00010000010000100000000000000001"),
                 new Instruction("00000000000000100001100000100000"),
@@ -62,11 +54,7 @@ class InstructionFetchTest {
                 new Instruction("00000000000000100001100000100000")
         );
 
-        for (Instruction instruction : instructions) {
-            instructionMemory.setAddress(initProgramCounter + number * 4);
-            instructionMemory.write(instruction);
-            number++;
-        }
+        setInstructions(instructions);
 
         // XXX: This TestCase violates encapsulation of InstructionFetch.
         ExecutionToMemoryAccessRegister exeMem = mock(ExecutionToMemoryAccessRegister.class);
@@ -75,16 +63,25 @@ class InstructionFetchTest {
         instructionFetch.setExecutionToMemoryAccessRegister(exeMem);
 
         int expectedBranchResult = 8;
-        when(exeMem.getBranch()).thenReturn(MainController.Branch.TRUE);
+        when(exeMem.shouldBranch()).thenReturn(true);
         when(exeMem.getBranchResult()).thenReturn(expectedBranchResult);
         instructionFetch.run();
         assertEquals(expectedBranchResult, instructionFetch.getProgramCounter());
         assertEquals(instructions.get(0), instructionFetch.getInstruction());
 
-        when(exeMem.getBranch()).thenReturn(MainController.Branch.FALSE);
+        when(exeMem.shouldBranch()).thenReturn(false);
         instructionFetch.run();
         assertEquals(expectedBranchResult + 4, instructionFetch.getProgramCounter());
         assertEquals(instructions.get(expectedBranchResult / 4), instructionFetch.getInstruction());
+    }
+
+    private void setInstructions(List<Instruction> instructions) {
+        int initProgramCounter = 0, number = 0;
+        for (Instruction instruction : instructions) {
+            instructionMemory.setAddress(initProgramCounter + number * 4);
+            instructionMemory.write(instruction);
+            number++;
+        }
     }
 
     @AfterEach

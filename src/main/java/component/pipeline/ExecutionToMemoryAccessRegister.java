@@ -40,9 +40,8 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
         return memoryToRegister;
     }
 
-    @Nullable
-    public MainController.Branch getBranch() {
-        return branch;
+    public boolean shouldBranch() {
+        return branch == MainController.Branch.TRUE && getAluResult() == 0;
     }
 
     @Nullable

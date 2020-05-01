@@ -7,6 +7,7 @@ import signal.FunctionCode;
 import signal.Instruction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -99,23 +100,25 @@ class PipelineRegisterTest {
     void testGetExecutionToMemoryAccessRegisterControlSignals() {
         MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
         MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
-        MainController.Branch expectedBranch = MainController.Branch.FALSE;
         MainController.MemoryRead expectedMemoryRead = MainController.MemoryRead.TRUE;
         MainController.MemoryWrite expectedMemoryWrite = MainController.MemoryWrite.FALSE;
+        MainController.Branch expectedBranch = MainController.Branch.FALSE;
+        int expectedAluResult = 0;
 
         Execution execution = mock(Execution.class);
         when(execution.getRegisterWrite()).thenReturn(expectedRegisterWrite);
         when(execution.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
-        when(execution.getBranch()).thenReturn(expectedBranch);
         when(execution.getMemoryRead()).thenReturn(expectedMemoryRead);
         when(execution.getMemoryWrite()).thenReturn(expectedMemoryWrite);
+        when(execution.getBranch()).thenReturn(expectedBranch);
+        when(execution.getAluResult()).thenReturn(expectedAluResult);
 
         ExecutionToMemoryAccessRegister exeMem = new ExecutionToMemoryAccessRegister(execution);
         exeMem.update();
 
         assertEquals(expectedRegisterWrite, exeMem.getRegisterWrite());
         assertEquals(expectedMemoryToRegister, exeMem.getMemoryToRegister());
-        assertEquals(expectedBranch, exeMem.getBranch());
+        assertFalse(exeMem.shouldBranch());
         assertEquals(expectedMemoryRead, exeMem.getMemoryRead());
         assertEquals(expectedMemoryWrite, exeMem.getMemoryWrite());
     }

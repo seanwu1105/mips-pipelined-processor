@@ -44,7 +44,7 @@ public class InstructionFetch implements Stage {
         instructionMemory.setAddress(programCounter);
         currentInstruction = instructionMemory.readInstruction();
 
-        if (exeMem != null && exeMem.getBranch() == MainController.Branch.TRUE)
+        if (exeMem != null && exeMem.shouldBranch())
             programCounter = exeMem.getBranchResult();
         else
             programCounter += 4;
