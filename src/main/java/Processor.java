@@ -8,12 +8,15 @@ import signal.Instruction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Processor {
 
     private final List<Stage> stages = new ArrayList<>();
     private final List<PipelineRegister> pipelineRegisters = new ArrayList<>();
-    private final List<ProcessorPrinter> printers = new ArrayList<>();
+    private final List<ProcessorLogger> loggers = new ArrayList<>();
+    private final InstructionDecode instructionDecode;
+    private final MemoryAccess memoryAccess;
 
     private Processor(
             @NotNull InstructionFetch instructionFetch,
@@ -26,6 +29,8 @@ public class Processor {
             @NotNull MemoryAccessToWriteBackRegister memWb,
             @NotNull WriteBack writeBack
     ) {
+        this.instructionDecode = instructionDecode;
+        this.memoryAccess = memoryAccess;
         stages.add(instructionFetch);
         stages.add(instructionDecode);
         stages.add(execution);
@@ -41,7 +46,7 @@ public class Processor {
         do {
             stages.forEach(Stage::run);
             pipelineRegisters.forEach(PipelineRegister::update);
-            printers.forEach(printer -> printer.onClockCycleFinished(this));
+            loggers.forEach(printer -> printer.onClockCycleFinished(this));
         } while (hasUnfinishedInstructions());
     }
 
@@ -51,8 +56,24 @@ public class Processor {
         return false;
     }
 
-    public void addPrinter(ProcessorPrinter printer) {
-        printers.add(printer);
+    public void addLogger(ProcessorLogger logger) {
+        loggers.add(logger);
+    }
+
+    public Set<Integer> getWrittenRegisterAddresses() {
+        return instructionDecode.getWrittenRegisterAddresses();
+    }
+
+    public int readRegister(int address) {
+        return instructionDecode.readRegister(address);
+    }
+
+    public Set<Integer> getWrittenDataMemoryAddresses() {
+        return memoryAccess.getWrittenDataMemoryAddresses();
+    }
+
+    public int readDataMemory(int address) {
+        return memoryAccess.readDataMemory(address);
     }
 
     static public class Builder {

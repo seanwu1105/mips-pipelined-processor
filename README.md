@@ -8,12 +8,12 @@
 
 * JDK 11
 
-## Main Controller
+## Control Signals
 
 |                 | `RegisterDestination` | `AluOperation` | `AluSource` | `Branch` | `MemoryRead` | `MemoryWrite` | `RegisterWrite` | `MemoryToRegister` |
 |:---------------:|:---------------------:|:--------------:|:-----------:|:--------:|:------------:|:-------------:|:---------------:|:------------------:|
 |       NOP       |          `0`          |      `00`      |     `0`     |    `0`   |      `0`     |      `0`      |       `0`       |         `0`        |
 |      R Type     |          `1`          |      `10`      |     `0`     |    `0`   |      `0`     |      `0`      |       `1`       |         `0`        |
 |    Load Word    |          `0`          |      `00`      |     `1`     |    `0`   |      `1`     |      `0`      |       `1`       |         `1`        |
-|    Save Word    |       don't care      |      `00`      |     `1`     |    `0`   |      `0`     |      `1`      |       `0`       |     don't care     |
-| Branch On Equal |       don't care      |      `01`      |     `0`     |    `1`   |      `0`     |      `0`      |       `0`       |     don't care     |
+|    Save Word    |    don't care (`0`)   |      `00`      |     `1`     |    `0`   |      `0`     |      `1`      |       `0`       |  don't care (`0`)  |
+| Branch On Equal |    don't care (`0`)   |      `01`      |     `0`     |    `1`   |      `0`     |      `0`      |       `0`       |  don't care (`0`)  |

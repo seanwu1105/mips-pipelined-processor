@@ -32,8 +32,10 @@ class InstructionDecodeTest {
         register = new Register();
         register.setRegisterWrite(MainController.RegisterWrite.TRUE);
         registerValues.forEach((key, value) -> {
-            register.setWriteAddress(key);
-            register.write(value);
+            if (key != 0) {
+                register.setWriteAddress(key);
+                register.write(value);
+            }
         });
     }
 

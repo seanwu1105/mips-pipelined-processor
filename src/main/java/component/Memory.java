@@ -6,6 +6,7 @@ import signal.Instruction;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Memory {
 
@@ -50,5 +51,9 @@ public class Memory {
     @NotNull
     public Instruction readInstruction() {
         return new Instruction(read());
+    }
+
+    public Set<Integer> getWrittenAddresses() {
+        return data.keySet();
     }
 }

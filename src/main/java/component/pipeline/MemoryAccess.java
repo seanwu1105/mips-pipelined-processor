@@ -4,6 +4,8 @@ import component.Memory;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class MemoryAccess implements Stage {
 
     @NotNull
@@ -79,5 +81,17 @@ public class MemoryAccess implements Stage {
 
     public int getWriteRegisterAddress() {
         return writeRegisterAddress;
+    }
+
+    public Set<Integer> getWrittenDataMemoryAddresses() {
+        return dataMemory.getWrittenAddresses();
+    }
+
+    public int readDataMemory(int address) {
+        dataMemory.setMemoryRead(MainController.MemoryRead.TRUE);
+        dataMemory.setAddress(address);
+        int data = dataMemory.read();
+        dataMemory.setMemoryRead(MainController.MemoryRead.FALSE);
+        return data;
     }
 }

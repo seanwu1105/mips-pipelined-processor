@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import signal.FunctionCode;
 import signal.Instruction;
 
+import java.util.Set;
+
 public class InstructionDecode implements Stage {
 
     @NotNull
@@ -90,13 +92,11 @@ public class InstructionDecode implements Stage {
     }
 
     public int getRegisterData1() {
-        register.setReadAddress1(currentInstruction.getRs());
-        return register.readData1();
+        return readRegister(currentInstruction.getRs());
     }
 
     public int getRegisterData2() {
-        register.setReadAddress2(currentInstruction.getRt());
-        return register.readData2();
+        return readRegister(currentInstruction.getRt());
     }
 
     public int getImmediate() {
@@ -118,5 +118,14 @@ public class InstructionDecode implements Stage {
 
     public int getRd() {
         return currentInstruction.getRd();
+    }
+
+    public int readRegister(int address) {
+        register.setReadAddress1(address);
+        return register.readData1();
+    }
+
+    public Set<Integer> getWrittenRegisterAddresses() {
+        return register.getWrittenAddresses();
     }
 }

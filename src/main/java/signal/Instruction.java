@@ -86,4 +86,9 @@ public class Instruction implements Signal {
     public int hashCode() {
         return raw.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return getRaw();
+    }
 }

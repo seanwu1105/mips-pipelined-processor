@@ -29,11 +29,17 @@ class InstructionTest {
 
     @Test
     void testEquals() {
-        String raw = "00000000000000000000000000000000";
+        String raw = "10101010101010101010101010101010";
         Instruction a = new Instruction(raw);
         Instruction b = new Instruction(raw);
         assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        String raw = "10101010101010101010101010101010";
+        assertEquals(raw, "" + new Instruction(raw));
     }
 
     @Test
