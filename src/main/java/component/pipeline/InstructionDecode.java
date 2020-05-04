@@ -129,6 +129,7 @@ public class InstructionDecode implements Stage {
         return register.readData1();
     }
 
+    @NotNull
     public Set<Integer> getWrittenRegisterAddresses() {
         return register.getWrittenAddresses();
     }

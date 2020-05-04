@@ -2,6 +2,7 @@ import component.Memory;
 import component.Register;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import signal.Instruction;
@@ -194,16 +195,9 @@ class ProcessorTest {
 //        assertEquals(registerValues.get(3) - registerValues.get(4), register.readData1());
 //    }
 
-    private void buildProcessorAndRun(List<Instruction> instructions) {
-        Processor processor = processorBuilder
-                .setInstructions(instructions)
-                .build();
-        processor.run();
-    }
-
     @Test
-    void testProcessorPrinter() {
-        Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100000"); // add $3, $1, $2
+    void testProcessorLogWithSingleRTypeInstruction() {
+        Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
         String expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
@@ -332,7 +326,7 @@ class ProcessorTest {
                 "Control Signals\t" + "000000000",
                 "",
                 "EX/MEM:",
-                "ALUout\t" + (initRegisterValues.get(addInstruction.getRs()) + initRegisterValues.get(addInstruction.getRt())),
+                "ALUout\t" + (initRegisterValues.get(addInstruction.getRs()) | initRegisterValues.get(addInstruction.getRt())),
                 "WriteData\t" + initRegisterValues.get(addInstruction.getRt()),
                 "Rt/Rd\t" + addInstruction.getRd(),
                 "Control Signals\t" + "00010",
@@ -385,7 +379,7 @@ class ProcessorTest {
                 "",
                 "MEM/WB:",
                 "ReadData\t" + 0,
-                "ALUout\t" + (initRegisterValues.get(addInstruction.getRs()) + initRegisterValues.get(addInstruction.getRt())),
+                "ALUout\t" + (initRegisterValues.get(addInstruction.getRs()) | initRegisterValues.get(addInstruction.getRt())),
                 "Rt/Rd\t" + addInstruction.getRd(),
                 "Control Signals\t" + "10",
                 "=================================================================",
@@ -395,7 +389,7 @@ class ProcessorTest {
                 "$0: " + initRegisterValues.get(0),
                 "$1: " + initRegisterValues.get(1),
                 "$2: " + initRegisterValues.get(2),
-                "$3: " + (initRegisterValues.get(1) + initRegisterValues.get(2)),
+                "$3: " + (initRegisterValues.get(1) | initRegisterValues.get(2)),
                 "$4: " + initRegisterValues.get(4),
                 "$5: " + initRegisterValues.get(5),
                 "$6: " + initRegisterValues.get(6),
@@ -444,12 +438,268 @@ class ProcessorTest {
                 addInstruction
         );
 
+        buildProcessorAndRun(instructions, logger);
+
+        assertEquals(expect, logger.getLog());
+    }
+
+    @Test
+    void testProcessorLogWithLoadWordInstruction() {
+        Instruction loadWordInstruction = new Instruction("100011 00001 00110 0000000000000011"); // lw $6, 3($1)
+        String expect = String.join(System.lineSeparator(),
+                "CC1:",
+                "",
+                "Registers:",
+                "$0: " + initRegisterValues.get(0),
+                "$1: " + initRegisterValues.get(1),
+                "$2: " + initRegisterValues.get(2),
+                "$3: " + initRegisterValues.get(3),
+                "$4: " + initRegisterValues.get(4),
+                "$5: " + initRegisterValues.get(5),
+                "$6: " + initRegisterValues.get(6),
+                "$7: " + initRegisterValues.get(7),
+                "$8: " + initRegisterValues.get(8),
+                "$9: " + initRegisterValues.get(9),
+                "",
+                "Data memory:",
+                "0x00: " + initDataMemoryValues.get(0x00),
+                "0x04: " + initDataMemoryValues.get(0x04),
+                "0x08: " + initDataMemoryValues.get(0x08),
+                "0x0C: " + initDataMemoryValues.get(0x0C),
+                "0x10: " + initDataMemoryValues.get(0x10),
+                "",
+                "IF/ID:",
+                "PC\t" + 4,
+                "Instruction\t" + loadWordInstruction,
+                "",
+                "ID/EX:",
+                "ReadData1\t" + 0,
+                "ReadData2\t" + 0,
+                "sign_ext\t" + 0,
+                "Rs\t" + 0,
+                "Rt\t" + 0,
+                "Rd\t" + 0,
+                "Control Signals\t" + "000000000",
+                "",
+                "EX/MEM:",
+                "ALUout\t" + 0,
+                "WriteData\t" + 0,
+                "Rt/Rd\t" + 0,
+                "Control Signals\t" + "00000",
+                "",
+                "MEM/WB:",
+                "ReadData\t" + 0,
+                "ALUout\t" + 0,
+                "Rt/Rd\t" + 0,
+                "Control Signals\t" + "00",
+                "=================================================================",
+                "CC2:",
+                "",
+                "Registers:",
+                "$0: " + initRegisterValues.get(0),
+                "$1: " + initRegisterValues.get(1),
+                "$2: " + initRegisterValues.get(2),
+                "$3: " + initRegisterValues.get(3),
+                "$4: " + initRegisterValues.get(4),
+                "$5: " + initRegisterValues.get(5),
+                "$6: " + initRegisterValues.get(6),
+                "$7: " + initRegisterValues.get(7),
+                "$8: " + initRegisterValues.get(8),
+                "$9: " + initRegisterValues.get(9),
+                "",
+                "Data memory:",
+                "0x00: " + initDataMemoryValues.get(0x00),
+                "0x04: " + initDataMemoryValues.get(0x04),
+                "0x08: " + initDataMemoryValues.get(0x08),
+                "0x0C: " + initDataMemoryValues.get(0x0C),
+                "0x10: " + initDataMemoryValues.get(0x10),
+                "",
+                "IF/ID:",
+                "PC\t" + 8,
+                "Instruction\t" + Instruction.NOP,
+                "",
+                "ID/EX:",
+                "ReadData1\t" + initRegisterValues.get(loadWordInstruction.getRs()),
+                "ReadData2\t" + initRegisterValues.get(loadWordInstruction.getRt()),
+                "sign_ext\t" + loadWordInstruction.getImmediate(),
+                "Rs\t" + loadWordInstruction.getRs(),
+                "Rt\t" + loadWordInstruction.getRt(),
+                "Rd\t" + loadWordInstruction.getRd(),
+                "Control Signals\t" + "000101011",
+                "",
+                "EX/MEM:",
+                "ALUout\t" + 0,
+                "WriteData\t" + 0,
+                "Rt/Rd\t" + 0,
+                "Control Signals\t" + "00000",
+                "",
+                "MEM/WB:",
+                "ReadData\t" + 0,
+                "ALUout\t" + 0,
+                "Rt/Rd\t" + 0,
+                "Control Signals\t" + "00",
+                "=================================================================",
+                "CC3:",
+                "",
+                "Registers:",
+                "$0: " + initRegisterValues.get(0),
+                "$1: " + initRegisterValues.get(1),
+                "$2: " + initRegisterValues.get(2),
+                "$3: " + initRegisterValues.get(3),
+                "$4: " + initRegisterValues.get(4),
+                "$5: " + initRegisterValues.get(5),
+                "$6: " + initRegisterValues.get(6),
+                "$7: " + initRegisterValues.get(7),
+                "$8: " + initRegisterValues.get(8),
+                "$9: " + initRegisterValues.get(9),
+                "",
+                "Data memory:",
+                "0x00: " + initDataMemoryValues.get(0x00),
+                "0x04: " + initDataMemoryValues.get(0x04),
+                "0x08: " + initDataMemoryValues.get(0x08),
+                "0x0C: " + initDataMemoryValues.get(0x0C),
+                "0x10: " + initDataMemoryValues.get(0x10),
+                "",
+                "IF/ID:",
+                "PC\t" + 12,
+                "Instruction\t" + Instruction.NOP,
+                "",
+                "ID/EX:",
+                "ReadData1\t" + 0,
+                "ReadData2\t" + 0,
+                "sign_ext\t" + 0,
+                "Rs\t" + 0,
+                "Rt\t" + 0,
+                "Rd\t" + 0,
+                "Control Signals\t" + "000000000",
+                "",
+                "EX/MEM:",
+                "ALUout\t" + (initRegisterValues.get(loadWordInstruction.getRs()) + loadWordInstruction.getImmediate()),
+                "WriteData\t" + initRegisterValues.get(loadWordInstruction.getRt()),
+                "Rt/Rd\t" + loadWordInstruction.getRt(),
+                "Control Signals\t" + "01011",
+                "",
+                "MEM/WB:",
+                "ReadData\t" + 0,
+                "ALUout\t" + 0,
+                "Rt/Rd\t" + 0,
+                "Control Signals\t" + "00",
+                "=================================================================",
+                "CC4:",
+                "",
+                "Registers:",
+                "$0: " + initRegisterValues.get(0),
+                "$1: " + initRegisterValues.get(1),
+                "$2: " + initRegisterValues.get(2),
+                "$3: " + initRegisterValues.get(3),
+                "$4: " + initRegisterValues.get(4),
+                "$5: " + initRegisterValues.get(5),
+                "$6: " + initRegisterValues.get(6),
+                "$7: " + initRegisterValues.get(7),
+                "$8: " + initRegisterValues.get(8),
+                "$9: " + initRegisterValues.get(9),
+                "",
+                "Data memory:",
+                "0x00: " + initDataMemoryValues.get(0x00),
+                "0x04: " + initDataMemoryValues.get(0x04),
+                "0x08: " + initDataMemoryValues.get(0x08),
+                "0x0C: " + initDataMemoryValues.get(0x0C),
+                "0x10: " + initDataMemoryValues.get(0x10),
+                "",
+                "IF/ID:",
+                "PC\t" + 16,
+                "Instruction\t" + Instruction.NOP,
+                "",
+                "ID/EX:",
+                "ReadData1\t" + 0,
+                "ReadData2\t" + 0,
+                "sign_ext\t" + 0,
+                "Rs\t" + 0,
+                "Rt\t" + 0,
+                "Rd\t" + 0,
+                "Control Signals\t" + "000000000",
+                "",
+                "EX/MEM:",
+                "ALUout\t" + 0,
+                "WriteData\t" + 0,
+                "Rt/Rd\t" + 0,
+                "Control Signals\t" + "00000",
+                "",
+                "MEM/WB:",
+                "ReadData\t" + initDataMemoryValues.get((initRegisterValues.get(loadWordInstruction.getRs()) + loadWordInstruction.getImmediate())),
+                "ALUout\t" + (initRegisterValues.get(loadWordInstruction.getRs()) + loadWordInstruction.getImmediate()),
+                "Rt/Rd\t" + loadWordInstruction.getRt(),
+                "Control Signals\t" + "11",
+                "=================================================================",
+                "CC5:",
+                "",
+                "Registers:",
+                "$0: " + initRegisterValues.get(0),
+                "$1: " + initRegisterValues.get(1),
+                "$2: " + initRegisterValues.get(2),
+                "$3: " + initRegisterValues.get(3),
+                "$4: " + initRegisterValues.get(4),
+                "$5: " + initRegisterValues.get(5),
+                "$6: " + initDataMemoryValues.get((initRegisterValues.get(loadWordInstruction.getRs()) + loadWordInstruction.getImmediate())),
+                "$7: " + initRegisterValues.get(7),
+                "$8: " + initRegisterValues.get(8),
+                "$9: " + initRegisterValues.get(9),
+                "",
+                "Data memory:",
+                "0x00: " + initDataMemoryValues.get(0x00),
+                "0x04: " + initDataMemoryValues.get(0x04),
+                "0x08: " + initDataMemoryValues.get(0x08),
+                "0x0C: " + initDataMemoryValues.get(0x0C),
+                "0x10: " + initDataMemoryValues.get(0x10),
+                "",
+                "IF/ID:",
+                "PC\t" + 20,
+                "Instruction\t" + Instruction.NOP,
+                "",
+                "ID/EX:",
+                "ReadData1\t" + 0,
+                "ReadData2\t" + 0,
+                "sign_ext\t" + 0,
+                "Rs\t" + 0,
+                "Rt\t" + 0,
+                "Rd\t" + 0,
+                "Control Signals\t" + "000000000",
+                "",
+                "EX/MEM:",
+                "ALUout\t" + 0,
+                "WriteData\t" + 0,
+                "Rt/Rd\t" + 0,
+                "Control Signals\t" + "00000",
+                "",
+                "MEM/WB:",
+
+                "ReadData\t" + 0,
+                "ALUout\t" + 0,
+                "Rt/Rd\t" + 0,
+                "Control Signals\t" + "00",
+                "=================================================================",
+                ""
+        );
+
+        ProcessorLogger logger = new ProcessorLogger();
+        List<Instruction> instructions = List.of(
+                loadWordInstruction
+        );
+
+        buildProcessorAndRun(instructions, logger);
+
+        assertEquals(expect, logger.getLog());
+    }
+
+    private void buildProcessorAndRun(@NotNull List<Instruction> instructions) {
+        buildProcessorAndRun(instructions, null);
+    }
+
+    private void buildProcessorAndRun(@NotNull List<Instruction> instructions, @Nullable ProcessorLogger logger) {
         Processor processor = processorBuilder
                 .setInstructions(instructions)
                 .build();
-        processor.addLogger(logger);
+        if (logger != null) processor.addLogger(logger);
         processor.run();
-
-        assertEquals(expect, logger.getLog());
     }
 }

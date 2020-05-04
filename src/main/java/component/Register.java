@@ -50,6 +50,7 @@ public class Register {
         return data.get(readAddress2);
     }
 
+    @NotNull
     public Set<Integer> getWrittenAddresses() {
         return data.keySet();
     }

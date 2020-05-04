@@ -1,6 +1,7 @@
 package signal;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Instruction implements Signal {
 
@@ -73,7 +74,7 @@ public class Instruction implements Signal {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -87,6 +88,7 @@ public class Instruction implements Signal {
         return raw.hashCode();
     }
 
+    @NotNull
     @Override
     public String toString() {
         return getRaw();

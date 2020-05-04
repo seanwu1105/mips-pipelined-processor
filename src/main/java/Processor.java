@@ -64,10 +64,11 @@ public class Processor {
         return false;
     }
 
-    public void addLogger(ProcessorLogger logger) {
+    public void addLogger(@NotNull ProcessorLogger logger) {
         loggers.add(logger);
     }
 
+    @NotNull
     public Set<Integer> getWrittenRegisterAddresses() {
         return instructionDecode.getWrittenRegisterAddresses();
     }
@@ -76,6 +77,7 @@ public class Processor {
         return instructionDecode.readRegister(address);
     }
 
+    @NotNull
     public Set<Integer> getWrittenDataMemoryAddresses() {
         return memoryAccess.getWrittenDataMemoryAddresses();
     }
@@ -93,7 +95,8 @@ public class Processor {
         @NotNull
         private Memory dataMemory = new Memory();
 
-        Builder setInstructions(List<Instruction> instructions) {
+        @NotNull
+        Builder setInstructions(@NotNull List<Instruction> instructions) {
             instructionMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
             int address = 0x00;
             for (Instruction instruction : instructions) {
@@ -105,11 +108,13 @@ public class Processor {
             return this;
         }
 
+        @NotNull
         Builder setRegister(@NotNull Register register) {
             this.register = register;
             return this;
         }
 
+        @NotNull
         Builder setDataMemory(@NotNull Memory dataMemory) {
             this.dataMemory = dataMemory;
             return this;

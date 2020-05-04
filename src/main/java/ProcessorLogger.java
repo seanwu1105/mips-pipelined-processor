@@ -99,6 +99,7 @@ public class ProcessorLogger {
                 + memWb.getMemoryToRegister());
     }
 
+    @NotNull
     public String getLog() {
         return stringBuilder.toString();
     }

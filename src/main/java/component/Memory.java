@@ -38,7 +38,7 @@ public class Memory {
         data.put(address, value);
     }
 
-    public void write(Instruction instruction) {
+    public void write(@NotNull Instruction instruction) {
         write(instruction.toInt());
     }
 
@@ -53,6 +53,7 @@ public class Memory {
         return new Instruction(read());
     }
 
+    @NotNull
     public Set<Integer> getWrittenAddresses() {
         return data.keySet();
     }

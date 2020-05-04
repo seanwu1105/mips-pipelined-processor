@@ -75,7 +75,7 @@ class InstructionFetchTest {
         assertEquals(instructions.get(expectedBranchResult / 4), instructionFetch.getInstruction());
     }
 
-    private void setInstructions(List<Instruction> instructions) {
+    private void setInstructions(@NotNull List<Instruction> instructions) {
         int initProgramCounter = 0, number = 0;
         for (Instruction instruction : instructions) {
             instructionMemory.setAddress(initProgramCounter + number * 4);

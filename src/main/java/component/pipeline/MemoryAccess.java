@@ -57,7 +57,9 @@ public class MemoryAccess implements Stage {
         dataMemory.setMemoryWrite(exeMem.getMemoryWrite());
         if (exeMem.getMemoryRead() == MainController.MemoryRead.TRUE)
             memoryReadData = dataMemory.read();
-        else if (exeMem.getMemoryWrite() == MainController.MemoryWrite.TRUE)
+        else
+            memoryReadData = 0;
+        if (exeMem.getMemoryWrite() == MainController.MemoryWrite.TRUE)
             dataMemory.write(exeMem.getRegisterData2());
     }
 
@@ -83,6 +85,7 @@ public class MemoryAccess implements Stage {
         return writeRegisterAddress;
     }
 
+    @NotNull
     public Set<Integer> getWrittenDataMemoryAddresses() {
         return dataMemory.getWrittenAddresses();
     }

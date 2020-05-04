@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 class InstructionDecodeTest {
 
     private final int expectedProgramCounter = 0;
-    Map<Integer, Integer> registerValues = Map.of(
+    private final Map<Integer, Integer> registerValues = Map.of(
             0, 0,
             1, 11,
             2, 12,
