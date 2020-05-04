@@ -15,6 +15,10 @@ public class Processor {
     private final List<Stage> stages = new ArrayList<>();
     private final List<PipelineRegister> pipelineRegisters = new ArrayList<>();
     private final List<ProcessorLogger> loggers = new ArrayList<>();
+    private final InstructionFetchToInstructionDecodeRegister ifId;
+    private final InstructionDecodeToExecutionRegister idExe;
+    private final ExecutionToMemoryAccessRegister exeMem;
+    private final MemoryAccessToWriteBackRegister memWb;
     private final InstructionDecode instructionDecode;
     private final MemoryAccess memoryAccess;
 
@@ -29,6 +33,10 @@ public class Processor {
             @NotNull MemoryAccessToWriteBackRegister memWb,
             @NotNull WriteBack writeBack
     ) {
+        this.ifId = ifId;
+        this.idExe = idExe;
+        this.exeMem = exeMem;
+        this.memWb = memWb;
         this.instructionDecode = instructionDecode;
         this.memoryAccess = memoryAccess;
         stages.add(instructionFetch);
@@ -46,7 +54,7 @@ public class Processor {
         do {
             stages.forEach(Stage::run);
             pipelineRegisters.forEach(PipelineRegister::update);
-            loggers.forEach(printer -> printer.onClockCycleFinished(this));
+            loggers.forEach(printer -> printer.onClockCycleFinished(this, ifId, idExe, exeMem, memWb));
         } while (hasUnfinishedInstructions());
     }
 

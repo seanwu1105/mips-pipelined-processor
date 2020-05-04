@@ -112,6 +112,10 @@ public class InstructionDecode implements Stage {
         }
     }
 
+    public int getRs() {
+        return currentInstruction.getRs();
+    }
+
     public int getRt() {
         return currentInstruction.getRt();
     }

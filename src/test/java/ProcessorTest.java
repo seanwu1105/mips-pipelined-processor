@@ -203,7 +203,7 @@ class ProcessorTest {
 
     @Test
     void testProcessorPrinter() {
-        Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100100"); // and $3, $1, $2
+        Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100000"); // add $3, $1, $2
         String expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
@@ -273,7 +273,7 @@ class ProcessorTest {
                 "0x10: " + initDataMemoryValues.get(0x10),
                 "",
                 "IF/ID:",
-                "PC\t" + 4,
+                "PC\t" + 8,
                 "Instruction\t" + Instruction.NOP,
                 "",
                 "ID/EX:",
@@ -319,7 +319,7 @@ class ProcessorTest {
                 "0x10: " + initDataMemoryValues.get(0x10),
                 "",
                 "IF/ID:",
-                "PC\t" + 4,
+                "PC\t" + 12,
                 "Instruction\t" + Instruction.NOP,
                 "",
                 "ID/EX:",
@@ -365,7 +365,7 @@ class ProcessorTest {
                 "0x10: " + initDataMemoryValues.get(0x10),
                 "",
                 "IF/ID:",
-                "PC\t" + 4,
+                "PC\t" + 16,
                 "Instruction\t" + Instruction.NOP,
                 "",
                 "ID/EX:",
@@ -411,7 +411,7 @@ class ProcessorTest {
                 "0x10: " + initDataMemoryValues.get(0x10),
                 "",
                 "IF/ID:",
-                "PC\t" + 4,
+                "PC\t" + 20,
                 "Instruction\t" + Instruction.NOP,
                 "",
                 "ID/EX:",
@@ -430,6 +430,7 @@ class ProcessorTest {
                 "Control Signals\t" + "00000",
                 "",
                 "MEM/WB:",
+
                 "ReadData\t" + 0,
                 "ALUout\t" + 0,
                 "Rt/Rd\t" + 0,

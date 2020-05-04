@@ -89,14 +89,12 @@ public class Execution implements Stage {
     @Override
     public void run() {
         passControlSignals();
-        if (idExe.getFunctionCode() != FunctionCode.NOP) {
-            configAlu();
-            configBranchAdder();
-            registerData2 = idExe.getRegisterData2();
-            if (idExe.getRegisterDestination() == MainController.RegisterDestination.RT)
-                writeRegisterAddress = idExe.getRt();
-            else writeRegisterAddress = idExe.getRd();
-        }
+        configAlu();
+        configBranchAdder();
+        registerData2 = idExe.getRegisterData2();
+        if (idExe.getRegisterDestination() == MainController.RegisterDestination.RT)
+            writeRegisterAddress = idExe.getRt();
+        else writeRegisterAddress = idExe.getRd();
     }
 
     @Override

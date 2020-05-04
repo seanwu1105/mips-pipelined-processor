@@ -95,6 +95,11 @@ public class MainController {
         public String getRaw() {
             return raw;
         }
+
+        @Override
+        public String toString() {
+            return getRaw();
+        }
     }
 
     public enum AluSource implements Signal {
@@ -112,6 +117,11 @@ public class MainController {
         @Override
         public String getRaw() {
             return raw;
+        }
+
+        @Override
+        public String toString() {
+            return getRaw();
         }
     }
 
@@ -131,6 +141,11 @@ public class MainController {
         public String getRaw() {
             return raw;
         }
+
+        @Override
+        public String toString() {
+            return getRaw();
+        }
     }
 
     public enum MemoryWrite implements Signal {
@@ -148,6 +163,11 @@ public class MainController {
         @Override
         public String getRaw() {
             return raw;
+        }
+
+        @Override
+        public String toString() {
+            return getRaw();
         }
     }
 
@@ -167,6 +187,11 @@ public class MainController {
         public String getRaw() {
             return raw;
         }
+
+        @Override
+        public String toString() {
+            return getRaw();
+        }
     }
 
     public enum RegisterDestination implements Signal {
@@ -184,6 +209,11 @@ public class MainController {
         @Override
         public String getRaw() {
             return raw;
+        }
+
+        @Override
+        public String toString() {
+            return getRaw();
         }
     }
 
@@ -203,6 +233,11 @@ public class MainController {
         public String getRaw() {
             return raw;
         }
+
+        @Override
+        public String toString() {
+            return getRaw();
+        }
     }
 
     public enum Branch implements Signal {
@@ -220,6 +255,11 @@ public class MainController {
         @Override
         public String getRaw() {
             return raw;
+        }
+
+        @Override
+        public String toString() {
+            return getRaw();
         }
     }
 }
