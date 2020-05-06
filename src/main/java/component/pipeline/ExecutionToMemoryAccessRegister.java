@@ -25,7 +25,7 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
 
     private int branchResult, aluResult, registerData2, writeRegisterAddress;
 
-    public ExecutionToMemoryAccessRegister(@NotNull Execution execution) {
+    public ExecutionToMemoryAccessRegister(@NotNull final Execution execution) {
         this.execution = execution;
     }
 

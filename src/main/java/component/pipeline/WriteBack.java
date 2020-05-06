@@ -12,7 +12,7 @@ public class WriteBack implements Stage {
     @NotNull
     private final Register register;
 
-    public WriteBack(@NotNull MemoryAccessToWriteBackRegister memWb, @NotNull Register register) {
+    public WriteBack(@NotNull final MemoryAccessToWriteBackRegister memWb, @NotNull final Register register) {
         this.memWb = memWb;
         this.register = register;
     }

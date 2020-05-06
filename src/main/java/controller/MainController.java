@@ -10,7 +10,7 @@ public class MainController {
     @NotNull
     private Instruction instruction = Instruction.NOP;
 
-    public void setInstruction(@NotNull Instruction instruction) {
+    public void setInstruction(@NotNull final Instruction instruction) {
         this.instruction = instruction;
     }
 
@@ -86,7 +86,7 @@ public class MainController {
         @NotNull
         private final String raw;
 
-        AluOperation(@NotNull String raw) {
+        AluOperation(@NotNull final String raw) {
             this.raw = raw;
         }
 
@@ -110,7 +110,7 @@ public class MainController {
         @NotNull
         private final String raw;
 
-        AluSource(@NotNull String raw) {
+        AluSource(@NotNull final String raw) {
             this.raw = raw;
         }
 
@@ -134,7 +134,7 @@ public class MainController {
         @NotNull
         private final String raw;
 
-        MemoryRead(@NotNull String raw) {
+        MemoryRead(@NotNull final String raw) {
             this.raw = raw;
         }
 
@@ -158,7 +158,7 @@ public class MainController {
         @NotNull
         private final String raw;
 
-        MemoryWrite(@NotNull String raw) {
+        MemoryWrite(@NotNull final String raw) {
             this.raw = raw;
         }
 
@@ -182,7 +182,7 @@ public class MainController {
         @NotNull
         private final String raw;
 
-        MemoryToRegister(@NotNull String raw) {
+        MemoryToRegister(@NotNull final String raw) {
             this.raw = raw;
         }
 
@@ -206,7 +206,7 @@ public class MainController {
         @NotNull
         private final String raw;
 
-        RegisterDestination(@NotNull String raw) {
+        RegisterDestination(@NotNull final String raw) {
             this.raw = raw;
         }
 
@@ -230,7 +230,7 @@ public class MainController {
         @NotNull
         private final String raw;
 
-        RegisterWrite(@NotNull String raw) {
+        RegisterWrite(@NotNull final String raw) {
             this.raw = raw;
         }
 
@@ -254,7 +254,7 @@ public class MainController {
         @NotNull
         private final String raw;
 
-        Branch(@NotNull String raw) {
+        Branch(@NotNull final String raw) {
             this.raw = raw;
         }
 

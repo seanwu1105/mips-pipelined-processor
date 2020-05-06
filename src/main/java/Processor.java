@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Processor {
+public final class Processor {
 
     private final List<Stage> stages = new ArrayList<>();
     private final List<PipelineRegister> pipelineRegisters = new ArrayList<>();
@@ -23,15 +23,15 @@ public class Processor {
     private final MemoryAccess memoryAccess;
 
     private Processor(
-            @NotNull InstructionFetch instructionFetch,
-            @NotNull InstructionFetchToInstructionDecodeRegister ifId,
-            @NotNull InstructionDecode instructionDecode,
-            @NotNull InstructionDecodeToExecutionRegister idExe,
-            @NotNull Execution execution,
-            @NotNull ExecutionToMemoryAccessRegister exeMem,
-            @NotNull MemoryAccess memoryAccess,
-            @NotNull MemoryAccessToWriteBackRegister memWb,
-            @NotNull WriteBack writeBack
+            @NotNull final InstructionFetch instructionFetch,
+            @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
+            @NotNull final InstructionDecode instructionDecode,
+            @NotNull final InstructionDecodeToExecutionRegister idExe,
+            @NotNull final Execution execution,
+            @NotNull final ExecutionToMemoryAccessRegister exeMem,
+            @NotNull final MemoryAccess memoryAccess,
+            @NotNull final MemoryAccessToWriteBackRegister memWb,
+            @NotNull final WriteBack writeBack
     ) {
         this.ifId = ifId;
         this.idExe = idExe;
@@ -59,12 +59,12 @@ public class Processor {
     }
 
     private boolean hasUnfinishedInstructions() {
-        for (Stage stage : stages)
+        for (final Stage stage : stages)
             if (stage.hasInstruction()) return true;
         return false;
     }
 
-    public void addLogger(@NotNull ProcessorLogger logger) {
+    public void addLogger(@NotNull final ProcessorLogger logger) {
         loggers.add(logger);
     }
 
@@ -73,7 +73,7 @@ public class Processor {
         return instructionDecode.getWrittenRegisterAddresses();
     }
 
-    public int readRegister(int address) {
+    public int readRegister(final int address) {
         return instructionDecode.readRegister(address);
     }
 
@@ -82,7 +82,7 @@ public class Processor {
         return memoryAccess.getWrittenDataMemoryAddresses();
     }
 
-    public int readDataMemory(int address) {
+    public int readDataMemory(final int address) {
         return memoryAccess.readDataMemory(address);
     }
 
@@ -96,10 +96,10 @@ public class Processor {
         private Memory dataMemory = new Memory();
 
         @NotNull
-        Builder setInstructions(@NotNull List<Instruction> instructions) {
+        Builder setInstructions(@NotNull final List<Instruction> instructions) {
             instructionMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
             int address = 0x00;
-            for (Instruction instruction : instructions) {
+            for (final Instruction instruction : instructions) {
                 instructionMemory.setAddress(address);
                 instructionMemory.write(instruction);
                 address += 4;
@@ -109,28 +109,28 @@ public class Processor {
         }
 
         @NotNull
-        Builder setRegister(@NotNull Register register) {
+        Builder setRegister(@NotNull final Register register) {
             this.register = register;
             return this;
         }
 
         @NotNull
-        Builder setDataMemory(@NotNull Memory dataMemory) {
+        Builder setDataMemory(@NotNull final Memory dataMemory) {
             this.dataMemory = dataMemory;
             return this;
         }
 
         @NotNull
         Processor build() {
-            InstructionFetch instructionFetch = new InstructionFetch(instructionMemory);
-            InstructionFetchToInstructionDecodeRegister ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
-            InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
-            InstructionDecodeToExecutionRegister idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
-            Execution execution = new Execution(idExe, new Alu(), new Alu());
-            ExecutionToMemoryAccessRegister exeMem = new ExecutionToMemoryAccessRegister(execution);
-            MemoryAccess memoryAccess = new MemoryAccess(exeMem, dataMemory);
-            MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
-            WriteBack writeBack = new WriteBack(memWb, register);
+            final InstructionFetch instructionFetch = new InstructionFetch(instructionMemory);
+            final InstructionFetchToInstructionDecodeRegister ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
+            final InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+            final InstructionDecodeToExecutionRegister idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
+            final Execution execution = new Execution(idExe, new Alu(), new Alu());
+            final ExecutionToMemoryAccessRegister exeMem = new ExecutionToMemoryAccessRegister(execution);
+            final MemoryAccess memoryAccess = new MemoryAccess(exeMem, dataMemory);
+            final MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
+            final WriteBack writeBack = new WriteBack(memWb, register);
             return new Processor(
                     instructionFetch,
                     ifId,

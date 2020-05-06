@@ -35,9 +35,9 @@ public class Execution implements Stage {
     private int registerData2, writeRegisterAddress;
 
     public Execution(
-            @NotNull InstructionDecodeToExecutionRegister idExe,
-            @NotNull Alu alu,
-            @NotNull Alu branchAdder
+            @NotNull final InstructionDecodeToExecutionRegister idExe,
+            @NotNull final Alu alu,
+            @NotNull final Alu branchAdder
     ) {
         this.idExe = idExe;
         this.alu = alu;

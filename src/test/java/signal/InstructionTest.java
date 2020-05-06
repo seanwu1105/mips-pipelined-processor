@@ -11,14 +11,14 @@ class InstructionTest {
 
     @Test
     void testFromLong() {
-        Instruction expect = new Instruction("00000000000000000000000000000001");
-        Instruction instruction = new Instruction(1);
+        final Instruction expect = new Instruction("00000000000000000000000000000001");
+        final Instruction instruction = new Instruction(1);
         assertEquals(expect, instruction);
     }
 
     @Test
     void testToInt() {
-        Instruction instruction = new Instruction("11111111111111111111111111111111");
+        final Instruction instruction = new Instruction("11111111111111111111111111111111");
         assertEquals(Integer.parseUnsignedInt("11111111111111111111111111111111", 2), instruction.toInt());
     }
 
@@ -29,16 +29,16 @@ class InstructionTest {
 
     @Test
     void testEquals() {
-        String raw = "10101010101010101010101010101010";
-        Instruction a = new Instruction(raw);
-        Instruction b = new Instruction(raw);
+        final String raw = "10101010101010101010101010101010";
+        final Instruction a = new Instruction(raw);
+        final Instruction b = new Instruction(raw);
         assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     @Test
     void testToString() {
-        String raw = "10101010101010101010101010101010";
+        final String raw = "10101010101010101010101010101010";
         assertEquals(raw, "" + new Instruction(raw));
     }
 
@@ -56,13 +56,13 @@ class InstructionTest {
 
     @Test
     void testGetUnknownOpCode() {
-        Instruction instruction = new Instruction("111111 00000000000000000000000000");
+        final Instruction instruction = new Instruction("111111 00000000000000000000000000");
         assertThrows(IllegalStateException.class, instruction::getOpCode);
     }
 
     @Test
     void testGetRsAndRtAndRd() {
-        Instruction instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $0 $1 $2
+        final Instruction instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $0 $1 $2
         assertEquals(0, instruction.getRs());
         assertEquals(1, instruction.getRt());
         assertEquals(2, instruction.getRd());
@@ -89,7 +89,7 @@ class InstructionTest {
 
     @Test
     void testGetImmediate() {
-        Instruction instruction = new Instruction("100011 00001 00010 0000000000000001"); // lw $1 1($2)
+        final Instruction instruction = new Instruction("100011 00001 00010 0000000000000001"); // lw $1 1($2)
         assertEquals(1, instruction.getImmediate());
     }
 }

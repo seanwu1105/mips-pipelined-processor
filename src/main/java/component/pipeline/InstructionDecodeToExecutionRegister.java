@@ -39,7 +39,7 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     @Nullable
     private FunctionCode functionCode = FunctionCode.NOP;
 
-    public InstructionDecodeToExecutionRegister(@NotNull InstructionDecode instructionDecode) {
+    public InstructionDecodeToExecutionRegister(@NotNull final InstructionDecode instructionDecode) {
         this.instructionDecode = instructionDecode;
     }
 

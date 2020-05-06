@@ -13,7 +13,7 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
     @NotNull
     private Instruction instruction = Instruction.NOP;
 
-    public InstructionFetchToInstructionDecodeRegister(@NotNull InstructionFetch instructionFetch) {
+    public InstructionFetchToInstructionDecodeRegister(@NotNull final InstructionFetch instructionFetch) {
         this.instructionFetch = instructionFetch;
     }
 

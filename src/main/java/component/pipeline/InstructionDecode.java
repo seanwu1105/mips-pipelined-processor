@@ -26,9 +26,9 @@ public class InstructionDecode implements Stage {
     private Instruction currentInstruction = Instruction.NOP;
 
     public InstructionDecode(
-            @NotNull InstructionFetchToInstructionDecodeRegister ifId,
-            @NotNull MainController mainController,
-            @NotNull Register register
+            @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
+            @NotNull final MainController mainController,
+            @NotNull final Register register
     ) {
         this.ifId = ifId;
         this.mainController = mainController;
@@ -107,7 +107,7 @@ public class InstructionDecode implements Stage {
     public FunctionCode getFunctionCode() {
         try {
             return currentInstruction.getFunctionCode();
-        } catch (IllegalStateException e) {
+        } catch (final IllegalStateException e) {
             return null;
         }
     }
@@ -124,7 +124,7 @@ public class InstructionDecode implements Stage {
         return currentInstruction.getRd();
     }
 
-    public int readRegister(int address) {
+    public int readRegister(final int address) {
         register.setReadAddress1(address);
         return register.readData1();
     }

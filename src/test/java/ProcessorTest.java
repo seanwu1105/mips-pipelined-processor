@@ -71,8 +71,8 @@ class ProcessorTest {
 
     @Test
     void testAdd() {
-        Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100000"); // add $3, $1, $2
-        List<Instruction> instructions = List.of(addInstruction);
+        final Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100000"); // add $3, $1, $2
+        final List<Instruction> instructions = List.of(addInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -85,8 +85,8 @@ class ProcessorTest {
 
     @Test
     void testSubtract() {
-        Instruction subtractInstruction = new Instruction("000000 00001 00010 00011 00000 100010"); // sub $3, $1, $2
-        List<Instruction> instructions = List.of(subtractInstruction);
+        final Instruction subtractInstruction = new Instruction("000000 00001 00010 00011 00000 100010"); // sub $3, $1, $2
+        final List<Instruction> instructions = List.of(subtractInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -99,8 +99,8 @@ class ProcessorTest {
 
     @Test
     void testAnd() {
-        Instruction andInstruction = new Instruction("000000 00001 00010 00011 00000 100100"); // and $3, $1, $2
-        List<Instruction> instructions = List.of(andInstruction);
+        final Instruction andInstruction = new Instruction("000000 00001 00010 00011 00000 100100"); // and $3, $1, $2
+        final List<Instruction> instructions = List.of(andInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -113,8 +113,8 @@ class ProcessorTest {
 
     @Test
     void testOr() {
-        Instruction orInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
-        List<Instruction> instructions = List.of(orInstruction);
+        final Instruction orInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
+        final List<Instruction> instructions = List.of(orInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -127,8 +127,8 @@ class ProcessorTest {
 
     @Test
     void testSetOnLessThan() {
-        Instruction setOnLessThanInstruction = new Instruction("000000 00001 00010 00011 00000 101010"); // slt $3, $1, $2
-        List<Instruction> instructions = List.of(setOnLessThanInstruction);
+        final Instruction setOnLessThanInstruction = new Instruction("000000 00001 00010 00011 00000 101010"); // slt $3, $1, $2
+        final List<Instruction> instructions = List.of(setOnLessThanInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -141,8 +141,8 @@ class ProcessorTest {
 
     @Test
     void testLoadWord() {
-        Instruction loadWordInstruction = new Instruction("100011 00010 00001 0000000000000100"); // lw $1, 4($2)
-        List<Instruction> instructions = List.of(loadWordInstruction);
+        final Instruction loadWordInstruction = new Instruction("100011 00010 00001 0000000000000100"); // lw $1, 4($2)
+        final List<Instruction> instructions = List.of(loadWordInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -155,8 +155,8 @@ class ProcessorTest {
 
     @Test
     void testSaveWord() {
-        Instruction saveWordInstruction = new Instruction("101011 00010 00001 0000000000000100"); // sw $1, 4($2)
-        List<Instruction> instructions = List.of(saveWordInstruction);
+        final Instruction saveWordInstruction = new Instruction("101011 00010 00001 0000000000000100"); // sw $1, 4($2)
+        final List<Instruction> instructions = List.of(saveWordInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -197,8 +197,8 @@ class ProcessorTest {
 
     @Test
     void testProcessorLogWithSingleRTypeInstruction() {
-        Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
-        String expect = String.join(System.lineSeparator(),
+        final Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
+        final String expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
                 "Registers:",
@@ -433,8 +433,8 @@ class ProcessorTest {
                 ""
         );
 
-        ProcessorLogger logger = new ProcessorLogger();
-        List<Instruction> instructions = List.of(
+        final ProcessorLogger logger = new ProcessorLogger();
+        final List<Instruction> instructions = List.of(
                 addInstruction
         );
 
@@ -445,8 +445,8 @@ class ProcessorTest {
 
     @Test
     void testProcessorLogWithSingleLoadWordInstruction() {
-        Instruction loadWordInstruction = new Instruction("100011 00001 00110 0000000000000011"); // lw $6, 3($1)
-        String expect = String.join(System.lineSeparator(),
+        final Instruction loadWordInstruction = new Instruction("100011 00001 00110 0000000000000011"); // lw $6, 3($1)
+        final String expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
                 "Registers:",
@@ -681,8 +681,8 @@ class ProcessorTest {
                 ""
         );
 
-        ProcessorLogger logger = new ProcessorLogger();
-        List<Instruction> instructions = List.of(
+        final ProcessorLogger logger = new ProcessorLogger();
+        final List<Instruction> instructions = List.of(
                 loadWordInstruction
         );
 
@@ -693,8 +693,8 @@ class ProcessorTest {
 
     @Test
     void testProcessorLogWithSingleSaveWordInstruction() {
-        Instruction saveWordInstruction = new Instruction("101011 00101 00100 0000000000000010"); // sw $4, 2($5)
-        String expect = String.join(System.lineSeparator(),
+        final Instruction saveWordInstruction = new Instruction("101011 00101 00100 0000000000000010"); // sw $4, 2($5)
+        final String expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
                 "Registers:",
@@ -882,8 +882,8 @@ class ProcessorTest {
                 ""
         );
 
-        ProcessorLogger logger = new ProcessorLogger();
-        List<Instruction> instructions = List.of(
+        final ProcessorLogger logger = new ProcessorLogger();
+        final List<Instruction> instructions = List.of(
                 saveWordInstruction
         );
 
@@ -894,14 +894,14 @@ class ProcessorTest {
 
     @Test
     void testProcessorLogWithMemoryAccessAndRTypeInstructionsWithoutHazards() {
-        List<Instruction> instructions = List.of(
+        final List<Instruction> instructions = List.of(
                 new Instruction("100011 01000 01001 0000000000000011"),   // lw $9, 3($8)   ----- $9 = 4
                 new Instruction("000000 00110 00000 00111 00000 100010"), // sub $7, $6, $0 ----- $7 = 3 - 0
                 new Instruction("000000 00011 00010 00100 00000 100100"), // and $4, $3, $2 ----- $4 = 7 & 8
                 new Instruction("101011 01000 00001 0000000000000111"),   // sw $1, 7($8)   ----- m12 = 9
                 new Instruction("000000 00101 00101 00101 00000 100000")  // add $5, $5, $5 ----- $5 = 2 + 2
         );
-        String expect = String.join(System.lineSeparator(),
+        final String expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
                 "Registers:",
@@ -1319,19 +1319,19 @@ class ProcessorTest {
                 ""
         );
 
-        ProcessorLogger logger = new ProcessorLogger();
+        final ProcessorLogger logger = new ProcessorLogger();
 
         buildProcessorAndRun(instructions, logger);
 
         assertEquals(expect, logger.getLog());
     }
 
-    private void buildProcessorAndRun(@NotNull List<Instruction> instructions) {
+    private void buildProcessorAndRun(@NotNull final List<Instruction> instructions) {
         buildProcessorAndRun(instructions, null);
     }
 
-    private void buildProcessorAndRun(@NotNull List<Instruction> instructions, @Nullable ProcessorLogger logger) {
-        Processor processor = processorBuilder
+    private void buildProcessorAndRun(@NotNull final List<Instruction> instructions, @Nullable final ProcessorLogger logger) {
+        final Processor processor = processorBuilder
                 .setInstructions(instructions)
                 .build();
         if (logger != null) processor.addLogger(logger);

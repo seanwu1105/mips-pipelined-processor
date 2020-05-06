@@ -23,8 +23,8 @@ public class MemoryAccess implements Stage {
     private int memoryReadData, aluResult, writeRegisterAddress;
 
     public MemoryAccess(
-            @NotNull ExecutionToMemoryAccessRegister exeMem,
-            @NotNull Memory dataMemory
+            @NotNull final ExecutionToMemoryAccessRegister exeMem,
+            @NotNull final Memory dataMemory
     ) {
         this.exeMem = exeMem;
         this.dataMemory = dataMemory;
@@ -90,10 +90,10 @@ public class MemoryAccess implements Stage {
         return dataMemory.getWrittenAddresses();
     }
 
-    public int readDataMemory(int address) {
+    public int readDataMemory(final int address) {
         dataMemory.setMemoryRead(MainController.MemoryRead.TRUE);
         dataMemory.setAddress(address);
-        int data = dataMemory.read();
+        final int data = dataMemory.read();
         dataMemory.setMemoryRead(MainController.MemoryRead.FALSE);
         return data;
     }

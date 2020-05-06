@@ -13,7 +13,7 @@ public enum FunctionCode implements Signal {
     @NotNull
     private final String raw;
 
-    FunctionCode(@NotNull String raw) {
+    FunctionCode(@NotNull final String raw) {
         this.raw = raw;
     }
 

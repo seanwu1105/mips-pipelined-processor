@@ -11,8 +11,8 @@ public class AluController {
 
     @NotNull
     static public Alu.AluControl getAluControl(
-            @NotNull MainController.AluOperation aluOperation,
-            @Nullable FunctionCode functionCode
+            @NotNull final MainController.AluOperation aluOperation,
+            @Nullable final FunctionCode functionCode
     ) {
         switch (aluOperation) {
             case R_TYPE:

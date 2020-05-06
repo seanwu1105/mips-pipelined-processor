@@ -20,25 +20,25 @@ public class Memory {
     @NotNull
     private MainController.MemoryRead memoryRead = MainController.MemoryRead.FALSE;
 
-    public void setAddress(int address) {
+    public void setAddress(final int address) {
         this.address = address;
     }
 
-    public void setMemoryWrite(@NotNull MainController.MemoryWrite memoryWrite) {
+    public void setMemoryWrite(@NotNull final MainController.MemoryWrite memoryWrite) {
         this.memoryWrite = memoryWrite;
     }
 
-    public void setMemoryRead(@NotNull MainController.MemoryRead memoryRead) {
+    public void setMemoryRead(@NotNull final MainController.MemoryRead memoryRead) {
         this.memoryRead = memoryRead;
     }
 
-    public void write(int value) {
+    public void write(final int value) {
         if (memoryWrite == MainController.MemoryWrite.FALSE)
             throw new IllegalStateException("Memory cannot be written.");
         data.put(address, value);
     }
 
-    public void write(@NotNull Instruction instruction) {
+    public void write(@NotNull final Instruction instruction) {
         write(instruction.toInt());
     }
 

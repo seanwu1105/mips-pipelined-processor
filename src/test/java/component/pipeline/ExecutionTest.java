@@ -33,11 +33,11 @@ class ExecutionTest {
 
     @Test
     void testPropertiesPass() {
-        MainController.Branch expectedBranch = MainController.Branch.FALSE;
-        MainController.MemoryRead expectedMemoryRead = MainController.MemoryRead.TRUE;
-        MainController.MemoryWrite expectedMemoryWrite = MainController.MemoryWrite.FALSE;
-        MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
-        MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
+        final MainController.Branch expectedBranch = MainController.Branch.FALSE;
+        final MainController.MemoryRead expectedMemoryRead = MainController.MemoryRead.TRUE;
+        final MainController.MemoryWrite expectedMemoryWrite = MainController.MemoryWrite.FALSE;
+        final MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
+        final MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
 
         when(idExe.getBranch()).thenReturn(expectedBranch);
         when(idExe.getMemoryRead()).thenReturn(expectedMemoryRead);

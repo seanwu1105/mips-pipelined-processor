@@ -19,12 +19,12 @@ public class InstructionFetch implements Stage {
     @NotNull
     private Instruction currentInstruction = Instruction.NOP;
 
-    public InstructionFetch(@NotNull Memory instructionMemory) {
+    public InstructionFetch(@NotNull final Memory instructionMemory) {
         this.instructionMemory = instructionMemory;
         this.instructionMemory.setMemoryRead(MainController.MemoryRead.TRUE);
     }
 
-    public void setExecutionToMemoryAccessRegister(@NotNull ExecutionToMemoryAccessRegister exeMem) {
+    public void setExecutionToMemoryAccessRegister(@NotNull final ExecutionToMemoryAccessRegister exeMem) {
         this.exeMem = exeMem;
     }
 
@@ -51,7 +51,7 @@ public class InstructionFetch implements Stage {
     private void updateCurrentInstruction() {
         try {
             currentInstruction = instructionMemory.readInstruction();
-        } catch (NullPointerException e) {
+        } catch (final NullPointerException e) {
             currentInstruction = Instruction.NOP;
         }
     }

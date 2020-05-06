@@ -8,7 +8,7 @@ public class ProgramCounter {
         return counter;
     }
 
-    public void setCounter(int counter) {
+    public void setCounter(final int counter) {
         this.counter = counter;
     }
 }

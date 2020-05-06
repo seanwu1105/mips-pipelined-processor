@@ -14,11 +14,11 @@ public class ProcessorLogger {
     private int clockCycle = 1;
 
     public void onClockCycleFinished(
-            @NotNull Processor processor,
-            @NotNull InstructionFetchToInstructionDecodeRegister ifId,
-            @NotNull InstructionDecodeToExecutionRegister idExe,
-            @NotNull ExecutionToMemoryAccessRegister exeMem,
-            @NotNull MemoryAccessToWriteBackRegister memWb
+            @NotNull final Processor processor,
+            @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
+            @NotNull final InstructionDecodeToExecutionRegister idExe,
+            @NotNull final ExecutionToMemoryAccessRegister exeMem,
+            @NotNull final MemoryAccessToWriteBackRegister memWb
     ) {
         appendLine("CC" + clockCycle + ":");
         appendLine("");
@@ -37,27 +37,27 @@ public class ProcessorLogger {
         clockCycle++;
     }
 
-    private void logRegister(@NotNull Processor processor) {
-        SortedSet<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenRegisterAddresses());
+    private void logRegister(@NotNull final Processor processor) {
+        final SortedSet<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenRegisterAddresses());
         appendLine("Registers:");
         sortedAddresses.forEach((address) -> appendLine("$" + address + ": " + processor.readRegister(address)));
     }
 
-    private void logDataMemory(@NotNull Processor processor) {
-        SortedSet<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenDataMemoryAddresses());
+    private void logDataMemory(@NotNull final Processor processor) {
+        final SortedSet<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenDataMemoryAddresses());
         appendLine("Data memory:");
         sortedAddresses.forEach((address) ->
                 appendLine(String.format("0x%02X: %d", address, processor.readDataMemory(address)))
         );
     }
 
-    private void logIfId(@NotNull InstructionFetchToInstructionDecodeRegister ifId) {
+    private void logIfId(@NotNull final InstructionFetchToInstructionDecodeRegister ifId) {
         appendLine("IF/ID:");
         appendLine("PC\t" + ifId.getProgramCounter());
         appendLine("Instruction\t" + ifId.getInstruction());
     }
 
-    private void logIdExe(@NotNull InstructionDecodeToExecutionRegister idExe) {
+    private void logIdExe(@NotNull final InstructionDecodeToExecutionRegister idExe) {
         appendLine("ID/EX:");
         appendLine("ReadData1\t" + idExe.getRegisterData1());
         appendLine("ReadData2\t" + idExe.getRegisterData2());
@@ -76,7 +76,7 @@ public class ProcessorLogger {
                 + idExe.getMemoryToRegister());
     }
 
-    private void logExeMem(@NotNull ExecutionToMemoryAccessRegister exeMem) {
+    private void logExeMem(@NotNull final ExecutionToMemoryAccessRegister exeMem) {
         appendLine("EX/MEM:");
         appendLine("ALUout\t" + exeMem.getAluResult());
         appendLine("WriteData\t" + exeMem.getRegisterData2());
@@ -89,7 +89,7 @@ public class ProcessorLogger {
                 + exeMem.getMemoryToRegister());
     }
 
-    private void logMemWb(@NotNull MemoryAccessToWriteBackRegister memWb) {
+    private void logMemWb(@NotNull final MemoryAccessToWriteBackRegister memWb) {
         appendLine("MEM/WB:");
         appendLine("ReadData\t" + memWb.getMemoryReadData());
         appendLine("ALUout\t" + memWb.getAluResult());
@@ -104,7 +104,7 @@ public class ProcessorLogger {
         return stringBuilder.toString();
     }
 
-    private void appendLine(String str) {
+    private void appendLine(final String str) {
         stringBuilder.append(str).append(System.lineSeparator());
     }
 }

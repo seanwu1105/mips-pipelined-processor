@@ -9,7 +9,7 @@ public class Alu {
     private AluControl control = AluControl.ADD;
     private int operand1, operand2;
 
-    public void setControl(@NotNull AluControl control) {
+    public void setControl(@NotNull final AluControl control) {
         this.control = control;
     }
 
@@ -30,11 +30,11 @@ public class Alu {
         }
     }
 
-    public void setOperand1(int operand1) {
+    public void setOperand1(final int operand1) {
         this.operand1 = operand1;
     }
 
-    public void setOperand2(int operand2) {
+    public void setOperand2(final int operand2) {
         this.operand2 = operand2;
     }
 
@@ -48,7 +48,7 @@ public class Alu {
         @NotNull
         private final String raw;
 
-        AluControl(@NotNull String raw) {
+        AluControl(@NotNull final String raw) {
             this.raw = raw;
         }
 

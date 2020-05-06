@@ -12,7 +12,7 @@ public enum OpCode implements Signal {
     @NotNull
     private final String raw;
 
-    OpCode(@NotNull String raw) {
+    OpCode(@NotNull final String raw) {
         this.raw = raw.replaceAll("\\s", "");
     }
 

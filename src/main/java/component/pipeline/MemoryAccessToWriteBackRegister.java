@@ -16,7 +16,7 @@ public class MemoryAccessToWriteBackRegister implements PipelineRegister {
 
     private int memoryReadData, aluResult, writeRegisterAddress;
 
-    public MemoryAccessToWriteBackRegister(@NotNull MemoryAccess memoryAccess) {
+    public MemoryAccessToWriteBackRegister(@NotNull final MemoryAccess memoryAccess) {
         this.memoryAccess = memoryAccess;
     }
 
