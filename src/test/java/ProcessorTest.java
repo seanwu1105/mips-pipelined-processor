@@ -166,6 +166,33 @@ class ProcessorTest {
         dataMemory.setMemoryRead(MainController.MemoryRead.FALSE);
     }
 
+    @Test
+    void testDataHazardAtExecutionStage() {
+
+    }
+
+    @Test
+    void testDataHazardAtMemoryAccessStage() {
+    }
+
+    @Test
+    void testDataHazardAtWriteBackStage() {
+        final List<Instruction> instructions = List.of(
+                new Instruction("000000 00010 00010 00001 00000 100000"), // add $1, $2, $2
+                new Instruction("000000 00000 00000 01001 00000 100010"), // sub $9, $0, $0
+                new Instruction("000000 00000 00000 01001 00000 100010"), // sub $9, $0, $0
+                new Instruction("000000 00001 00001 00011 00000 100000")  // add $3, $1, $1
+        );
+
+        final int expectedRegister1 = initRegisterValues.get(2) + initRegisterValues.get(2);
+        final int expect = expectedRegister1 + expectedRegister1;
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(3);
+        assertEquals(expect, register.readData1());
+    }
+
     // TODO: Implement branch hazard resolver.
 //    @Test
 //    void testBranchOnEqualFalse() {
