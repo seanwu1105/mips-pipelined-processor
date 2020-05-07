@@ -8,6 +8,14 @@
 
 * JDK 11
 
+## Supported Instructions
+
+|                | `add`  | `sub`  | `and`  |  `or`  | `slt`  |    `lw`    |    `sw`    |   `beq`    |
+|:--------------:|:------:|:------:|:------:|:------:|:------:|:----------:|:----------:|:----------:|
+|     OP Code    | 000000 | 000000 | 000000 | 000000 | 000000 |   100011   |   101011   |   000100   |
+|  Function Code | 100000 | 100010 | 100100 | 100101 | 101010 | don't care | don't care | don't care |
+|   ALU Control  |  010   |  110   |  000   |  001   |  111   |    010     |    010     |    110     |
+
 ## Control Signals
 
 |                 | `RegisterDestination` | `AluOperation` | `AluSource` | `Branch` | `MemoryRead` | `MemoryWrite` | `RegisterWrite` | `MemoryToRegister` |
