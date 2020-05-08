@@ -1,6 +1,7 @@
 package component.pipeline;
 
 import component.Memory;
+import component.ProgramCounter;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,12 +11,10 @@ public class InstructionFetch implements Stage {
 
     @NotNull
     final private Memory instructionMemory;
-
+    @NotNull
+    private final ProgramCounter programCounter = new ProgramCounter();
     @Nullable
     private ExecutionToMemoryAccessRegister exeMem;
-
-    private int programCounter = 0;
-
     @NotNull
     private Instruction currentInstruction = Instruction.NOP;
 
@@ -29,7 +28,7 @@ public class InstructionFetch implements Stage {
     }
 
     public int getProgramCounter() {
-        return programCounter;
+        return programCounter.getCounter();
     }
 
     @NotNull
@@ -39,13 +38,13 @@ public class InstructionFetch implements Stage {
 
     @Override
     public void run() {
-        instructionMemory.setAddress(programCounter);
+        instructionMemory.setAddress(programCounter.getCounter());
         updateCurrentInstruction();
 
         if (exeMem != null && exeMem.shouldBranch())
-            programCounter = exeMem.getBranchResult();
+            programCounter.setCounter(exeMem.getBranchResult());
         else
-            programCounter += 4;
+            programCounter.setCounter(programCounter.getCounter() + 4);
     }
 
     private void updateCurrentInstruction() {
