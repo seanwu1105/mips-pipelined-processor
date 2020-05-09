@@ -86,7 +86,7 @@ public final class Processor {
         return memoryAccess.readDataMemory(address);
     }
 
-    static public class Builder {
+    public static class Builder {
 
         @NotNull
         private final Memory instructionMemory = new Memory();

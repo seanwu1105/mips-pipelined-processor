@@ -10,7 +10,7 @@ import java.util.Objects;
 public class AluController {
 
     @NotNull
-    static public Alu.AluControl getAluControl(
+    public static Alu.AluControl getAluControl(
             @NotNull final MainController.AluOperation aluOperation,
             @Nullable final FunctionCode functionCode
     ) {

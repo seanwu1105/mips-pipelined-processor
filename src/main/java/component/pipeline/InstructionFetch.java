@@ -10,7 +10,7 @@ import signal.Instruction;
 public class InstructionFetch implements Stage {
 
     @NotNull
-    final private Memory instructionMemory;
+    private final Memory instructionMemory;
     @NotNull
     private final ProgramCounter programCounter = new ProgramCounter();
     @Nullable
