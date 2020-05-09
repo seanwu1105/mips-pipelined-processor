@@ -22,7 +22,5 @@ jobs:
       - name: Generate coverage report
         run: ./gradlew jacocoTestReport
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          fail_ci_if_error: true
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master

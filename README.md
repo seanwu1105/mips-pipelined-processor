@@ -1,8 +1,7 @@
 # MIPS Pipelined Processor
 
 [![Java CI with Gradle](https://github.com/seanwu1105/mips-pipelined-processor/workflows/Java%20CI%20with%20Gradle/badge.svg)](https://github.com/seanwu1105/mips-pipelined-processor/actions)
-[![codecov](https://codecov.io/gh/seanwu1105/mips-pipelined-processor/branch/master/graph/badge.svg)](https://codecov.io/gh/seanwu1105/mips-pipelined-processor)
-[![CodeFactor](https://www.codefactor.io/repository/github/seanwu1105/mips-pipelined-processor/badge)](https://www.codefactor.io/repository/github/seanwu1105/mips-pipelined-processor)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/42b29e0e6f1545bd8ce7a0f145db0584)](https://www.codacy.com/manual/seanwu1105/mips-pipelined-processor?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=seanwu1105/mips-pipelined-processor&amp;utm_campaign=Badge_Grade)
 
 ## Dependencies
 
