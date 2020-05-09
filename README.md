@@ -2,6 +2,7 @@
 
 [![Java CI with Gradle](https://github.com/seanwu1105/mips-pipelined-processor/workflows/Java%20CI%20with%20Gradle/badge.svg)](https://github.com/seanwu1105/mips-pipelined-processor/actions)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/42b29e0e6f1545bd8ce7a0f145db0584)](https://www.codacy.com/manual/seanwu1105/mips-pipelined-processor?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=seanwu1105/mips-pipelined-processor&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/42b29e0e6f1545bd8ce7a0f145db0584)](https://www.codacy.com/manual/seanwu1105/mips-pipelined-processor?utm_source=github.com&utm_medium=referral&utm_content=seanwu1105/mips-pipelined-processor&utm_campaign=Badge_Coverage)
 
 ## Dependencies
 
