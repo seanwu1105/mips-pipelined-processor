@@ -1,4 +1,5 @@
 import component.Alu;
+import component.ForwardingUnit;
 import component.Memory;
 import component.Register;
 import component.pipeline.*;
@@ -131,6 +132,11 @@ public final class Processor {
             final MemoryAccess memoryAccess = new MemoryAccess(exeMem, dataMemory);
             final MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
             final WriteBack writeBack = new WriteBack(memWb, register);
+
+            execution.setForwardingUnit(new ForwardingUnit(idExe, exeMem, memWb));
+            execution.setExecutionToMemoryAccessRegister(exeMem);
+            execution.setMemoryAccessToWriteBackRegister(memWb);
+
             return new Processor(
                     instructionFetch,
                     ifId,

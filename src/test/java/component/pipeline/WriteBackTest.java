@@ -34,6 +34,7 @@ class WriteBackTest {
 
     @Test
     void testRType() {
+        when(memWb.getWriteRegisterData()).thenReturn(expectedAluResult);
         when(memWb.getRegisterWrite()).thenReturn(MainController.RegisterWrite.TRUE);
         when(memWb.getMemoryToRegister()).thenReturn(MainController.MemoryToRegister.FROM_ALU_RESULT);
 
@@ -45,6 +46,7 @@ class WriteBackTest {
 
     @Test
     void testLoadWord() {
+        when(memWb.getWriteRegisterData()).thenReturn(expectedMemoryReadData);
         when(memWb.getRegisterWrite()).thenReturn(MainController.RegisterWrite.TRUE);
         when(memWb.getMemoryToRegister()).thenReturn(MainController.MemoryToRegister.FROM_MEMORY);
 

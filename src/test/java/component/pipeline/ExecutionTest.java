@@ -1,6 +1,7 @@
 package component.pipeline;
 
 import component.Alu;
+import component.ForwardingUnit;
 import controller.MainController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,9 @@ class ExecutionTest {
 
     final int programCounter = 0, registerData1 = 11, registerData2 = 12, immediate = 20, rt = 2, rd = 3;
     private final InstructionDecodeToExecutionRegister idExe = mock(InstructionDecodeToExecutionRegister.class);
+    private final ForwardingUnit forwardingUnit = mock(ForwardingUnit.class);
+    private final ExecutionToMemoryAccessRegister exeMem = mock(ExecutionToMemoryAccessRegister.class);
+    private final MemoryAccessToWriteBackRegister memWb = mock(MemoryAccessToWriteBackRegister.class);
 
     private Execution execution;
 
@@ -24,11 +28,16 @@ class ExecutionTest {
         when(idExe.getImmediate()).thenReturn(immediate);
         when(idExe.getRt()).thenReturn(rt);
         when(idExe.getRd()).thenReturn(rd);
+        when(forwardingUnit.getOperand1ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_ID);
+        when(forwardingUnit.getOperand2ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_ID);
     }
 
     @BeforeEach
     void buildUp() {
         execution = new Execution(idExe, new Alu(), new Alu());
+        execution.setForwardingUnit(forwardingUnit);
+        execution.setExecutionToMemoryAccessRegister(exeMem);
+        execution.setMemoryAccessToWriteBackRegister(memWb);
     }
 
     @Test
@@ -162,5 +171,39 @@ class ExecutionTest {
 
         assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(registerData1 - registerData2, execution.getAluResult());
+    }
+
+    @Test
+    void testDataHazardAtExecutionStage() {
+        int forwardedValue = 5;
+        when(forwardingUnit.getOperand1ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_EXE);
+        when(forwardingUnit.getOperand2ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_EXE);
+        when(exeMem.getAluResult()).thenReturn(forwardedValue);
+
+        when(idExe.getRegisterDestination()).thenReturn(MainController.RegisterDestination.RD);
+        when(idExe.getAluOperation()).thenReturn(MainController.AluOperation.R_TYPE);
+        when(idExe.getAluSource()).thenReturn(MainController.AluSource.REGISTER);
+        when(idExe.getFunctionCode()).thenReturn(FunctionCode.ADD);
+
+        execution.run();
+
+        assertEquals(forwardedValue + forwardedValue, execution.getAluResult());
+    }
+
+    @Test
+    void testDataHazardAtMemoryAccessStage() {
+        int forwardedValue = 5;
+        when(forwardingUnit.getOperand1ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_MEM);
+        when(forwardingUnit.getOperand2ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_MEM);
+        when(memWb.getWriteRegisterData()).thenReturn(forwardedValue);
+
+        when(idExe.getRegisterDestination()).thenReturn(MainController.RegisterDestination.RD);
+        when(idExe.getAluOperation()).thenReturn(MainController.AluOperation.R_TYPE);
+        when(idExe.getAluSource()).thenReturn(MainController.AluSource.REGISTER);
+        when(idExe.getFunctionCode()).thenReturn(FunctionCode.ADD);
+
+        execution.run();
+
+        assertEquals(forwardedValue + forwardedValue, execution.getAluResult());
     }
 }

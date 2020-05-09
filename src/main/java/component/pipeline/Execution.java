@@ -1,10 +1,14 @@
 package component.pipeline;
 
 import component.Alu;
+import component.ForwardingUnit;
 import controller.AluController;
 import controller.MainController;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import signal.FunctionCode;
+
+import java.util.Objects;
 
 public class Execution implements Stage {
 
@@ -16,6 +20,15 @@ public class Execution implements Stage {
 
     @NotNull
     private final Alu branchAdder;
+
+    @Nullable
+    private ForwardingUnit forwardingUnit;
+
+    @Nullable
+    private ExecutionToMemoryAccessRegister exeMem;
+
+    @Nullable
+    private MemoryAccessToWriteBackRegister memWb;
 
     @NotNull
     private MainController.RegisterWrite registerWrite = MainController.RegisterWrite.FALSE;
@@ -86,6 +99,18 @@ public class Execution implements Stage {
         return writeRegisterAddress;
     }
 
+    public void setForwardingUnit(@NotNull final ForwardingUnit forwardingUnit) {
+        this.forwardingUnit = forwardingUnit;
+    }
+
+    public void setExecutionToMemoryAccessRegister(@NotNull final ExecutionToMemoryAccessRegister exeMem) {
+        this.exeMem = exeMem;
+    }
+
+    public void setMemoryAccessToWriteBackRegister(@NotNull final MemoryAccessToWriteBackRegister memWb) {
+        this.memWb = memWb;
+    }
+
     @Override
     public void run() {
         passControlSignals();
@@ -112,11 +137,30 @@ public class Execution implements Stage {
 
     private void configAlu() {
         alu.setControl(AluController.getAluControl(idExe.getAluOperation(), idExe.getFunctionCode()));
-        alu.setOperand1(idExe.getRegisterData1());
+        resolveOperand1();
+        resolveOperand2();
+    }
 
-        if (idExe.getAluSource() == MainController.AluSource.REGISTER)
-            alu.setOperand2(idExe.getRegisterData2());
-        else alu.setOperand2(idExe.getImmediate());
+    private void resolveOperand1() {
+        assert forwardingUnit != null;
+        if (forwardingUnit.getOperand1ForwardingSignal() == ForwardingUnit.ForwardingSignal.FROM_EXE)
+            alu.setOperand1(Objects.requireNonNull(exeMem).getAluResult());
+        else if (forwardingUnit.getOperand1ForwardingSignal() == ForwardingUnit.ForwardingSignal.FROM_MEM)
+            alu.setOperand1(Objects.requireNonNull(memWb).getWriteRegisterData());
+        else
+            alu.setOperand1(idExe.getRegisterData1());
+    }
+
+    private void resolveOperand2() {
+        if (idExe.getAluSource() == MainController.AluSource.REGISTER) {
+            assert forwardingUnit != null;
+            if (forwardingUnit.getOperand2ForwardingSignal() == ForwardingUnit.ForwardingSignal.FROM_EXE)
+                alu.setOperand2(Objects.requireNonNull(exeMem).getAluResult());
+            else if (forwardingUnit.getOperand2ForwardingSignal() == ForwardingUnit.ForwardingSignal.FROM_MEM)
+                alu.setOperand2(Objects.requireNonNull(memWb).getWriteRegisterData());
+            else
+                alu.setOperand2(idExe.getRegisterData2());
+        } else alu.setOperand2(idExe.getImmediate());
     }
 
     private void configBranchAdder() {

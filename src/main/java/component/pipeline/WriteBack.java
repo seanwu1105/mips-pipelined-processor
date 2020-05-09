@@ -22,10 +22,7 @@ public class WriteBack implements Stage {
         register.setRegisterWrite(memWb.getRegisterWrite());
         if (memWb.getRegisterWrite() == MainController.RegisterWrite.TRUE) {
             register.setWriteAddress(memWb.getWriteRegisterAddress());
-            if (memWb.getMemoryToRegister() == MainController.MemoryToRegister.FROM_ALU_RESULT)
-                register.write(memWb.getAluResult());
-            else if (memWb.getMemoryToRegister() == MainController.MemoryToRegister.FROM_MEMORY)
-                register.write(memWb.getMemoryReadData());
+            register.write(memWb.getWriteRegisterData());
         }
     }
 

@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-// XXX: This TestSuite violates encapsulation of all PipelineRegister.
-
 class PipelineRegisterTest {
 
     @Test
@@ -168,15 +166,23 @@ class PipelineRegisterTest {
         final int expectedWriteRegisterAddress = 4;
 
         final MemoryAccess memoryAccess = mock(MemoryAccess.class);
+        final MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
         when(memoryAccess.getMemoryReadData()).thenReturn(expectedMemoryReadData);
         when(memoryAccess.getAluResult()).thenReturn(expectedAluResult);
         when(memoryAccess.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
 
-        final MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
+        when(memoryAccess.getMemoryToRegister()).thenReturn(MainController.MemoryToRegister.FROM_MEMORY);
+
         memWb.update();
 
-        assertEquals(expectedMemoryReadData, memWb.getMemoryReadData());
-        assertEquals(expectedAluResult, memWb.getAluResult());
         assertEquals(expectedWriteRegisterAddress, memWb.getWriteRegisterAddress());
+        assertEquals(expectedMemoryReadData, memWb.getWriteRegisterData());
+
+        when(memoryAccess.getMemoryToRegister()).thenReturn(MainController.MemoryToRegister.FROM_ALU_RESULT);
+
+        memWb.update();
+
+        assertEquals(expectedWriteRegisterAddress, memWb.getWriteRegisterAddress());
+        assertEquals(expectedAluResult, memWb.getWriteRegisterData());
     }
 }

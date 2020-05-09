@@ -50,4 +50,11 @@ public class MemoryAccessToWriteBackRegister implements PipelineRegister {
     public int getWriteRegisterAddress() {
         return writeRegisterAddress;
     }
+
+    public int getWriteRegisterData() {
+        if (getMemoryToRegister() == MainController.MemoryToRegister.FROM_ALU_RESULT)
+            return getAluResult();
+        else
+            return getMemoryReadData();
+    }
 }
