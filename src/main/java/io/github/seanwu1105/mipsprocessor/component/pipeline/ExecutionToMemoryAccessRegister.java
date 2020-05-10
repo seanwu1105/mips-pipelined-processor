@@ -23,7 +23,10 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
     @NotNull
     private MainController.MemoryWrite memoryWrite = MainController.MemoryWrite.FALSE;
 
-    private int branchResult, aluResult, registerData2, writeRegisterAddress;
+    private int branchResult;
+    private int aluResult;
+    private int registerData2;
+    private int writeRegisterAddress;
 
     public ExecutionToMemoryAccessRegister(@NotNull final Execution execution) {
         this.execution = execution;

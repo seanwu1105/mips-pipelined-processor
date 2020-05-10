@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProcessorTest {
 
-    public static final Map<Integer, Integer> initRegisterValues = Map.of(
+    private static final Map<Integer, Integer> initRegisterValues = Map.of(
             0, 0,
             1, 9,
             2, 8,
@@ -28,7 +28,7 @@ class ProcessorTest {
             8, 5,
             9, 6
     );
-    public static final Map<Integer, Integer> initDataMemoryValues = Map.of(
+    private static final Map<Integer, Integer> initDataMemoryValues = Map.of(
             0x00, 5,
             0x04, 9,
             0x08, 4,
@@ -73,8 +73,8 @@ class ProcessorTest {
 
     @Test
     void testAdd() {
-        final Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100000"); // add $3, $1, $2
-        final List<Instruction> instructions = List.of(addInstruction);
+        final var addInstruction = new Instruction("000000 00001 00010 00011 00000 100000"); // add $3, $1, $2
+        final var instructions = List.of(addInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -87,8 +87,8 @@ class ProcessorTest {
 
     @Test
     void testSubtract() {
-        final Instruction subtractInstruction = new Instruction("000000 00001 00010 00011 00000 100010"); // sub $3, $1, $2
-        final List<Instruction> instructions = List.of(subtractInstruction);
+        final var subtractInstruction = new Instruction("000000 00001 00010 00011 00000 100010"); // sub $3, $1, $2
+        final var instructions = List.of(subtractInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -101,8 +101,8 @@ class ProcessorTest {
 
     @Test
     void testAnd() {
-        final Instruction andInstruction = new Instruction("000000 00001 00010 00011 00000 100100"); // and $3, $1, $2
-        final List<Instruction> instructions = List.of(andInstruction);
+        final var andInstruction = new Instruction("000000 00001 00010 00011 00000 100100"); // and $3, $1, $2
+        final var instructions = List.of(andInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -115,8 +115,8 @@ class ProcessorTest {
 
     @Test
     void testOr() {
-        final Instruction orInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
-        final List<Instruction> instructions = List.of(orInstruction);
+        final var orInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
+        final var instructions = List.of(orInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -129,8 +129,8 @@ class ProcessorTest {
 
     @Test
     void testSetOnLessThan() {
-        final Instruction setOnLessThanInstruction = new Instruction("000000 00001 00010 00011 00000 101010"); // slt $3, $1, $2
-        final List<Instruction> instructions = List.of(setOnLessThanInstruction);
+        final var setOnLessThanInstruction = new Instruction("000000 00001 00010 00011 00000 101010"); // slt $3, $1, $2
+        final var instructions = List.of(setOnLessThanInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -143,8 +143,8 @@ class ProcessorTest {
 
     @Test
     void testLoadWord() {
-        final Instruction loadWordInstruction = new Instruction("100011 00010 00001 0000000000000100"); // lw $1, 4($2)
-        final List<Instruction> instructions = List.of(loadWordInstruction);
+        final var loadWordInstruction = new Instruction("100011 00010 00001 0000000000000100"); // lw $1, 4($2)
+        final var instructions = List.of(loadWordInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -157,8 +157,8 @@ class ProcessorTest {
 
     @Test
     void testSaveWord() {
-        final Instruction saveWordInstruction = new Instruction("101011 00010 00001 0000000000000100"); // sw $1, 4($2)
-        final List<Instruction> instructions = List.of(saveWordInstruction);
+        final var saveWordInstruction = new Instruction("101011 00010 00001 0000000000000100"); // sw $1, 4($2)
+        final var instructions = List.of(saveWordInstruction);
 
         buildProcessorAndRun(instructions);
 
@@ -170,13 +170,13 @@ class ProcessorTest {
 
     @Test
     void testDataHazardAtExecutionStage() {
-        final List<Instruction> instructions = List.of(
+        final var instructions = List.of(
                 new Instruction("000000 00010 00010 00001 00000 100000"), // add $1, $2, $2
                 new Instruction("000000 00001 00001 00011 00000 100000")  // add $3, $1, $1
         );
 
-        final int expectedRegister1 = initRegisterValues.get(2) + initRegisterValues.get(2);
-        final int expect = expectedRegister1 + expectedRegister1;
+        final var expectedRegister1 = initRegisterValues.get(2) + initRegisterValues.get(2);
+        final var expect = expectedRegister1 + expectedRegister1;
 
         buildProcessorAndRun(instructions);
 
@@ -186,14 +186,14 @@ class ProcessorTest {
 
     @Test
     void testDataHazardAtMemoryAccessStage() {
-        final List<Instruction> instructions = List.of(
+        final var instructions = List.of(
                 new Instruction("000000 00010 00010 00001 00000 100000"), // add $1, $2, $2
                 new Instruction("000000 00000 00000 01001 00000 100010"), // sub $9, $0, $0
                 new Instruction("000000 00001 00001 00011 00000 100000")  // add $3, $1, $1
         );
 
-        final int expectedRegister1 = initRegisterValues.get(2) + initRegisterValues.get(2);
-        final int expect = expectedRegister1 + expectedRegister1;
+        final var expectedRegister1 = initRegisterValues.get(2) + initRegisterValues.get(2);
+        final var expect = expectedRegister1 + expectedRegister1;
 
         buildProcessorAndRun(instructions);
 
@@ -203,15 +203,15 @@ class ProcessorTest {
 
     @Test
     void testDataHazardAtWriteBackStage() {
-        final List<Instruction> instructions = List.of(
+        final var instructions = List.of(
                 new Instruction("000000 00010 00010 00001 00000 100000"), // add $1, $2, $2
                 new Instruction("000000 00000 00000 01001 00000 100010"), // sub $9, $0, $0
                 new Instruction("000000 00000 00000 01001 00000 100010"), // sub $9, $0, $0
                 new Instruction("000000 00001 00001 00011 00000 100000")  // add $3, $1, $1
         );
 
-        final int expectedRegister1 = initRegisterValues.get(2) + initRegisterValues.get(2);
-        final int expect = expectedRegister1 + expectedRegister1;
+        final var expectedRegister1 = initRegisterValues.get(2) + initRegisterValues.get(2);
+        final var expect = expectedRegister1 + expectedRegister1;
 
         buildProcessorAndRun(instructions);
 
@@ -250,8 +250,8 @@ class ProcessorTest {
 
     @Test
     void testProcessorLogWithSingleRTypeInstruction() {
-        final Instruction addInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
-        final String expect = String.join(System.lineSeparator(),
+        final var addInstruction = new Instruction("000000 00001 00010 00011 00000 100101"); // or $3, $1, $2
+        final var expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
                 "Registers:",
@@ -486,8 +486,8 @@ class ProcessorTest {
                 ""
         );
 
-        final ProcessorLogger logger = new ProcessorLogger();
-        final List<Instruction> instructions = List.of(
+        final var logger = new ProcessorLogger();
+        final var instructions = List.of(
                 addInstruction
         );
 
@@ -498,8 +498,8 @@ class ProcessorTest {
 
     @Test
     void testProcessorLogWithSingleLoadWordInstruction() {
-        final Instruction loadWordInstruction = new Instruction("100011 00001 00110 0000000000000011"); // lw $6, 3($1)
-        final String expect = String.join(System.lineSeparator(),
+        final var loadWordInstruction = new Instruction("100011 00001 00110 0000000000000011"); // lw $6, 3($1)
+        final var expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
                 "Registers:",
@@ -734,8 +734,8 @@ class ProcessorTest {
                 ""
         );
 
-        final ProcessorLogger logger = new ProcessorLogger();
-        final List<Instruction> instructions = List.of(
+        final var logger = new ProcessorLogger();
+        final var instructions = List.of(
                 loadWordInstruction
         );
 
@@ -746,8 +746,8 @@ class ProcessorTest {
 
     @Test
     void testProcessorLogWithSingleSaveWordInstruction() {
-        final Instruction saveWordInstruction = new Instruction("101011 00101 00100 0000000000000010"); // sw $4, 2($5)
-        final String expect = String.join(System.lineSeparator(),
+        final var saveWordInstruction = new Instruction("101011 00101 00100 0000000000000010"); // sw $4, 2($5)
+        final var expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
                 "Registers:",
@@ -935,8 +935,8 @@ class ProcessorTest {
                 ""
         );
 
-        final ProcessorLogger logger = new ProcessorLogger();
-        final List<Instruction> instructions = List.of(
+        final var logger = new ProcessorLogger();
+        final var instructions = List.of(
                 saveWordInstruction
         );
 
@@ -947,14 +947,14 @@ class ProcessorTest {
 
     @Test
     void testProcessorLogWithMemoryAccessAndRTypeInstructionsWithoutHazards() {
-        final List<Instruction> instructions = List.of(
+        final var instructions = List.of(
                 new Instruction("100011 01000 01001 0000000000000011"),   // lw $9, 3($8)   ----- $9 = 4
                 new Instruction("000000 00110 00000 00111 00000 100010"), // sub $7, $6, $0 ----- $7 = 3 - 0
                 new Instruction("000000 00011 00010 00100 00000 100100"), // and $4, $3, $2 ----- $4 = 7 & 8
                 new Instruction("101011 01000 00001 0000000000000111"),   // sw $1, 7($8)   ----- m12 = 9
                 new Instruction("000000 00101 00101 00101 00000 100000")  // add $5, $5, $5 ----- $5 = 2 + 2
         );
-        final String expect = String.join(System.lineSeparator(),
+        final var expect = String.join(System.lineSeparator(),
                 "CC1:",
                 "",
                 "Registers:",
@@ -1372,19 +1372,19 @@ class ProcessorTest {
                 ""
         );
 
-        final ProcessorLogger logger = new ProcessorLogger();
+        final var logger = new ProcessorLogger();
 
         buildProcessorAndRun(instructions, logger);
 
         assertEquals(expect, logger.getLog());
     }
 
-    private void buildProcessorAndRun(@NotNull final List<Instruction> instructions) {
+    private void buildProcessorAndRun(@NotNull final Iterable<Instruction> instructions) {
         buildProcessorAndRun(instructions, null);
     }
 
-    private void buildProcessorAndRun(@NotNull final List<Instruction> instructions, @Nullable final ProcessorLogger logger) {
-        final Processor processor = processorBuilder
+    private void buildProcessorAndRun(@NotNull final Iterable<Instruction> instructions, @Nullable final ProcessorLogger logger) {
+        final var processor = processorBuilder
                 .setInstructions(instructions)
                 .build();
         if (logger != null) processor.addLogger(logger);

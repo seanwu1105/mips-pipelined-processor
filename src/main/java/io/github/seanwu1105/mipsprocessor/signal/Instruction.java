@@ -33,7 +33,7 @@ public class Instruction implements Signal {
 
     @NotNull
     public OpCode getOpCode() {
-        for (final OpCode opCode : OpCode.values())
+        for (final var opCode : OpCode.values())
             if (opCode.getRaw().equals(raw.substring(0, 6)))
                 return opCode;
 
@@ -41,23 +41,23 @@ public class Instruction implements Signal {
     }
 
     public int getRs() {
-        final String rsRaw = raw.substring(6, 11);
+        final var rsRaw = raw.substring(6, 11);
         return Integer.parseInt(rsRaw, 2);
     }
 
     public int getRt() {
-        final String rtRaw = raw.substring(11, 16);
+        final var rtRaw = raw.substring(11, 16);
         return Integer.parseInt(rtRaw, 2);
     }
 
     public int getRd() {
-        final String rdRaw = raw.substring(16, 21);
+        final var rdRaw = raw.substring(16, 21);
         return Integer.parseInt(rdRaw, 2);
     }
 
     @NotNull
     public FunctionCode getFunctionCode() {
-        for (final FunctionCode functionCode : FunctionCode.values())
+        for (final var functionCode : FunctionCode.values())
             if (functionCode.getRaw().equals(raw.substring(26, 32)))
                 return functionCode;
 
@@ -65,7 +65,7 @@ public class Instruction implements Signal {
     }
 
     public int getImmediate() {
-        final String immediateRaw = raw.substring(16, 32);
+        final var immediateRaw = raw.substring(16, 32);
         return Integer.parseInt(immediateRaw, 2);
     }
 
@@ -78,7 +78,7 @@ public class Instruction implements Signal {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        final Instruction that = (Instruction) o;
+        final var that = (Instruction) o;
 
         return raw.equals(that.raw);
     }

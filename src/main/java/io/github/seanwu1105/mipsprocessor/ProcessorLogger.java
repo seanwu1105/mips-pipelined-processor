@@ -6,16 +6,15 @@ import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionFetchToI
 import io.github.seanwu1105.mipsprocessor.component.pipeline.MemoryAccessToWriteBackRegister;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class ProcessorLogger {
+class ProcessorLogger {
 
     private final StringBuilder stringBuilder = new StringBuilder();
 
     private int clockCycle = 1;
 
-    public void onClockCycleFinished(
+    void onClockCycleFinished(
             @NotNull final Processor processor,
             @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
             @NotNull final InstructionDecodeToExecutionRegister idExe,
@@ -40,13 +39,13 @@ public class ProcessorLogger {
     }
 
     private void logRegister(@NotNull final Processor processor) {
-        final SortedSet<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenRegisterAddresses());
+        final Iterable<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenRegisterAddresses());
         appendLine("Registers:");
         sortedAddresses.forEach((address) -> appendLine("$" + address + ": " + processor.readRegister(address)));
     }
 
     private void logDataMemory(@NotNull final Processor processor) {
-        final SortedSet<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenDataMemoryAddresses());
+        final Iterable<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenDataMemoryAddresses());
         appendLine("Data memory:");
         sortedAddresses.forEach((address) ->
                 appendLine(String.format("0x%02X: %d", address, processor.readDataMemory(address)))

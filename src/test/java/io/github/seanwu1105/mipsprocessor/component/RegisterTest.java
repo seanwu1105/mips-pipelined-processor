@@ -21,8 +21,8 @@ class RegisterTest {
 
     @Test
     void testWriteAndReadData() {
-        final int data1 = 10;
-        final int data2 = 20;
+        final var data1 = 10;
+        final var data2 = 20;
 
         register.setRegisterWrite(MainController.RegisterWrite.TRUE);
         register.setWriteAddress(1);
@@ -58,10 +58,10 @@ class RegisterTest {
 
     @Test
     void testGetInitializedAddresses() {
-        final Set<Integer> expect = Set.of(0, 2, 4);
+        final var expect = Set.of(0, 2, 4);
 
         register.setRegisterWrite(MainController.RegisterWrite.TRUE);
-        for (final Integer address : expect) {
+        for (final var address : expect) {
             if (address != 0) {
                 register.setWriteAddress(address);
                 register.write(address * 10);

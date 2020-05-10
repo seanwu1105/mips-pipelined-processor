@@ -4,20 +4,30 @@ import io.github.seanwu1105.mipsprocessor.component.Alu;
 import io.github.seanwu1105.mipsprocessor.component.ForwardingUnit;
 import io.github.seanwu1105.mipsprocessor.component.Memory;
 import io.github.seanwu1105.mipsprocessor.component.Register;
-import io.github.seanwu1105.mipsprocessor.component.pipeline.*;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.Execution;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.ExecutionToMemoryAccessRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionDecode;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionDecodeToExecutionRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionFetch;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionFetchToInstructionDecodeRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.MemoryAccess;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.MemoryAccessToWriteBackRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.PipelineRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.Stage;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.WriteBack;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
 import io.github.seanwu1105.mipsprocessor.signal.Instruction;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
 public final class Processor {
 
-    private final List<Stage> stages = new ArrayList<>();
-    private final List<PipelineRegister> pipelineRegisters = new ArrayList<>();
-    private final List<ProcessorLogger> loggers = new ArrayList<>();
+    private final Collection<Stage> stages = new ArrayList<>();
+    private final Collection<PipelineRegister> pipelineRegisters = new ArrayList<>();
+    private final Collection<ProcessorLogger> loggers = new ArrayList<>();
     private final InstructionFetchToInstructionDecodeRegister ifId;
     private final InstructionDecodeToExecutionRegister idExe;
     private final ExecutionToMemoryAccessRegister exeMem;
@@ -26,15 +36,15 @@ public final class Processor {
     private final MemoryAccess memoryAccess;
 
     private Processor(
-            @NotNull final InstructionFetch instructionFetch,
+            @NotNull final Stage instructionFetch,
             @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
             @NotNull final InstructionDecode instructionDecode,
             @NotNull final InstructionDecodeToExecutionRegister idExe,
-            @NotNull final Execution execution,
+            @NotNull final Stage execution,
             @NotNull final ExecutionToMemoryAccessRegister exeMem,
             @NotNull final MemoryAccess memoryAccess,
             @NotNull final MemoryAccessToWriteBackRegister memWb,
-            @NotNull final WriteBack writeBack
+            @NotNull final Stage writeBack
     ) {
         this.ifId = ifId;
         this.idExe = idExe;
@@ -62,7 +72,7 @@ public final class Processor {
     }
 
     private boolean hasUnfinishedInstructions() {
-        for (final Stage stage : stages)
+        for (final var stage : stages)
             if (stage.hasInstruction()) return true;
         return false;
     }
@@ -72,20 +82,20 @@ public final class Processor {
     }
 
     @NotNull
-    public Set<Integer> getWrittenRegisterAddresses() {
+    Set<Integer> getWrittenRegisterAddresses() {
         return instructionDecode.getWrittenRegisterAddresses();
     }
 
-    public int readRegister(final int address) {
+    int readRegister(final int address) {
         return instructionDecode.readRegister(address);
     }
 
     @NotNull
-    public Set<Integer> getWrittenDataMemoryAddresses() {
+    Set<Integer> getWrittenDataMemoryAddresses() {
         return memoryAccess.getWrittenDataMemoryAddresses();
     }
 
-    public int readDataMemory(final int address) {
+    int readDataMemory(final int address) {
         return memoryAccess.readDataMemory(address);
     }
 
@@ -99,10 +109,10 @@ public final class Processor {
         private Memory dataMemory = new Memory();
 
         @NotNull
-        Builder setInstructions(@NotNull final List<Instruction> instructions) {
+        public Builder setInstructions(@NotNull final Iterable<Instruction> instructions) {
             instructionMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
-            int address = 0x00;
-            for (final Instruction instruction : instructions) {
+            var address = 0x00;
+            for (final var instruction : instructions) {
                 instructionMemory.setAddress(address);
                 instructionMemory.write(instruction);
                 address += 4;
@@ -112,28 +122,28 @@ public final class Processor {
         }
 
         @NotNull
-        Builder setRegister(@NotNull final Register register) {
+        public Builder setRegister(@NotNull final Register register) {
             this.register = register;
             return this;
         }
 
         @NotNull
-        Builder setDataMemory(@NotNull final Memory dataMemory) {
+        public Builder setDataMemory(@NotNull final Memory dataMemory) {
             this.dataMemory = dataMemory;
             return this;
         }
 
         @NotNull
-        Processor build() {
-            final InstructionFetch instructionFetch = new InstructionFetch(instructionMemory);
-            final InstructionFetchToInstructionDecodeRegister ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
-            final InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
-            final InstructionDecodeToExecutionRegister idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
-            final Execution execution = new Execution(idExe, new Alu(), new Alu());
-            final ExecutionToMemoryAccessRegister exeMem = new ExecutionToMemoryAccessRegister(execution);
-            final MemoryAccess memoryAccess = new MemoryAccess(exeMem, dataMemory);
-            final MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
-            final WriteBack writeBack = new WriteBack(memWb, register);
+        public Processor build() {
+            final var instructionFetch = new InstructionFetch(instructionMemory);
+            final var ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
+            final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+            final var idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
+            final var execution = new Execution(idExe, new Alu(), new Alu());
+            final var exeMem = new ExecutionToMemoryAccessRegister(execution);
+            final var memoryAccess = new MemoryAccess(exeMem, dataMemory);
+            final var memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
+            final var writeBack = new WriteBack(memWb, register);
 
             execution.setForwardingUnit(new ForwardingUnit(idExe, exeMem, memWb));
             execution.setExecutionToMemoryAccessRegister(exeMem);

@@ -14,7 +14,9 @@ import static org.mockito.Mockito.when;
 class WriteBackTest {
 
     private final MemoryAccessToWriteBackRegister memWb = mock(MemoryAccessToWriteBackRegister.class);
-    private final int expectedMemoryReadData = 11, expectedAluResult = 12, expectedRegisterWriteAddress = 1;
+    private final int expectedMemoryReadData = 11;
+    private final int expectedAluResult = 12;
+    private final int expectedRegisterWriteAddress = 1;
 
     @NotNull
     private WriteBack writeBack;

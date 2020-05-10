@@ -50,6 +50,7 @@ public class Memory {
 
     @NotNull
     public Instruction readInstruction() {
+        if (!data.containsKey(address)) return Instruction.NOP;
         return new Instruction(read());
     }
 

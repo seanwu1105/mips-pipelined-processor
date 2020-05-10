@@ -34,7 +34,13 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     @NotNull
     private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
-    private int programCounter, registerData1, registerData2, immediate, rs, rt, rd;
+    private int programCounter;
+    private int registerData1;
+    private int registerData2;
+    private int immediate;
+    private int rs;
+    private int rt;
+    private int rd;
 
     @Nullable
     private FunctionCode functionCode = FunctionCode.NOP;

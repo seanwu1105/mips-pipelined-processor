@@ -4,7 +4,9 @@ import io.github.seanwu1105.mipsprocessor.signal.Instruction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.*;
+import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.BRANCH;
+import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.MEMORY_REFERENCE;
+import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.R_TYPE;
 import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluSource.IMMEDIATE;
 import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluSource.REGISTER;
 import static io.github.seanwu1105.mipsprocessor.controller.MainController.MemoryToRegister.FROM_ALU_RESULT;

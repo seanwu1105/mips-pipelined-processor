@@ -27,17 +27,17 @@ class InstructionFetchTest {
 
     @Test
     void testInstructionFetchRun() {
-        final List<Instruction> instructions = List.of(
+        final var instructions = List.of(
                 new Instruction("10001101000000010000000000000011"),
                 new Instruction("00000000000000100001100000100000")
         );
 
         setInstructions(instructions);
 
-        final InstructionFetch instructionFetch = new InstructionFetch(instructionMemory);
+        final var instructionFetch = new InstructionFetch(instructionMemory);
 
-        int number = 0;
-        for (final Instruction instruction : instructions) {
+        var number = 0;
+        for (final var instruction : instructions) {
             instructionFetch.run();
             assertEquals((number + 1) * 4, instructionFetch.getProgramCounter());
             assertEquals(instruction, instructionFetch.getInstruction());
@@ -47,7 +47,7 @@ class InstructionFetchTest {
 
     @Test
     void testInstructionFetchRunOnBranch() {
-        final List<Instruction> instructions = List.of(
+        final var instructions = List.of(
                 new Instruction("00010000010000100000000000000001"),
                 new Instruction("00000000000000100001100000100000"),
                 new Instruction("00010000000000100000000000000110"),
@@ -57,12 +57,12 @@ class InstructionFetchTest {
         setInstructions(instructions);
 
         // XXX: This TestCase violates encapsulation of InstructionFetch.
-        final ExecutionToMemoryAccessRegister exeMem = mock(ExecutionToMemoryAccessRegister.class);
+        final var exeMem = mock(ExecutionToMemoryAccessRegister.class);
 
-        final InstructionFetch instructionFetch = new InstructionFetch(instructionMemory);
+        final var instructionFetch = new InstructionFetch(instructionMemory);
         instructionFetch.setExecutionToMemoryAccessRegister(exeMem);
 
-        final int expectedBranchResult = 8;
+        final var expectedBranchResult = 8;
         when(exeMem.shouldBranch()).thenReturn(true);
         when(exeMem.getBranchResult()).thenReturn(expectedBranchResult);
         instructionFetch.run();
@@ -75,10 +75,10 @@ class InstructionFetchTest {
         assertEquals(instructions.get(expectedBranchResult / 4), instructionFetch.getInstruction());
     }
 
-    private void setInstructions(@NotNull final List<Instruction> instructions) {
-        final int initProgramCounter = 0;
-        int number = 0;
-        for (final Instruction instruction : instructions) {
+    private void setInstructions(@NotNull final Iterable<Instruction> instructions) {
+        final var initProgramCounter = 0;
+        var number = 0;
+        for (final var instruction : instructions) {
             instructionMemory.setAddress(initProgramCounter + number * 4);
             instructionMemory.write(instruction);
             number++;

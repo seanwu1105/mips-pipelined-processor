@@ -14,7 +14,9 @@ public class MemoryAccessToWriteBackRegister implements PipelineRegister {
     @NotNull
     private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
-    private int memoryReadData, aluResult, writeRegisterAddress;
+    private int memoryReadData;
+    private int aluResult;
+    private int writeRegisterAddress;
 
     public MemoryAccessToWriteBackRegister(@NotNull final MemoryAccess memoryAccess) {
         this.memoryAccess = memoryAccess;

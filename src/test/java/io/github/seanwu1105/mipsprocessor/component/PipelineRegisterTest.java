@@ -1,6 +1,13 @@
 package io.github.seanwu1105.mipsprocessor.component;
 
-import io.github.seanwu1105.mipsprocessor.component.pipeline.*;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.Execution;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.ExecutionToMemoryAccessRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionDecode;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionDecodeToExecutionRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionFetch;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionFetchToInstructionDecodeRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.MemoryAccess;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.MemoryAccessToWriteBackRegister;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
 import io.github.seanwu1105.mipsprocessor.signal.FunctionCode;
 import io.github.seanwu1105.mipsprocessor.signal.Instruction;
@@ -15,14 +22,14 @@ class PipelineRegisterTest {
 
     @Test
     void testGetInstructionFetchToInstructionDecodeRegisterProperties() {
-        final int expectedProgramCounter = 8;
-        final Instruction expectedInstruction = new Instruction("00000000000000000000000000000000");
+        final var expectedProgramCounter = 8;
+        final var expectedInstruction = new Instruction("00000000000000000000000000000000");
 
-        final InstructionFetch instructionFetch = mock(InstructionFetch.class);
+        final var instructionFetch = mock(InstructionFetch.class);
         when(instructionFetch.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(instructionFetch.getInstruction()).thenReturn(expectedInstruction);
 
-        final InstructionFetchToInstructionDecodeRegister ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
+        final var ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
         ifId.update();
 
         assertEquals(expectedProgramCounter, ifId.getProgramCounter());
@@ -31,16 +38,16 @@ class PipelineRegisterTest {
 
     @Test
     void testGetInstructionDecodeToExecutionRegisterControlSignals() {
-        final MainController.RegisterDestination expectedRegisterDestination = MainController.RegisterDestination.RD;
-        final MainController.AluOperation expectedAluOperation = MainController.AluOperation.R_TYPE;
-        final MainController.AluSource expectedAluSource = MainController.AluSource.REGISTER;
-        final MainController.Branch expectedBranch = MainController.Branch.FALSE;
-        final MainController.MemoryRead expectedMemoryRead = MainController.MemoryRead.FALSE;
-        final MainController.MemoryWrite expectedMemoryWrite = MainController.MemoryWrite.FALSE;
-        final MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
-        final MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
+        final var expectedRegisterDestination = MainController.RegisterDestination.RD;
+        final var expectedAluOperation = MainController.AluOperation.R_TYPE;
+        final var expectedAluSource = MainController.AluSource.REGISTER;
+        final var expectedBranch = MainController.Branch.FALSE;
+        final var expectedMemoryRead = MainController.MemoryRead.FALSE;
+        final var expectedMemoryWrite = MainController.MemoryWrite.FALSE;
+        final var expectedRegisterWrite = MainController.RegisterWrite.TRUE;
+        final var expectedMemoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
-        final InstructionDecode instructionDecode = mock(InstructionDecode.class);
+        final var instructionDecode = mock(InstructionDecode.class);
         when(instructionDecode.getRegisterDestination()).thenReturn(expectedRegisterDestination);
         when(instructionDecode.getAluOperation()).thenReturn(expectedAluOperation);
         when(instructionDecode.getAluSource()).thenReturn(expectedAluSource);
@@ -50,7 +57,7 @@ class PipelineRegisterTest {
         when(instructionDecode.getRegisterWrite()).thenReturn(expectedRegisterWrite);
         when(instructionDecode.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
 
-        final InstructionDecodeToExecutionRegister idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
+        final var idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
         idExe.update();
 
         assertEquals(expectedRegisterDestination, idExe.getRegisterDestination());
@@ -65,15 +72,15 @@ class PipelineRegisterTest {
 
     @Test
     void testGetInstructionDecodeToExecutionRegisterProperties() {
-        final int expectedProgramCounter = 12;
-        final int expectedRegisterData1 = 4;
-        final int expectedRegisterData2 = 5;
-        final int expectedImmediate = 10;
-        final FunctionCode expectedFunctionCode = FunctionCode.OR;
-        final int expectedRt = 6;
-        final int expectedRd = 7;
+        final var expectedProgramCounter = 12;
+        final var expectedRegisterData1 = 4;
+        final var expectedRegisterData2 = 5;
+        final var expectedImmediate = 10;
+        final var expectedFunctionCode = FunctionCode.OR;
+        final var expectedRt = 6;
+        final var expectedRd = 7;
 
-        final InstructionDecode instructionDecode = mock(InstructionDecode.class);
+        final var instructionDecode = mock(InstructionDecode.class);
         when(instructionDecode.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(instructionDecode.getRegisterData1()).thenReturn(expectedRegisterData1);
         when(instructionDecode.getRegisterData2()).thenReturn(expectedRegisterData2);
@@ -82,7 +89,7 @@ class PipelineRegisterTest {
         when(instructionDecode.getRt()).thenReturn(expectedRt);
         when(instructionDecode.getRd()).thenReturn(expectedRd);
 
-        final InstructionDecodeToExecutionRegister idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
+        final var idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
         idExe.update();
 
         assertEquals(expectedProgramCounter, idExe.getProgramCounter());
@@ -96,14 +103,14 @@ class PipelineRegisterTest {
 
     @Test
     void testGetExecutionToMemoryAccessRegisterControlSignals() {
-        final MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
-        final MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
-        final MainController.MemoryRead expectedMemoryRead = MainController.MemoryRead.TRUE;
-        final MainController.MemoryWrite expectedMemoryWrite = MainController.MemoryWrite.FALSE;
-        final MainController.Branch expectedBranch = MainController.Branch.FALSE;
-        final int expectedAluResult = 0;
+        final var expectedRegisterWrite = MainController.RegisterWrite.TRUE;
+        final var expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
+        final var expectedMemoryRead = MainController.MemoryRead.TRUE;
+        final var expectedMemoryWrite = MainController.MemoryWrite.FALSE;
+        final var expectedBranch = MainController.Branch.FALSE;
+        final var expectedAluResult = 0;
 
-        final Execution execution = mock(Execution.class);
+        final var execution = mock(Execution.class);
         when(execution.getRegisterWrite()).thenReturn(expectedRegisterWrite);
         when(execution.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
         when(execution.getMemoryRead()).thenReturn(expectedMemoryRead);
@@ -111,7 +118,7 @@ class PipelineRegisterTest {
         when(execution.getBranch()).thenReturn(expectedBranch);
         when(execution.getAluResult()).thenReturn(expectedAluResult);
 
-        final ExecutionToMemoryAccessRegister exeMem = new ExecutionToMemoryAccessRegister(execution);
+        final var exeMem = new ExecutionToMemoryAccessRegister(execution);
         exeMem.update();
 
         assertEquals(expectedRegisterWrite, exeMem.getRegisterWrite());
@@ -123,18 +130,18 @@ class PipelineRegisterTest {
 
     @Test
     void testGetExecutionToMemoryAccessRegisterProperties() {
-        final int expectedBranchResult = 5 * 4 + 12;
-        final int expectedAluResult = 6;
-        final int expectedRegisterData2 = 7;
-        final int expectedWriteRegisterAddress = 2;
+        final var expectedBranchResult = 5 * 4 + 12;
+        final var expectedAluResult = 6;
+        final var expectedRegisterData2 = 7;
+        final var expectedWriteRegisterAddress = 2;
 
-        final Execution execution = mock(Execution.class);
+        final var execution = mock(Execution.class);
         when(execution.getBranchResult()).thenReturn(expectedBranchResult);
         when(execution.getAluResult()).thenReturn(expectedAluResult);
         when(execution.getRegisterData2()).thenReturn(expectedRegisterData2);
         when(execution.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
 
-        final ExecutionToMemoryAccessRegister exeMem = new ExecutionToMemoryAccessRegister(execution);
+        final var exeMem = new ExecutionToMemoryAccessRegister(execution);
         exeMem.update();
 
         assertEquals(expectedBranchResult, exeMem.getBranchResult());
@@ -145,14 +152,14 @@ class PipelineRegisterTest {
 
     @Test
     void testGetMemoryAccessToWriteBackRegisterControlSignals() {
-        final MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
-        final MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
+        final var expectedRegisterWrite = MainController.RegisterWrite.TRUE;
+        final var expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
 
-        final MemoryAccess memoryAccess = mock(MemoryAccess.class);
+        final var memoryAccess = mock(MemoryAccess.class);
         when(memoryAccess.getRegisterWrite()).thenReturn(expectedRegisterWrite);
         when(memoryAccess.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
 
-        final MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
+        final var memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
         memWb.update();
 
         assertEquals(expectedRegisterWrite, memWb.getRegisterWrite());
@@ -161,12 +168,12 @@ class PipelineRegisterTest {
 
     @Test
     void testGetMemoryAccessToWriteBackRegisterProperties() {
-        final int expectedMemoryReadData = 2;
-        final int expectedAluResult = 3;
-        final int expectedWriteRegisterAddress = 4;
+        final var expectedMemoryReadData = 2;
+        final var expectedAluResult = 3;
+        final var expectedWriteRegisterAddress = 4;
 
-        final MemoryAccess memoryAccess = mock(MemoryAccess.class);
-        final MemoryAccessToWriteBackRegister memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
+        final var memoryAccess = mock(MemoryAccess.class);
+        final var memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
         when(memoryAccess.getMemoryReadData()).thenReturn(expectedMemoryReadData);
         when(memoryAccess.getAluResult()).thenReturn(expectedAluResult);
         when(memoryAccess.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);

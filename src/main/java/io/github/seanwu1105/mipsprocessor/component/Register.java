@@ -13,7 +13,9 @@ public class Register {
 
     @NotNull
     private MainController.RegisterWrite registerWrite = MainController.RegisterWrite.FALSE;
-    private int writeAddress, readAddress1, readAddress2;
+    private int writeAddress;
+    private int readAddress1;
+    private int readAddress2;
 
     public Register() {
         data.put(0, 0);

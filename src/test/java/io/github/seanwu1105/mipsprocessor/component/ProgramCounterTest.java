@@ -8,7 +8,7 @@ class ProgramCounterTest {
 
     @Test
     void testCounter() {
-        final ProgramCounter pc = new ProgramCounter();
+        final var pc = new ProgramCounter();
         assertEquals(0, pc.getCounter());
         pc.setCounter(5);
         assertEquals(5, pc.getCounter());

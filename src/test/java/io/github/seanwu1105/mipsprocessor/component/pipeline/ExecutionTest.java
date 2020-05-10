@@ -13,7 +13,12 @@ import static org.mockito.Mockito.when;
 
 class ExecutionTest {
 
-    final int programCounter = 0, registerData1 = 11, registerData2 = 12, immediate = 20, rt = 2, rd = 3;
+    private final int programCounter = 0;
+    private final int registerData1 = 11;
+    private final int registerData2 = 12;
+    private final int immediate = 20;
+    private final int rt = 2;
+    private final int rd = 3;
     private final InstructionDecodeToExecutionRegister idExe = mock(InstructionDecodeToExecutionRegister.class);
     private final ForwardingUnit forwardingUnit = mock(ForwardingUnit.class);
     private final ExecutionToMemoryAccessRegister exeMem = mock(ExecutionToMemoryAccessRegister.class);
@@ -42,11 +47,11 @@ class ExecutionTest {
 
     @Test
     void testPropertiesPass() {
-        final MainController.Branch expectedBranch = MainController.Branch.FALSE;
-        final MainController.MemoryRead expectedMemoryRead = MainController.MemoryRead.TRUE;
-        final MainController.MemoryWrite expectedMemoryWrite = MainController.MemoryWrite.FALSE;
-        final MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
-        final MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
+        final var expectedBranch = MainController.Branch.FALSE;
+        final var expectedMemoryRead = MainController.MemoryRead.TRUE;
+        final var expectedMemoryWrite = MainController.MemoryWrite.FALSE;
+        final var expectedRegisterWrite = MainController.RegisterWrite.TRUE;
+        final var expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
 
         when(idExe.getBranch()).thenReturn(expectedBranch);
         when(idExe.getMemoryRead()).thenReturn(expectedMemoryRead);
@@ -175,7 +180,7 @@ class ExecutionTest {
 
     @Test
     void testDataHazardAtExecutionStage() {
-        int forwardedValue = 5;
+        final var forwardedValue = 5;
         when(forwardingUnit.getOperand1ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_EXE);
         when(forwardingUnit.getOperand2ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_EXE);
         when(exeMem.getAluResult()).thenReturn(forwardedValue);
@@ -192,7 +197,7 @@ class ExecutionTest {
 
     @Test
     void testDataHazardAtMemoryAccessStage() {
-        int forwardedValue = 5;
+        final var forwardedValue = 5;
         when(forwardingUnit.getOperand1ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_MEM);
         when(forwardingUnit.getOperand2ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_MEM);
         when(memWb.getWriteRegisterData()).thenReturn(forwardedValue);

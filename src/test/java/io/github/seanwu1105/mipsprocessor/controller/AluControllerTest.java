@@ -4,10 +4,12 @@ import io.github.seanwu1105.mipsprocessor.component.Alu;
 import io.github.seanwu1105.mipsprocessor.signal.FunctionCode;
 import org.junit.jupiter.api.Test;
 
-import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.*;
+import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.BRANCH;
+import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.MEMORY_REFERENCE;
+import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.R_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AluControllerTest {
+class AluControllerTest {
 
     @Test
     void testGetAluControl() {

@@ -45,7 +45,8 @@ public class Execution implements Stage {
     @NotNull
     private MainController.MemoryWrite memoryWrite = MainController.MemoryWrite.FALSE;
 
-    private int registerData2, writeRegisterAddress;
+    private int registerData2;
+    private int writeRegisterAddress;
 
     public Execution(
             @NotNull final InstructionDecodeToExecutionRegister idExe,

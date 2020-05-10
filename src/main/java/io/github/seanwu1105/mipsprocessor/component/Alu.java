@@ -7,7 +7,8 @@ public class Alu {
 
     @NotNull
     private AluControl control = AluControl.ADD;
-    private int operand1, operand2;
+    private int operand1;
+    private int operand2;
 
     public void setControl(@NotNull final AluControl control) {
         this.control = control;

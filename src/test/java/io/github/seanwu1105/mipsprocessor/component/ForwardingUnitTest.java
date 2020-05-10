@@ -8,7 +8,9 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.github.seanwu1105.mipsprocessor.component.ForwardingUnit.ForwardingSignal.*;
+import static io.github.seanwu1105.mipsprocessor.component.ForwardingUnit.ForwardingSignal.FROM_EXE;
+import static io.github.seanwu1105.mipsprocessor.component.ForwardingUnit.ForwardingSignal.FROM_ID;
+import static io.github.seanwu1105.mipsprocessor.component.ForwardingUnit.ForwardingSignal.FROM_MEM;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -31,7 +33,7 @@ class ForwardingUnitTest {
 
     @Test
     void testForwardExeHazard() {
-        final int hazardAddress = 2;
+        final var hazardAddress = 2;
         when(exeMem.getRegisterWrite()).thenReturn(MainController.RegisterWrite.TRUE);
         when(exeMem.getWriteRegisterAddress()).thenReturn(hazardAddress);
         when(memWb.getRegisterWrite()).thenReturn(MainController.RegisterWrite.TRUE);
@@ -44,7 +46,7 @@ class ForwardingUnitTest {
 
     @Test
     void testForwardMemHazard() {
-        final int hazardAddress = 2;
+        final var hazardAddress = 2;
         when(exeMem.getRegisterWrite()).thenReturn(MainController.RegisterWrite.FALSE);
         when(exeMem.getWriteRegisterAddress()).thenReturn(hazardAddress);
         when(memWb.getRegisterWrite()).thenReturn(MainController.RegisterWrite.TRUE);

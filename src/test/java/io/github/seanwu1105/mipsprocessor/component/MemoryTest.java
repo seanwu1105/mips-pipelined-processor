@@ -20,7 +20,7 @@ class MemoryTest {
 
     @Test
     void testWriteReadInteger() {
-        final int expect = 9;
+        final var expect = 9;
         memory.setMemoryWrite(MainController.MemoryWrite.TRUE);
         memory.write(expect);
         memory.setMemoryRead(MainController.MemoryRead.TRUE);
@@ -30,7 +30,7 @@ class MemoryTest {
 
     @Test
     void testWriteReadInstruction() {
-        final Instruction expect = new Instruction("10001101000000010000000000000011");
+        final var expect = new Instruction("10001101000000010000000000000011");
         memory.setMemoryWrite(MainController.MemoryWrite.TRUE);
         memory.write(expect);
         memory.setMemoryRead(MainController.MemoryRead.TRUE);

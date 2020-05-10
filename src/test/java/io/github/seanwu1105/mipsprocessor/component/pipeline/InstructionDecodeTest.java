@@ -41,12 +41,12 @@ class InstructionDecodeTest {
 
     @Test
     void testDecodeRType() {
-        final Instruction instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $2, $0, $1
-        final InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        final var instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $2, $0, $1
+        final var ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        final InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+        final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.RegisterDestination.RD, instructionDecode.getRegisterDestination());
@@ -66,12 +66,12 @@ class InstructionDecodeTest {
 
     @Test
     void testDecodeLoadWord() {
-        final Instruction instruction = new Instruction("100011 00001 00010 0000000000010100"); // lw $2, 20($1)
-        final InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        final var instruction = new Instruction("100011 00001 00010 0000000000010100"); // lw $2, 20($1)
+        final var ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        final InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+        final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.RegisterDestination.RT, instructionDecode.getRegisterDestination());
@@ -90,12 +90,12 @@ class InstructionDecodeTest {
 
     @Test
     void testDecodeSaveWord() {
-        final Instruction instruction = new Instruction("101011 00001 00010 0000000000010100"); // sw $2, 20($1)
-        final InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        final var instruction = new Instruction("101011 00001 00010 0000000000010100"); // sw $2, 20($1)
+        final var ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        final InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+        final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.AluOperation.MEMORY_REFERENCE, instructionDecode.getAluOperation());
@@ -112,12 +112,12 @@ class InstructionDecodeTest {
 
     @Test
     void testDecodeBranchOnEqual() {
-        final Instruction instruction = new Instruction("000100 00001 00010 0000000000010100"); // beq $1, $2, 20
-        final InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        final var instruction = new Instruction("000100 00001 00010 0000000000010100"); // beq $1, $2, 20
+        final var ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        final InstructionDecode instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+        final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.AluOperation.BRANCH, instructionDecode.getAluOperation());

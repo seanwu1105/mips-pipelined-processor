@@ -20,7 +20,9 @@ public class MemoryAccess implements Stage {
     @NotNull
     private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
-    private int memoryReadData, aluResult, writeRegisterAddress;
+    private int memoryReadData;
+    private int aluResult;
+    private int writeRegisterAddress;
 
     public MemoryAccess(
             @NotNull final ExecutionToMemoryAccessRegister exeMem,
@@ -93,7 +95,7 @@ public class MemoryAccess implements Stage {
     public int readDataMemory(final int address) {
         dataMemory.setMemoryRead(MainController.MemoryRead.TRUE);
         dataMemory.setAddress(address);
-        final int data = dataMemory.read();
+        final var data = dataMemory.read();
         dataMemory.setMemoryRead(MainController.MemoryRead.FALSE);
         return data;
     }

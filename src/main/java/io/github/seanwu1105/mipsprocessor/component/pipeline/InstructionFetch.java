@@ -48,11 +48,7 @@ public class InstructionFetch implements Stage {
     }
 
     private void updateCurrentInstruction() {
-        try {
-            currentInstruction = instructionMemory.readInstruction();
-        } catch (final NullPointerException e) {
-            currentInstruction = Instruction.NOP;
-        }
+        currentInstruction = instructionMemory.readInstruction();
     }
 
     @Override

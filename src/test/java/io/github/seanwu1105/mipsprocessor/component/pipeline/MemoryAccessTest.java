@@ -40,8 +40,8 @@ class MemoryAccessTest {
 
     @Test
     void testPropertiesPass() {
-        final MainController.RegisterWrite expectedRegisterWrite = MainController.RegisterWrite.TRUE;
-        final MainController.MemoryToRegister expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
+        final var expectedRegisterWrite = MainController.RegisterWrite.TRUE;
+        final var expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
 
         when(exeMem.getRegisterWrite()).thenReturn(expectedRegisterWrite);
         when(exeMem.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
@@ -84,7 +84,7 @@ class MemoryAccessTest {
         when(exeMem.getMemoryRead()).thenReturn(MainController.MemoryRead.FALSE);
         when(exeMem.getMemoryWrite()).thenReturn(MainController.MemoryWrite.TRUE);
 
-        final int expectedRegisterData2 = 6;
+        final var expectedRegisterData2 = 6;
         when(exeMem.getRegisterData2()).thenReturn(expectedRegisterData2);
 
         memoryAccess.run();
