@@ -14,7 +14,6 @@ import static org.mockito.Mockito.when;
 
 class ExecutionTest {
 
-    private final int programCounter = 0;
     private final int registerData1 = 11;
     private final int registerData2 = 12;
     private final int immediate = 20;
@@ -33,6 +32,7 @@ class ExecutionTest {
 
     @BeforeEach
     void buildUp() {
+        final var programCounter = 0;
         forwardingUnit = mock(ForwardingUnit.class);
         idExe = mock(InstructionDecodeToExecutionRegister.class);
         exeMem = mock(ExecutionToMemoryAccessRegister.class);
@@ -46,7 +46,7 @@ class ExecutionTest {
         when(idExe.getRt()).thenReturn(rt);
         when(idExe.getRd()).thenReturn(rd);
 
-        execution = new Execution(idExe, new Alu(), new Alu());
+        execution = new Execution(idExe, new Alu());
         execution.setForwardingUnit(forwardingUnit);
         execution.setExecutionToMemoryAccessRegister(exeMem);
         execution.setMemoryAccessToWriteBackRegister(memWb);
@@ -89,7 +89,6 @@ class ExecutionTest {
 
         execution.run();
 
-        assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(registerData1 + registerData2, execution.getAluResult());
         assertEquals(rd, execution.getWriteRegisterAddress());
     }
@@ -103,7 +102,6 @@ class ExecutionTest {
 
         execution.run();
 
-        assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(registerData1 - registerData2, execution.getAluResult());
         assertEquals(rd, execution.getWriteRegisterAddress());
     }
@@ -117,7 +115,6 @@ class ExecutionTest {
 
         execution.run();
 
-        assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(registerData1 & registerData2, execution.getAluResult());
         assertEquals(rd, execution.getWriteRegisterAddress());
     }
@@ -131,7 +128,6 @@ class ExecutionTest {
 
         execution.run();
 
-        assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(registerData1 | registerData2, execution.getAluResult());
         assertEquals(rd, execution.getWriteRegisterAddress());
     }
@@ -145,7 +141,6 @@ class ExecutionTest {
 
         execution.run();
 
-        assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(1, execution.getAluResult());
         assertEquals(rd, execution.getWriteRegisterAddress());
     }
@@ -158,7 +153,6 @@ class ExecutionTest {
 
         execution.run();
 
-        assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(registerData1 + immediate, execution.getAluResult());
         assertEquals(rt, execution.getWriteRegisterAddress());
     }
@@ -170,7 +164,6 @@ class ExecutionTest {
 
         execution.run();
 
-        assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(registerData1 + immediate, execution.getAluResult());
     }
 
@@ -181,7 +174,6 @@ class ExecutionTest {
 
         execution.run();
 
-        assertEquals(programCounter + immediate * 4, execution.getBranchResult());
         assertEquals(registerData1 - registerData2, execution.getAluResult());
     }
 

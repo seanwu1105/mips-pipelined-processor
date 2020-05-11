@@ -146,7 +146,7 @@ public final class Processor {
             final var ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
             final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
             final var idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
-            final var execution = new Execution(idExe, new Alu(), new Alu());
+            final var execution = new Execution(idExe, new Alu());
             final var exeMem = new ExecutionToMemoryAccessRegister(execution);
             final var memoryAccess = new MemoryAccess(exeMem, dataMemory);
             final var memWb = new MemoryAccessToWriteBackRegister(memoryAccess);

@@ -50,19 +50,16 @@ class ExecutionToMemoryAccessRegisterTest {
 
     @Test
     void testGetExecutionToMemoryAccessRegisterProperties() {
-        final var expectedBranchResult = 5 * 4 + 12;
         final var expectedAluResult = 6;
         final var expectedRegisterData2 = 7;
         final var expectedWriteRegisterAddress = 2;
 
-        when(execution.getBranchResult()).thenReturn(expectedBranchResult);
         when(execution.getAluResult()).thenReturn(expectedAluResult);
         when(execution.getRegisterData2()).thenReturn(expectedRegisterData2);
         when(execution.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
 
         exeMem.update();
 
-        assertEquals(expectedBranchResult, exeMem.getBranchResult());
         assertEquals(expectedAluResult, exeMem.getAluResult());
         assertEquals(expectedRegisterData2, exeMem.getRegisterData2());
         assertEquals(expectedWriteRegisterAddress, exeMem.getWriteRegisterAddress());

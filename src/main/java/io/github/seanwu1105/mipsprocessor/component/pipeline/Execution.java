@@ -18,9 +18,6 @@ public class Execution implements Stage {
     @NotNull
     private final Alu alu;
 
-    @NotNull
-    private final Alu branchAdder;
-
     @Nullable
     private ForwardingUnit forwardingUnit;
 
@@ -50,13 +47,10 @@ public class Execution implements Stage {
 
     public Execution(
             @NotNull final InstructionDecodeToExecutionRegister idExe,
-            @NotNull final Alu alu,
-            @NotNull final Alu branchAdder
+            @NotNull final Alu alu
     ) {
         this.idExe = idExe;
         this.alu = alu;
-        this.branchAdder = branchAdder;
-        branchAdder.setControl(Alu.AluControl.ADD);
     }
 
     @NotNull
@@ -82,10 +76,6 @@ public class Execution implements Stage {
     @NotNull
     public MainController.MemoryWrite getMemoryWrite() {
         return memoryWrite;
-    }
-
-    public int getBranchResult() {
-        return branchAdder.getResult();
     }
 
     public int getAluResult() {
@@ -116,7 +106,6 @@ public class Execution implements Stage {
     public void run() {
         passControlSignals();
         configAlu();
-        configBranchAdder();
         registerData2 = idExe.getRegisterData2();
         if (idExe.getRegisterDestination() == MainController.RegisterDestination.RT)
             writeRegisterAddress = idExe.getRt();
@@ -162,10 +151,5 @@ public class Execution implements Stage {
             else
                 alu.setOperand2(idExe.getRegisterData2());
         } else alu.setOperand2(idExe.getImmediate());
-    }
-
-    private void configBranchAdder() {
-        branchAdder.setOperand1(idExe.getProgramCounter());
-        branchAdder.setOperand2(idExe.getImmediate() * 4);
     }
 }

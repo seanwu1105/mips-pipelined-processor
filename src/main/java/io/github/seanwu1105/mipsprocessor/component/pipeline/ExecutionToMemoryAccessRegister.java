@@ -23,7 +23,6 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
     @NotNull
     private MainController.MemoryWrite memoryWrite = MainController.MemoryWrite.FALSE;
 
-    private int branchResult;
     private int aluResult;
     private int registerData2;
     private int writeRegisterAddress;
@@ -61,10 +60,6 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
         return memoryWrite;
     }
 
-    public int getBranchResult() {
-        return branchResult;
-    }
-
     public int getAluResult() {
         return aluResult;
     }
@@ -84,7 +79,6 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
         branch = execution.getBranch();
         memoryRead = execution.getMemoryRead();
         memoryWrite = execution.getMemoryWrite();
-        branchResult = execution.getBranchResult();
         aluResult = execution.getAluResult();
         registerData2 = execution.getRegisterData2();
         writeRegisterAddress = execution.getWriteRegisterAddress();
