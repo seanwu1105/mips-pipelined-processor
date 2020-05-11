@@ -23,17 +23,45 @@ class PipelineRegisterTest {
     @Test
     void testGetInstructionFetchToInstructionDecodeRegisterProperties() {
         final var expectedProgramCounter = 8;
-        final var expectedInstruction = new Instruction("00000000000000000000000000000000");
+        final var expectedInstruction = new Instruction("00000000001000010000100000100000");
 
         final var instructionFetch = mock(InstructionFetch.class);
         when(instructionFetch.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(instructionFetch.getInstruction()).thenReturn(expectedInstruction);
 
+        final var hazardDetectionUnit = mock(HazardDetectionUnit.class);
+        when(hazardDetectionUnit.needStalling()).thenReturn(false);
+
         final var ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
+        ifId.setHazardDetectionUnit(hazardDetectionUnit);
         ifId.update();
 
         assertEquals(expectedProgramCounter, ifId.getProgramCounter());
         assertEquals(expectedInstruction, ifId.getInstruction());
+    }
+
+    @Test
+    void testStallInstructionFetchToInstructionDecodeRegisterUpdate() {
+        final var firstProgramCounter = 8;
+        final var firstInstruction = new Instruction("00000000001000010000100000100000");
+        final var secondProgramCounter = 12;
+        final var secondInstruction = new Instruction("00000000011000010000100000100000");
+
+        final var hazardDetectionUnit = mock(HazardDetectionUnit.class);
+        final var instructionFetch = mock(InstructionFetch.class);
+        final var ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
+        ifId.setHazardDetectionUnit(hazardDetectionUnit);
+
+        when(instructionFetch.getProgramCounter()).thenReturn(firstProgramCounter);
+        when(instructionFetch.getInstruction()).thenReturn(firstInstruction);
+        when(hazardDetectionUnit.needStalling()).thenReturn(false);
+        ifId.update();
+        when(instructionFetch.getProgramCounter()).thenReturn(secondProgramCounter);
+        when(instructionFetch.getInstruction()).thenReturn(secondInstruction);
+        when(hazardDetectionUnit.needStalling()).thenReturn(true);
+        ifId.update();
+
+        assertEquals(firstInstruction, ifId.getInstruction());
     }
 
     @Test

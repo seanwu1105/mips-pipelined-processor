@@ -219,6 +219,44 @@ class ProcessorTest {
         assertEquals(expect, register.readData1());
     }
 
+    @Test
+    void testDataHazardAtAllPossibleStages() {
+        final var instructions = List.of(
+                new Instruction("000000 00001 00010 00001 00000 100000"), // add $1, $1, $2
+                new Instruction("000000 00001 00011 00001 00000 100000"), // sub $1, $1, $3
+                new Instruction("000000 00001 00100 00001 00000 100000"), // sub $1, $1, $4
+                new Instruction("000000 00001 00101 00001 00000 100000")  // add $1, $1, $5
+        );
+
+        var expect = 0;
+        for (var i = 1; i <= 5; i++) {
+            expect += initRegisterValues.get(i);
+        }
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(1);
+        assertEquals(expect, register.readData1());
+    }
+
+    @Test
+    void testDataHazardWithLoadWordInstruction() {
+        final var instructions = List.of(
+                new Instruction("100011 00010 00001 0000000000001000"), // lw $1, 8($2)
+                new Instruction("000000 00001 00011 00100 00000 100010")  // sub $4, $1, $3
+        );
+
+        final var expectedRegister1 = initDataMemoryValues.get(initRegisterValues.get(2) + 8);
+        final var expect = expectedRegister1 - initRegisterValues.get(3);
+
+        final var logger = new ProcessorLogger();
+        buildProcessorAndRun(instructions, logger);
+        System.out.println(logger.getLog());
+
+        register.setReadAddress1(4);
+        assertEquals(expect, register.readData1());
+    }
+
     // TODO: Implement branch hazard resolver.
 //    @Test
 //    void testBranchOnEqualFalse() {

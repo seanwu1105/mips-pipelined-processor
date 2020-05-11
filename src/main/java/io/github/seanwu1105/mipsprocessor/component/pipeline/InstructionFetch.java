@@ -1,5 +1,6 @@
 package io.github.seanwu1105.mipsprocessor.component.pipeline;
 
+import io.github.seanwu1105.mipsprocessor.component.HazardDetectionUnit;
 import io.github.seanwu1105.mipsprocessor.component.Memory;
 import io.github.seanwu1105.mipsprocessor.component.ProgramCounter;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
@@ -13,18 +14,18 @@ public class InstructionFetch implements Stage {
     private final Memory instructionMemory;
     @NotNull
     private final ProgramCounter programCounter = new ProgramCounter();
-    @Nullable
-    private ExecutionToMemoryAccessRegister exeMem;
     @NotNull
     private Instruction currentInstruction = Instruction.NOP;
+    @Nullable
+    private HazardDetectionUnit hazardDetectionUnit;
 
     public InstructionFetch(@NotNull final Memory instructionMemory) {
         this.instructionMemory = instructionMemory;
         this.instructionMemory.setMemoryRead(MainController.MemoryRead.TRUE);
     }
 
-    public void setExecutionToMemoryAccessRegister(@NotNull final ExecutionToMemoryAccessRegister exeMem) {
-        this.exeMem = exeMem;
+    public void setHazardDetectionUnit(@NotNull final HazardDetectionUnit hazardDetectionUnit) {
+        this.hazardDetectionUnit = hazardDetectionUnit;
     }
 
     public int getProgramCounter() {
@@ -38,16 +39,16 @@ public class InstructionFetch implements Stage {
 
     @Override
     public void run() {
-        instructionMemory.setAddress(programCounter.getCounter());
         updateCurrentInstruction();
 
-        if (exeMem != null && exeMem.shouldBranch())
-            programCounter.setCounter(exeMem.getBranchResult());
-        else
+        assert hazardDetectionUnit != null;
+        if (!hazardDetectionUnit.needStalling()) {
             programCounter.setCounter(programCounter.getCounter() + 4);
+        }
     }
 
     private void updateCurrentInstruction() {
+        instructionMemory.setAddress(programCounter.getCounter());
         currentInstruction = instructionMemory.readInstruction();
     }
 

@@ -28,6 +28,6 @@ public class WriteBack implements Stage {
 
     @Override
     public boolean hasInstruction() {
-        return memWb.getRegisterWrite() != MainController.RegisterWrite.FALSE;
+        return memWb.getRegisterWrite() == MainController.RegisterWrite.TRUE;
     }
 }

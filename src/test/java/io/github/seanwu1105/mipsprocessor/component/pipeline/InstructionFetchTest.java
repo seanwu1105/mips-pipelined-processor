@@ -1,5 +1,6 @@
 package io.github.seanwu1105.mipsprocessor.component.pipeline;
 
+import io.github.seanwu1105.mipsprocessor.component.HazardDetectionUnit;
 import io.github.seanwu1105.mipsprocessor.component.Memory;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
 import io.github.seanwu1105.mipsprocessor.signal.Instruction;
@@ -19,10 +20,22 @@ class InstructionFetchTest {
     @NotNull
     private Memory instructionMemory;
 
+    @NotNull
+    private InstructionFetch instructionFetch;
+
+    @NotNull
+    private HazardDetectionUnit hazardDetectionUnit;
+
     @BeforeEach
     void buildUp() {
         instructionMemory = new Memory();
         instructionMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
+
+        hazardDetectionUnit = mock(HazardDetectionUnit.class);
+        when(hazardDetectionUnit.needStalling()).thenReturn(false);
+
+        instructionFetch = new InstructionFetch(instructionMemory);
+        instructionFetch.setHazardDetectionUnit(hazardDetectionUnit);
     }
 
     @Test
@@ -34,8 +47,6 @@ class InstructionFetchTest {
 
         setInstructions(instructions);
 
-        final var instructionFetch = new InstructionFetch(instructionMemory);
-
         var number = 0;
         for (final var instruction : instructions) {
             instructionFetch.run();
@@ -43,36 +54,6 @@ class InstructionFetchTest {
             assertEquals(instruction, instructionFetch.getInstruction());
             number++;
         }
-    }
-
-    @Test
-    void testInstructionFetchRunOnBranch() {
-        final var instructions = List.of(
-                new Instruction("00010000010000100000000000000001"),
-                new Instruction("00000000000000100001100000100000"),
-                new Instruction("00010000000000100000000000000110"),
-                new Instruction("00000000000000100001100000100000")
-        );
-
-        setInstructions(instructions);
-
-        // XXX: This TestCase violates encapsulation of InstructionFetch.
-        final var exeMem = mock(ExecutionToMemoryAccessRegister.class);
-
-        final var instructionFetch = new InstructionFetch(instructionMemory);
-        instructionFetch.setExecutionToMemoryAccessRegister(exeMem);
-
-        final var expectedBranchResult = 8;
-        when(exeMem.shouldBranch()).thenReturn(true);
-        when(exeMem.getBranchResult()).thenReturn(expectedBranchResult);
-        instructionFetch.run();
-        assertEquals(expectedBranchResult, instructionFetch.getProgramCounter());
-        assertEquals(instructions.get(0), instructionFetch.getInstruction());
-
-        when(exeMem.shouldBranch()).thenReturn(false);
-        instructionFetch.run();
-        assertEquals(expectedBranchResult + 4, instructionFetch.getProgramCounter());
-        assertEquals(instructions.get(expectedBranchResult / 4), instructionFetch.getInstruction());
     }
 
     private void setInstructions(@NotNull final Iterable<Instruction> instructions) {
@@ -83,6 +64,22 @@ class InstructionFetchTest {
             instructionMemory.write(instruction);
             number++;
         }
+    }
+
+    @Test
+    void testStalling() {
+        final var instructions = List.of(
+                new Instruction("000000 00001 00000 00000 00000 100000"), // add $1, $0, $0
+                new Instruction("000000 00010 00000 00000 00000 100000")  // add $2, $0, $0
+        );
+
+        setInstructions(instructions);
+
+        when(hazardDetectionUnit.needStalling()).thenReturn(true);
+
+        final var expectedProgramCounter = 0;
+        instructionFetch.run();
+        assertEquals(expectedProgramCounter, instructionFetch.getProgramCounter());
     }
 
     @AfterEach

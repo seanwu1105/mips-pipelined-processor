@@ -1,12 +1,16 @@
 package io.github.seanwu1105.mipsprocessor.component.pipeline;
 
+import io.github.seanwu1105.mipsprocessor.component.HazardDetectionUnit;
 import io.github.seanwu1105.mipsprocessor.signal.Instruction;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class InstructionFetchToInstructionDecodeRegister implements PipelineRegister {
 
     @NotNull
     private final InstructionFetch instructionFetch;
+    @Nullable
+    private HazardDetectionUnit hazardDetectionUnit;
 
     private int programCounter;
 
@@ -15,6 +19,10 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
 
     public InstructionFetchToInstructionDecodeRegister(@NotNull final InstructionFetch instructionFetch) {
         this.instructionFetch = instructionFetch;
+    }
+
+    public void setHazardDetectionUnit(@NotNull final HazardDetectionUnit hazardDetectionUnit) {
+        this.hazardDetectionUnit = hazardDetectionUnit;
     }
 
     public int getProgramCounter() {
@@ -29,6 +37,9 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
     @Override
     public void update() {
         programCounter = instructionFetch.getProgramCounter();
-        instruction = instructionFetch.getInstruction();
+
+        assert hazardDetectionUnit != null;
+        if (!hazardDetectionUnit.needStalling())
+            instruction = instructionFetch.getInstruction();
     }
 }

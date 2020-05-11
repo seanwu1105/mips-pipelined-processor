@@ -1,5 +1,6 @@
 package io.github.seanwu1105.mipsprocessor.component.pipeline;
 
+import io.github.seanwu1105.mipsprocessor.component.HazardDetectionUnit;
 import io.github.seanwu1105.mipsprocessor.component.Register;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
 import io.github.seanwu1105.mipsprocessor.signal.FunctionCode;
@@ -17,13 +18,20 @@ import static org.mockito.Mockito.when;
 
 class InstructionDecodeTest {
 
-    private final int expectedProgramCounter = 0;
+    @NotNull
+    private final InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+    @NotNull
+    private final HazardDetectionUnit hazardDetectionUnit = mock(HazardDetectionUnit.class);
+    @NotNull
     private final Map<Integer, Integer> registerValues = Map.of(
             0, 0,
             1, 11,
             2, 12,
             3, 13
     );
+    private final int expectedProgramCounter = 0;
+    @NotNull
+    private InstructionDecode instructionDecode;
     @NotNull
     private Register register;
 
@@ -37,16 +45,19 @@ class InstructionDecodeTest {
                 register.write(value);
             }
         });
+
+        instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+        instructionDecode.setHazardDetectionUnit(hazardDetectionUnit);
+
+        when(hazardDetectionUnit.needStalling()).thenReturn(false);
     }
 
     @Test
     void testDecodeRType() {
         final var instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $2, $0, $1
-        final var ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.RegisterDestination.RD, instructionDecode.getRegisterDestination());
@@ -67,11 +78,9 @@ class InstructionDecodeTest {
     @Test
     void testDecodeLoadWord() {
         final var instruction = new Instruction("100011 00001 00010 0000000000010100"); // lw $2, 20($1)
-        final var ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.RegisterDestination.RT, instructionDecode.getRegisterDestination());
@@ -91,11 +100,9 @@ class InstructionDecodeTest {
     @Test
     void testDecodeSaveWord() {
         final var instruction = new Instruction("101011 00001 00010 0000000000010100"); // sw $2, 20($1)
-        final var ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.AluOperation.MEMORY_REFERENCE, instructionDecode.getAluOperation());
@@ -113,11 +120,9 @@ class InstructionDecodeTest {
     @Test
     void testDecodeBranchOnEqual() {
         final var instruction = new Instruction("000100 00001 00010 0000000000010100"); // beq $1, $2, 20
-        final var ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
         when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
         when(ifId.getInstruction()).thenReturn(instruction);
 
-        final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
         instructionDecode.run();
 
         assertEquals(MainController.AluOperation.BRANCH, instructionDecode.getAluOperation());
@@ -130,6 +135,25 @@ class InstructionDecodeTest {
         assertEquals(registerValues.get(1), instructionDecode.getRegisterData1());
         assertEquals(registerValues.get(2), instructionDecode.getRegisterData2());
         assertEquals(20, instructionDecode.getImmediate());
+    }
+
+    @Test
+    void testStalling() {
+        final var instruction = new Instruction("000000 00001 00000 00000 00000 100000"); // add $1, $0, $0
+        when(ifId.getProgramCounter()).thenReturn(expectedProgramCounter);
+        when(ifId.getInstruction()).thenReturn(instruction);
+        when(hazardDetectionUnit.needStalling()).thenReturn(true);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.RegisterDestination.RT, instructionDecode.getRegisterDestination());
+        assertEquals(MainController.AluOperation.MEMORY_REFERENCE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.FALSE, instructionDecode.getRegisterWrite());
+        assertEquals(MainController.MemoryToRegister.FROM_ALU_RESULT, instructionDecode.getMemoryToRegister());
     }
 
     @AfterEach

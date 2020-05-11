@@ -1,5 +1,6 @@
 package io.github.seanwu1105.mipsprocessor.component.pipeline;
 
+import io.github.seanwu1105.mipsprocessor.component.HazardDetectionUnit;
 import io.github.seanwu1105.mipsprocessor.component.Register;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
 import io.github.seanwu1105.mipsprocessor.signal.FunctionCode;
@@ -20,6 +21,9 @@ public class InstructionDecode implements Stage {
     @NotNull
     private final Register register;
 
+    @Nullable
+    private HazardDetectionUnit hazardDetectionUnit;
+
     private int programCounter;
 
     @NotNull
@@ -37,7 +41,11 @@ public class InstructionDecode implements Stage {
 
     @Override
     public void run() {
-        currentInstruction = ifId.getInstruction();
+        assert hazardDetectionUnit != null;
+        if (hazardDetectionUnit.needStalling())
+            currentInstruction = Instruction.NOP;
+        else
+            currentInstruction = ifId.getInstruction();
         mainController.setInstruction(currentInstruction);
         programCounter = ifId.getProgramCounter();
     }
@@ -45,6 +53,10 @@ public class InstructionDecode implements Stage {
     @Override
     public boolean hasInstruction() {
         return currentInstruction != Instruction.NOP;
+    }
+
+    public void setHazardDetectionUnit(@NotNull final HazardDetectionUnit hazardDetectionUnit) {
+        this.hazardDetectionUnit = hazardDetectionUnit;
     }
 
     @NotNull
@@ -112,7 +124,7 @@ public class InstructionDecode implements Stage {
         }
     }
 
-    public int getRs() {
+    int getRs() {
         return currentInstruction.getRs();
     }
 

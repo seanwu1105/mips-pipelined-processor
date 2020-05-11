@@ -2,6 +2,7 @@ package io.github.seanwu1105.mipsprocessor;
 
 import io.github.seanwu1105.mipsprocessor.component.Alu;
 import io.github.seanwu1105.mipsprocessor.component.ForwardingUnit;
+import io.github.seanwu1105.mipsprocessor.component.HazardDetectionUnit;
 import io.github.seanwu1105.mipsprocessor.component.Memory;
 import io.github.seanwu1105.mipsprocessor.component.Register;
 import io.github.seanwu1105.mipsprocessor.component.pipeline.Execution;
@@ -144,6 +145,11 @@ public final class Processor {
             final var memoryAccess = new MemoryAccess(exeMem, dataMemory);
             final var memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
             final var writeBack = new WriteBack(memWb, register);
+            final var hazardDetectionUnit = new HazardDetectionUnit(ifId, idExe);
+
+            instructionFetch.setHazardDetectionUnit(hazardDetectionUnit);
+            ifId.setHazardDetectionUnit(hazardDetectionUnit);
+            instructionDecode.setHazardDetectionUnit(hazardDetectionUnit);
 
             execution.setForwardingUnit(new ForwardingUnit(idExe, exeMem, memWb));
             execution.setExecutionToMemoryAccessRegister(exeMem);
