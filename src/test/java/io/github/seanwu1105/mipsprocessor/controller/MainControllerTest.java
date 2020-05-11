@@ -19,13 +19,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class MainControllerTest {
 
     @NotNull
-    private final Instruction add_signal = new Instruction("000000 00000000000000000000 100000");
+    private final Instruction addSignal = new Instruction("000000 00000000000000000000 100000");
     @NotNull
-    private final Instruction load_word_signal = new Instruction("100011 00000000000000000000 000000");
+    private final Instruction loadWordSignal = new Instruction("100011 00000000000000000000 000000");
     @NotNull
-    private final Instruction save_word_signal = new Instruction("101011 00000000000000000000 000000");
+    private final Instruction saveWordSignal = new Instruction("101011 00000000000000000000 000000");
     @NotNull
-    private final Instruction branch_on_equal_signal = new Instruction("000100 00000000000000000000 000000");
+    private final Instruction branchOnEqualSignal = new Instruction("000100 00000000000000000000 000000");
     @NotNull
     private MainController mainController;
 
@@ -36,7 +36,7 @@ class MainControllerTest {
 
     @Test
     void testGetSignalsWithRType() {
-        mainController.setInstruction(add_signal);
+        mainController.setInstruction(addSignal);
         assertEquals(R_TYPE, mainController.getAluOperation());
         assertEquals(REGISTER, mainController.getAluSource());
         assertEquals(MainController.MemoryRead.FALSE, mainController.getMemoryRead());
@@ -46,15 +46,15 @@ class MainControllerTest {
         assertEquals(MainController.RegisterWrite.TRUE, mainController.getRegisterWrite());
         assertEquals(MainController.Branch.FALSE, mainController.getBranch());
 
-        mainController.setInstruction(save_word_signal);
+        mainController.setInstruction(saveWordSignal);
         assertEquals(MEMORY_REFERENCE, mainController.getAluOperation());
-        mainController.setInstruction(branch_on_equal_signal);
+        mainController.setInstruction(branchOnEqualSignal);
         assertEquals(BRANCH, mainController.getAluOperation());
     }
 
     @Test
     void testGetSignalsWithLoadWord() {
-        mainController.setInstruction(load_word_signal);
+        mainController.setInstruction(loadWordSignal);
         assertEquals(MEMORY_REFERENCE, mainController.getAluOperation());
         assertEquals(IMMEDIATE, mainController.getAluSource());
         assertEquals(MainController.MemoryRead.TRUE, mainController.getMemoryRead());
@@ -64,15 +64,15 @@ class MainControllerTest {
         assertEquals(MainController.RegisterWrite.TRUE, mainController.getRegisterWrite());
         assertEquals(MainController.Branch.FALSE, mainController.getBranch());
 
-        mainController.setInstruction(save_word_signal);
+        mainController.setInstruction(saveWordSignal);
         assertEquals(IMMEDIATE, mainController.getAluSource());
-        mainController.setInstruction(branch_on_equal_signal);
+        mainController.setInstruction(branchOnEqualSignal);
         assertEquals(REGISTER, mainController.getAluSource());
     }
 
     @Test
     void testGetSignalsWithSaveWord() {
-        mainController.setInstruction(save_word_signal);
+        mainController.setInstruction(saveWordSignal);
         assertEquals(MainController.MemoryRead.FALSE, mainController.getMemoryRead());
         assertEquals(MainController.MemoryWrite.TRUE, mainController.getMemoryWrite());
         assertEquals(MainController.RegisterWrite.FALSE, mainController.getRegisterWrite());
@@ -81,7 +81,7 @@ class MainControllerTest {
 
     @Test
     void testGetSignalsWithBranchOnEqual() {
-        mainController.setInstruction(branch_on_equal_signal);
+        mainController.setInstruction(branchOnEqualSignal);
         assertEquals(MainController.MemoryRead.FALSE, mainController.getMemoryRead());
         assertEquals(MainController.MemoryWrite.FALSE, mainController.getMemoryWrite());
         assertEquals(MainController.RegisterWrite.FALSE, mainController.getRegisterWrite());

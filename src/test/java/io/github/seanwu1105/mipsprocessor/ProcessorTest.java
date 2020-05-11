@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ProcessorTest {
 
     @NotNull
-    private static final Map<Integer, Integer> initRegisterValues = Map.of(
+    private final Map<Integer, Integer> initRegisterValues = Map.of(
             0, 0,
             1, 9,
             2, 8,
@@ -30,7 +30,7 @@ class ProcessorTest {
             9, 6
     );
     @NotNull
-    private static final Map<Integer, Integer> initDataMemoryValues = Map.of(
+    private final Map<Integer, Integer> initDataMemoryValues = Map.of(
             0x00, 5,
             0x04, 9,
             0x08, 4,
@@ -259,34 +259,33 @@ class ProcessorTest {
         assertEquals(expect, register.readData1());
     }
 
-    // TODO: Implement branch hazard resolver.
-//    @Test
-//    void testBranchOnEqualFalse() {
-//        List<Instruction> instructions = List.of(
-//                new Instruction("000100 00001 00010 0000000000000001"), // beq $1, $2, 1
-//                new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
-//                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
-//        );
-//
-//        buildProcessorAndRun(instructions);
-//
-//        register.setReadAddress1(5);
-//        assertEquals(registerValues.get(1) + registerValues.get(2) - registerValues.get(4), register.readData1());
-//    }
-//
-//    @Test
-//    void testBranchOnEqualTrue() {
-//        List<Instruction> instructions = List.of(
-//                new Instruction("000100 00001 00001 0000000000000001"), // beq $1, $1, 1
-//                new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
-//                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
-//        );
-//
-//        buildProcessorAndRun(instructions);
-//
-//        register.setReadAddress1(5);
-//        assertEquals(registerValues.get(3) - registerValues.get(4), register.readData1());
-//    }
+    @Test
+    void testBranchOnEqualFalse() {
+        final var instructions = List.of(
+                new Instruction("000100 00001 00010 0000000000000001"), // beq $1, $2, 1
+                new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
+                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
+        );
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(5);
+        assertEquals(initRegisterValues.get(1) + initRegisterValues.get(2) - initRegisterValues.get(4), register.readData1());
+    }
+
+    @Test
+    void testBranchOnEqualTrue() {
+        final var instructions = List.of(
+                new Instruction("000100 00001 00001 0000000000000001"), // beq $1, $1, 1
+                new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
+                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
+        );
+
+        buildProcessorAndRun(instructions);
+
+        register.setReadAddress1(5);
+        assertEquals(initRegisterValues.get(3) - initRegisterValues.get(4), register.readData1());
+    }
 
     @Test
     void testProcessorLogWithSingleRTypeInstruction() {
