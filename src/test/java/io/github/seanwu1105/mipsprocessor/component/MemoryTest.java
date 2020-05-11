@@ -2,6 +2,7 @@ package io.github.seanwu1105.mipsprocessor.component;
 
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
 import io.github.seanwu1105.mipsprocessor.signal.Instruction;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemoryTest {
 
+    @NotNull
     private Memory memory;
 
     @BeforeEach

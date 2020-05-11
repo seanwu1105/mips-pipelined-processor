@@ -13,13 +13,13 @@ import static org.mockito.Mockito.when;
 class ExecutionToMemoryAccessRegisterTest {
 
     @NotNull
-    private final Execution execution = mock(Execution.class);
-
+    private Execution execution;
     @NotNull
     private ExecutionToMemoryAccessRegister exeMem;
 
     @BeforeEach
     void buildUp() {
+        execution = mock(Execution.class);
         exeMem = new ExecutionToMemoryAccessRegister(execution);
     }
 

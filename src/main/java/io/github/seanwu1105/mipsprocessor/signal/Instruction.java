@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class Instruction implements Signal {
 
+    @NotNull
     public static final Instruction NOP = new Instruction("00000000000000000000000000000000");
 
     @NotNull

@@ -18,16 +18,19 @@ import static org.mockito.Mockito.when;
 class ForwardingUnitTest {
 
     @NotNull
-    private final InstructionDecodeToExecutionRegister idExe = mock(InstructionDecodeToExecutionRegister.class);
+    private InstructionDecodeToExecutionRegister idExe;
     @NotNull
-    private final ExecutionToMemoryAccessRegister exeMem = mock(ExecutionToMemoryAccessRegister.class);
+    private ExecutionToMemoryAccessRegister exeMem;
     @NotNull
-    private final MemoryAccessToWriteBackRegister memWb = mock(MemoryAccessToWriteBackRegister.class);
+    private MemoryAccessToWriteBackRegister memWb;
     @NotNull
     private ForwardingUnit forwardingUnit;
 
     @BeforeEach
     void buildUp() {
+        idExe = mock(InstructionDecodeToExecutionRegister.class);
+        exeMem = mock(ExecutionToMemoryAccessRegister.class);
+        memWb = mock(MemoryAccessToWriteBackRegister.class);
         forwardingUnit = new ForwardingUnit(idExe, exeMem, memWb);
     }
 

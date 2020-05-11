@@ -119,7 +119,7 @@ public class InstructionDecode implements Stage {
     public FunctionCode getFunctionCode() {
         try {
             return currentInstruction.getFunctionCode();
-        } catch (final IllegalStateException e) {
+        } catch (@NotNull final IllegalStateException e) {
             return null;
         }
     }

@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class Register {
 
+    @NotNull
     private final Map<Integer, Integer> data = new HashMap<>();
 
     @NotNull

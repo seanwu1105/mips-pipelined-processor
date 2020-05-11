@@ -13,14 +13,17 @@ import static org.mockito.Mockito.when;
 class InstructionFetchToInstructionDecodeRegisterTest {
 
     @NotNull
-    private final InstructionFetch instructionFetch = mock(InstructionFetch.class);
+    private InstructionFetch instructionFetch;
     @NotNull
-    private final HazardDetectionUnit hazardDetectionUnit = mock(HazardDetectionUnit.class);
+    private HazardDetectionUnit hazardDetectionUnit;
     @NotNull
     private InstructionFetchToInstructionDecodeRegister ifId;
 
     @BeforeEach
     void buildUp() {
+        instructionFetch = mock(InstructionFetch.class);
+        hazardDetectionUnit = mock(HazardDetectionUnit.class);
+
         ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
         ifId.setHazardDetectionUnit(hazardDetectionUnit);
         when(hazardDetectionUnit.needStalling()).thenReturn(false);

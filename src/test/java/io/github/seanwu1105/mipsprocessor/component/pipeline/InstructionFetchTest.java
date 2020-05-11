@@ -19,10 +19,8 @@ class InstructionFetchTest {
 
     @NotNull
     private Memory instructionMemory;
-
     @NotNull
     private InstructionFetch instructionFetch;
-
     @NotNull
     private HazardDetectionUnit hazardDetectionUnit;
 

@@ -13,12 +13,13 @@ import static org.mockito.Mockito.when;
 class InstructionDecodeToExecutionRegisterTest {
 
     @NotNull
-    private final InstructionDecode instructionDecode = mock(InstructionDecode.class);
+    private InstructionDecode instructionDecode;
     @NotNull
     private InstructionDecodeToExecutionRegister idExe;
 
     @BeforeEach
     void buildUp() {
+        instructionDecode = mock(InstructionDecode.class);
         idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
     }
 

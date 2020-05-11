@@ -1,6 +1,7 @@
 package io.github.seanwu1105.mipsprocessor.controller;
 
 import io.github.seanwu1105.mipsprocessor.signal.Instruction;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,10 +18,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MainControllerTest {
 
+    @NotNull
     private final Instruction add_signal = new Instruction("000000 00000000000000000000 100000");
+    @NotNull
     private final Instruction load_word_signal = new Instruction("100011 00000000000000000000 000000");
+    @NotNull
     private final Instruction save_word_signal = new Instruction("101011 00000000000000000000 000000");
+    @NotNull
     private final Instruction branch_on_equal_signal = new Instruction("000100 00000000000000000000 000000");
+    @NotNull
     private MainController mainController;
 
     @BeforeEach

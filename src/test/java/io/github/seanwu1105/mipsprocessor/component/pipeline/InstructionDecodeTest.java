@@ -19,10 +19,6 @@ import static org.mockito.Mockito.when;
 class InstructionDecodeTest {
 
     @NotNull
-    private final InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
-    @NotNull
-    private final HazardDetectionUnit hazardDetectionUnit = mock(HazardDetectionUnit.class);
-    @NotNull
     private final Map<Integer, Integer> registerValues = Map.of(
             0, 0,
             1, 11,
@@ -31,12 +27,19 @@ class InstructionDecodeTest {
     );
     private final int expectedProgramCounter = 0;
     @NotNull
+    private InstructionFetchToInstructionDecodeRegister ifId;
+    @NotNull
+    private HazardDetectionUnit hazardDetectionUnit;
+    @NotNull
     private InstructionDecode instructionDecode;
     @NotNull
     private Register register;
 
     @BeforeEach
     void buildUp() {
+        ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        hazardDetectionUnit = mock(HazardDetectionUnit.class);
+
         register = new Register();
         register.setRegisterWrite(MainController.RegisterWrite.TRUE);
         registerValues.forEach((key, value) -> {

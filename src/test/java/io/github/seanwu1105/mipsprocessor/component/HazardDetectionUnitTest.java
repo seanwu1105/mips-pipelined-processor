@@ -15,14 +15,16 @@ import static org.mockito.Mockito.when;
 class HazardDetectionUnitTest {
 
     @NotNull
-    private final InstructionFetchToInstructionDecodeRegister ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+    private InstructionFetchToInstructionDecodeRegister ifId;
     @NotNull
-    private final InstructionDecodeToExecutionRegister idExe = mock(InstructionDecodeToExecutionRegister.class);
+    private InstructionDecodeToExecutionRegister idExe;
     @NotNull
     private HazardDetectionUnit hazardDetectionUnit;
 
     @BeforeEach
     void buildUp() {
+        ifId = mock(InstructionFetchToInstructionDecodeRegister.class);
+        idExe = mock(InstructionDecodeToExecutionRegister.class);
         hazardDetectionUnit = new HazardDetectionUnit(ifId, idExe);
     }
 

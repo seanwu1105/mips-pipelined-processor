@@ -29,11 +29,17 @@ public final class Processor {
     private final Collection<Stage> stages = new ArrayList<>();
     private final Collection<PipelineRegister> pipelineRegisters = new ArrayList<>();
     private final Collection<ProcessorLogger> loggers = new ArrayList<>();
+    @NotNull
     private final InstructionFetchToInstructionDecodeRegister ifId;
+    @NotNull
     private final InstructionDecodeToExecutionRegister idExe;
+    @NotNull
     private final ExecutionToMemoryAccessRegister exeMem;
+    @NotNull
     private final MemoryAccessToWriteBackRegister memWb;
+    @NotNull
     private final InstructionDecode instructionDecode;
+    @NotNull
     private final MemoryAccess memoryAccess;
 
     private Processor(

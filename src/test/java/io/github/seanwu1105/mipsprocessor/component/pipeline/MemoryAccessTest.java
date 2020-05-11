@@ -13,22 +13,23 @@ import static org.mockito.Mockito.when;
 
 class MemoryAccessTest {
 
-    private final ExecutionToMemoryAccessRegister exeMem = mock(ExecutionToMemoryAccessRegister.class);
     private final int expectedAluResult = 20;
     private final int expectedWriteRegisterAddress = 2;
     private final int expectedMemoryReadData = 5;
+
+    @NotNull
+    private ExecutionToMemoryAccessRegister exeMem;
     @NotNull
     private Memory dataMemory;
     @NotNull
     private MemoryAccess memoryAccess;
 
-    MemoryAccessTest() {
-        when(exeMem.getAluResult()).thenReturn(expectedAluResult);
-        when(exeMem.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
-    }
-
     @BeforeEach
     void buildUp() {
+        exeMem = mock(ExecutionToMemoryAccessRegister.class);
+        when(exeMem.getAluResult()).thenReturn(expectedAluResult);
+        when(exeMem.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
+
         dataMemory = new Memory();
         dataMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
         dataMemory.setAddress(expectedAluResult);

@@ -4,6 +4,7 @@ import io.github.seanwu1105.mipsprocessor.component.Alu;
 import io.github.seanwu1105.mipsprocessor.component.ForwardingUnit;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
 import io.github.seanwu1105.mipsprocessor.signal.FunctionCode;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,26 +20,32 @@ class ExecutionTest {
     private final int immediate = 20;
     private final int rt = 2;
     private final int rd = 3;
-    private final InstructionDecodeToExecutionRegister idExe = mock(InstructionDecodeToExecutionRegister.class);
-    private final ForwardingUnit forwardingUnit = mock(ForwardingUnit.class);
-    private final ExecutionToMemoryAccessRegister exeMem = mock(ExecutionToMemoryAccessRegister.class);
-    private final MemoryAccessToWriteBackRegister memWb = mock(MemoryAccessToWriteBackRegister.class);
-
+    @NotNull
+    private ForwardingUnit forwardingUnit;
+    @NotNull
+    private InstructionDecodeToExecutionRegister idExe;
+    @NotNull
+    private ExecutionToMemoryAccessRegister exeMem;
+    @NotNull
+    private MemoryAccessToWriteBackRegister memWb;
+    @NotNull
     private Execution execution;
 
-    ExecutionTest() {
+    @BeforeEach
+    void buildUp() {
+        forwardingUnit = mock(ForwardingUnit.class);
+        idExe = mock(InstructionDecodeToExecutionRegister.class);
+        exeMem = mock(ExecutionToMemoryAccessRegister.class);
+        memWb = mock(MemoryAccessToWriteBackRegister.class);
+        when(forwardingUnit.getOperand1ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_ID);
+        when(forwardingUnit.getOperand2ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_ID);
         when(idExe.getProgramCounter()).thenReturn(programCounter);
         when(idExe.getRegisterData1()).thenReturn(registerData1);
         when(idExe.getRegisterData2()).thenReturn(registerData2);
         when(idExe.getImmediate()).thenReturn(immediate);
         when(idExe.getRt()).thenReturn(rt);
         when(idExe.getRd()).thenReturn(rd);
-        when(forwardingUnit.getOperand1ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_ID);
-        when(forwardingUnit.getOperand2ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_ID);
-    }
 
-    @BeforeEach
-    void buildUp() {
         execution = new Execution(idExe, new Alu(), new Alu());
         execution.setForwardingUnit(forwardingUnit);
         execution.setExecutionToMemoryAccessRegister(exeMem);

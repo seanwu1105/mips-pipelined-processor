@@ -12,12 +12,13 @@ import static org.mockito.Mockito.when;
 class MemoryAccessToWriteBackRegisterTest {
 
     @NotNull
-    private final MemoryAccess memoryAccess = mock(MemoryAccess.class);
+    private MemoryAccess memoryAccess;
     @NotNull
     private MemoryAccessToWriteBackRegister memWb;
 
     @BeforeEach
     void buildUp() {
+        memoryAccess = mock(MemoryAccess.class);
         memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
     }
 

@@ -13,23 +13,22 @@ import static org.mockito.Mockito.when;
 
 class WriteBackTest {
 
-    private final MemoryAccessToWriteBackRegister memWb = mock(MemoryAccessToWriteBackRegister.class);
     private final int expectedMemoryReadData = 11;
     private final int expectedAluResult = 12;
     private final int expectedRegisterWriteAddress = 1;
-
+    @NotNull
+    private MemoryAccessToWriteBackRegister memWb;
     @NotNull
     private WriteBack writeBack;
+    @NotNull
     private Register register;
-
-    WriteBackTest() {
-        when(memWb.getMemoryReadData()).thenReturn(expectedMemoryReadData);
-        when(memWb.getAluResult()).thenReturn(expectedAluResult);
-        when(memWb.getWriteRegisterAddress()).thenReturn(expectedRegisterWriteAddress);
-    }
 
     @BeforeEach
     void buildUp() {
+        memWb = mock(MemoryAccessToWriteBackRegister.class);
+        when(memWb.getMemoryReadData()).thenReturn(expectedMemoryReadData);
+        when(memWb.getAluResult()).thenReturn(expectedAluResult);
+        when(memWb.getWriteRegisterAddress()).thenReturn(expectedRegisterWriteAddress);
         register = new Register();
         writeBack = new WriteBack(memWb, register);
     }

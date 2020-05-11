@@ -1,5 +1,6 @@
 package io.github.seanwu1105.mipsprocessor.component;
 
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,7 @@ class AluTest {
 
     private final int operand1 = 1;
     private final int operand2 = 2;
+    @NotNull
     private Alu alu;
 
     @BeforeEach

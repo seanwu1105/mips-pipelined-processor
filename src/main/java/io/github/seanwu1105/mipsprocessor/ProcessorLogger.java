@@ -10,6 +10,7 @@ import java.util.TreeSet;
 
 class ProcessorLogger {
 
+    @NotNull
     private final StringBuilder stringBuilder = new StringBuilder();
 
     private int clockCycle = 1;

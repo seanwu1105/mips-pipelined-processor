@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ProcessorTest {
 
+    @NotNull
     private static final Map<Integer, Integer> initRegisterValues = Map.of(
             0, 0,
             1, 9,
@@ -28,6 +29,7 @@ class ProcessorTest {
             8, 5,
             9, 6
     );
+    @NotNull
     private static final Map<Integer, Integer> initDataMemoryValues = Map.of(
             0x00, 5,
             0x04, 9,
@@ -37,12 +39,16 @@ class ProcessorTest {
     );
     @NotNull
     private Processor.Builder processorBuilder;
+    @NotNull
     private Register register;
+    @NotNull
     private Memory dataMemory;
 
     @BeforeEach
     void buildUp() {
+        register = new Register();
         initializeRegister();
+        dataMemory = new Memory();
         initializeDataMemory();
         processorBuilder = new Processor.Builder()
                 .setRegister(register)
@@ -50,7 +56,6 @@ class ProcessorTest {
     }
 
     private void initializeRegister() {
-        register = new Register();
         register.setRegisterWrite(MainController.RegisterWrite.TRUE);
         initRegisterValues.forEach((key, value) -> {
             if (key != 0) {
@@ -62,7 +67,6 @@ class ProcessorTest {
     }
 
     private void initializeDataMemory() {
-        dataMemory = new Memory();
         dataMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
         initDataMemoryValues.forEach((key, value) -> {
             dataMemory.setAddress(key);
@@ -249,9 +253,7 @@ class ProcessorTest {
         final var expectedRegister1 = initDataMemoryValues.get(initRegisterValues.get(2) + 8);
         final var expect = expectedRegister1 - initRegisterValues.get(3);
 
-        final var logger = new ProcessorLogger();
-        buildProcessorAndRun(instructions, logger);
-        System.out.println(logger.getLog());
+        buildProcessorAndRun(instructions);
 
         register.setReadAddress1(4);
         assertEquals(expect, register.readData1());
