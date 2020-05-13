@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -24,13 +23,15 @@ class ExecutionToMemoryAccessRegisterTest {
     }
 
     @Test
-    void testGetExecutionToMemoryAccessRegisterControlSignals() {
+    void testUpdate() {
         final var expectedRegisterWrite = MainController.RegisterWrite.TRUE;
         final var expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
         final var expectedMemoryRead = MainController.MemoryRead.TRUE;
         final var expectedMemoryWrite = MainController.MemoryWrite.FALSE;
         final var expectedBranch = MainController.Branch.FALSE;
         final var expectedAluResult = 0;
+        final var expectedRegisterData2 = 7;
+        final var expectedWriteRegisterAddress = 2;
 
         when(execution.getRegisterWrite()).thenReturn(expectedRegisterWrite);
         when(execution.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
@@ -38,29 +39,15 @@ class ExecutionToMemoryAccessRegisterTest {
         when(execution.getMemoryWrite()).thenReturn(expectedMemoryWrite);
         when(execution.getBranch()).thenReturn(expectedBranch);
         when(execution.getAluResult()).thenReturn(expectedAluResult);
-
-        exeMem.update();
-
-        assertEquals(expectedRegisterWrite, exeMem.getRegisterWrite());
-        assertEquals(expectedMemoryToRegister, exeMem.getMemoryToRegister());
-        assertFalse(exeMem.shouldBranch());
-        assertEquals(expectedMemoryRead, exeMem.getMemoryRead());
-        assertEquals(expectedMemoryWrite, exeMem.getMemoryWrite());
-    }
-
-    @Test
-    void testGetExecutionToMemoryAccessRegisterProperties() {
-        final var expectedAluResult = 6;
-        final var expectedRegisterData2 = 7;
-        final var expectedWriteRegisterAddress = 2;
-
-        when(execution.getAluResult()).thenReturn(expectedAluResult);
         when(execution.getRegisterData2()).thenReturn(expectedRegisterData2);
         when(execution.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
 
         exeMem.update();
 
-        assertEquals(expectedAluResult, exeMem.getAluResult());
+        assertEquals(expectedRegisterWrite, exeMem.getRegisterWrite());
+        assertEquals(expectedMemoryToRegister, exeMem.getMemoryToRegister());
+        assertEquals(expectedMemoryRead, exeMem.getMemoryRead());
+        assertEquals(expectedMemoryWrite, exeMem.getMemoryWrite());
         assertEquals(expectedRegisterData2, exeMem.getRegisterData2());
         assertEquals(expectedWriteRegisterAddress, exeMem.getWriteRegisterAddress());
     }

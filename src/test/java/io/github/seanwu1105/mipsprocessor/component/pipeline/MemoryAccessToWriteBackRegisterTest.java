@@ -23,33 +23,23 @@ class MemoryAccessToWriteBackRegisterTest {
     }
 
     @Test
-    void testGetMemoryAccessToWriteBackRegisterControlSignals() {
+    void testUpdate() {
         final var expectedRegisterWrite = MainController.RegisterWrite.TRUE;
         final var expectedMemoryToRegister = MainController.MemoryToRegister.FROM_MEMORY;
+        final var expectedMemoryReadData = 2;
+        final var expectedAluResult = 3;
+        final var expectedWriteRegisterAddress = 4;
 
         when(memoryAccess.getRegisterWrite()).thenReturn(expectedRegisterWrite);
         when(memoryAccess.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
+        when(memoryAccess.getMemoryReadData()).thenReturn(expectedMemoryReadData);
+        when(memoryAccess.getAluResult()).thenReturn(expectedAluResult);
+        when(memoryAccess.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
 
         memWb.update();
 
         assertEquals(expectedRegisterWrite, memWb.getRegisterWrite());
         assertEquals(expectedMemoryToRegister, memWb.getMemoryToRegister());
-    }
-
-    @Test
-    void testGetMemoryAccessToWriteBackRegisterProperties() {
-        final var expectedMemoryReadData = 2;
-        final var expectedAluResult = 3;
-        final var expectedWriteRegisterAddress = 4;
-
-        when(memoryAccess.getMemoryReadData()).thenReturn(expectedMemoryReadData);
-        when(memoryAccess.getAluResult()).thenReturn(expectedAluResult);
-        when(memoryAccess.getWriteRegisterAddress()).thenReturn(expectedWriteRegisterAddress);
-
-        when(memoryAccess.getMemoryToRegister()).thenReturn(MainController.MemoryToRegister.FROM_MEMORY);
-
-        memWb.update();
-
         assertEquals(expectedWriteRegisterAddress, memWb.getWriteRegisterAddress());
         assertEquals(expectedMemoryReadData, memWb.getWriteRegisterData());
 

@@ -46,10 +46,6 @@ public class ExecutionToMemoryAccessRegister implements PipelineRegister {
         return branch;
     }
 
-    public boolean shouldBranch() {
-        return branch == MainController.Branch.TRUE && getAluResult() == 0;
-    }
-
     @NotNull
     public MainController.MemoryRead getMemoryRead() {
         return memoryRead;

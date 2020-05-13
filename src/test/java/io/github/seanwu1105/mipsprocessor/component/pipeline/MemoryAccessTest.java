@@ -59,7 +59,6 @@ class MemoryAccessTest {
 
     @Test
     void testRType() {
-        when(exeMem.shouldBranch()).thenReturn(false);
         when(exeMem.getMemoryRead()).thenReturn(MainController.MemoryRead.FALSE);
         when(exeMem.getMemoryWrite()).thenReturn(MainController.MemoryWrite.FALSE);
 
@@ -70,7 +69,6 @@ class MemoryAccessTest {
 
     @Test
     void testLoadWord() {
-        when(exeMem.shouldBranch()).thenReturn(false);
         when(exeMem.getMemoryRead()).thenReturn(MainController.MemoryRead.TRUE);
         when(exeMem.getMemoryWrite()).thenReturn(MainController.MemoryWrite.FALSE);
 
@@ -81,7 +79,6 @@ class MemoryAccessTest {
 
     @Test
     void testSaveWord() {
-        when(exeMem.shouldBranch()).thenReturn(false);
         when(exeMem.getMemoryRead()).thenReturn(MainController.MemoryRead.FALSE);
         when(exeMem.getMemoryWrite()).thenReturn(MainController.MemoryWrite.TRUE);
 

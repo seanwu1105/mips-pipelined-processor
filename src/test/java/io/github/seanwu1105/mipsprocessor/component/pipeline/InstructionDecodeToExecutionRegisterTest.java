@@ -24,7 +24,7 @@ class InstructionDecodeToExecutionRegisterTest {
     }
 
     @Test
-    void testGetInstructionDecodeToExecutionRegisterControlSignals() {
+    void testUpdate() {
         final var expectedRegisterDestination = MainController.RegisterDestination.RD;
         final var expectedAluOperation = MainController.AluOperation.R_TYPE;
         final var expectedAluSource = MainController.AluSource.REGISTER;
@@ -33,6 +33,12 @@ class InstructionDecodeToExecutionRegisterTest {
         final var expectedMemoryWrite = MainController.MemoryWrite.FALSE;
         final var expectedRegisterWrite = MainController.RegisterWrite.TRUE;
         final var expectedMemoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
+        final var expectedRegisterData1 = 4;
+        final var expectedRegisterData2 = 5;
+        final var expectedImmediate = 10;
+        final var expectedFunctionCode = FunctionCode.OR;
+        final var expectedRt = 6;
+        final var expectedRd = 7;
 
         when(instructionDecode.getRegisterDestination()).thenReturn(expectedRegisterDestination);
         when(instructionDecode.getAluOperation()).thenReturn(expectedAluOperation);
@@ -42,6 +48,12 @@ class InstructionDecodeToExecutionRegisterTest {
         when(instructionDecode.getMemoryWrite()).thenReturn(expectedMemoryWrite);
         when(instructionDecode.getRegisterWrite()).thenReturn(expectedRegisterWrite);
         when(instructionDecode.getMemoryToRegister()).thenReturn(expectedMemoryToRegister);
+        when(instructionDecode.getRegisterData1()).thenReturn(expectedRegisterData1);
+        when(instructionDecode.getRegisterData2()).thenReturn(expectedRegisterData2);
+        when(instructionDecode.getImmediate()).thenReturn(expectedImmediate);
+        when(instructionDecode.getFunctionCode()).thenReturn(expectedFunctionCode);
+        when(instructionDecode.getRt()).thenReturn(expectedRt);
+        when(instructionDecode.getRd()).thenReturn(expectedRd);
 
         idExe.update();
 
@@ -53,29 +65,6 @@ class InstructionDecodeToExecutionRegisterTest {
         assertEquals(expectedMemoryWrite, idExe.getMemoryWrite());
         assertEquals(expectedRegisterWrite, idExe.getRegisterWrite());
         assertEquals(expectedMemoryToRegister, idExe.getMemoryToRegister());
-    }
-
-    @Test
-    void testGetInstructionDecodeToExecutionRegisterProperties() {
-        final var expectedProgramCounter = 12;
-        final var expectedRegisterData1 = 4;
-        final var expectedRegisterData2 = 5;
-        final var expectedImmediate = 10;
-        final var expectedFunctionCode = FunctionCode.OR;
-        final var expectedRt = 6;
-        final var expectedRd = 7;
-
-        when(instructionDecode.getProgramCounter()).thenReturn(expectedProgramCounter);
-        when(instructionDecode.getRegisterData1()).thenReturn(expectedRegisterData1);
-        when(instructionDecode.getRegisterData2()).thenReturn(expectedRegisterData2);
-        when(instructionDecode.getImmediate()).thenReturn(expectedImmediate);
-        when(instructionDecode.getFunctionCode()).thenReturn(expectedFunctionCode);
-        when(instructionDecode.getRt()).thenReturn(expectedRt);
-        when(instructionDecode.getRd()).thenReturn(expectedRd);
-
-        idExe.update();
-
-        assertEquals(expectedProgramCounter, idExe.getProgramCounter());
         assertEquals(expectedRegisterData1, idExe.getRegisterData1());
         assertEquals(expectedRegisterData2, idExe.getRegisterData2());
         assertEquals(expectedImmediate, idExe.getImmediate());

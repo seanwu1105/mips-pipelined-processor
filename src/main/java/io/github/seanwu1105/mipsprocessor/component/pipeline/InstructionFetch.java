@@ -17,11 +17,17 @@ public class InstructionFetch implements Stage {
     @NotNull
     private Instruction currentInstruction = Instruction.NOP;
     @Nullable
+    private InstructionDecode instructionDecode;
+    @Nullable
     private HazardDetectionUnit hazardDetectionUnit;
 
     public InstructionFetch(@NotNull final Memory instructionMemory) {
         this.instructionMemory = instructionMemory;
         this.instructionMemory.setMemoryRead(MainController.MemoryRead.TRUE);
+    }
+
+    public void setInstructionDecode(@NotNull final InstructionDecode instructionDecode) {
+        this.instructionDecode = instructionDecode;
     }
 
     public void setHazardDetectionUnit(@NotNull final HazardDetectionUnit hazardDetectionUnit) {
@@ -42,8 +48,14 @@ public class InstructionFetch implements Stage {
         updateCurrentInstruction();
 
         assert hazardDetectionUnit != null;
-        if (!hazardDetectionUnit.needStalling()) {
-            programCounter.setCounter(programCounter.getCounter() + 4);
+        assert instructionDecode != null;
+
+        if (!hazardDetectionUnit.mustStall()) {
+            if (instructionDecode.shouldBranch()) {
+                programCounter.setCounter(programCounter.getCounter() + 4 + instructionDecode.getBranchAdderResult());
+            } else {
+                programCounter.setCounter(programCounter.getCounter() + 4);
+            }
         }
     }
 

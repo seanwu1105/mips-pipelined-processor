@@ -34,10 +34,10 @@ class HazardDetectionUnitTest {
 
         when(ifId.getInstruction()).thenReturn(new Instruction("000000 00100 00010 00001 00000 100000")); // add $1, $4, $2
         when(idExe.getRt()).thenReturn(4);
-        assertTrue(hazardDetectionUnit.needStalling());
+        assertTrue(hazardDetectionUnit.mustStall());
 
         when(ifId.getInstruction()).thenReturn(new Instruction("000000 00100 00010 00001 00000 100000")); // add $1, $4, $2
         when(idExe.getRt()).thenReturn(2);
-        assertTrue(hazardDetectionUnit.needStalling());
+        assertTrue(hazardDetectionUnit.mustStall());
     }
 }

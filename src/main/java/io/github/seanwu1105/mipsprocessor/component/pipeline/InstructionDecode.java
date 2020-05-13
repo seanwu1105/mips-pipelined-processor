@@ -1,5 +1,6 @@
 package io.github.seanwu1105.mipsprocessor.component.pipeline;
 
+import io.github.seanwu1105.mipsprocessor.component.Alu;
 import io.github.seanwu1105.mipsprocessor.component.HazardDetectionUnit;
 import io.github.seanwu1105.mipsprocessor.component.Register;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
@@ -21,10 +22,11 @@ public class InstructionDecode implements Stage {
     @NotNull
     private final Register register;
 
+    @NotNull
+    private final Alu branchAdder;
+
     @Nullable
     private HazardDetectionUnit hazardDetectionUnit;
-
-    private int programCounter;
 
     @NotNull
     private Instruction currentInstruction = Instruction.NOP;
@@ -32,22 +34,24 @@ public class InstructionDecode implements Stage {
     public InstructionDecode(
             @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
             @NotNull final MainController mainController,
-            @NotNull final Register register
+            @NotNull final Register register,
+            @NotNull final Alu branchAdder
     ) {
         this.ifId = ifId;
         this.mainController = mainController;
         this.register = register;
+        this.branchAdder = branchAdder;
+        branchAdder.setControl(Alu.AluControl.ADD);
     }
 
     @Override
     public void run() {
         assert hazardDetectionUnit != null;
-        if (hazardDetectionUnit.needStalling())
+        if (hazardDetectionUnit.mustStall())
             currentInstruction = Instruction.NOP;
         else
             currentInstruction = ifId.getInstruction();
         mainController.setInstruction(currentInstruction);
-        programCounter = ifId.getProgramCounter();
     }
 
     @Override
@@ -79,6 +83,16 @@ public class InstructionDecode implements Stage {
         return mainController.getBranch();
     }
 
+    public boolean shouldBranch() {
+        return getBranch() == MainController.Branch.TRUE && getRegisterData1() == getRegisterData2();
+    }
+
+    public int getBranchAdderResult() {
+        branchAdder.setOperand1(ifId.getProgramCounter());
+        branchAdder.setOperand2(currentInstruction.getImmediate() * 4);
+        return branchAdder.getResult();
+    }
+
     @NotNull
     public MainController.MemoryRead getMemoryRead() {
         return mainController.getMemoryRead();
@@ -97,10 +111,6 @@ public class InstructionDecode implements Stage {
     @NotNull
     public MainController.MemoryToRegister getMemoryToRegister() {
         return mainController.getMemoryToRegister();
-    }
-
-    public int getProgramCounter() {
-        return programCounter;
     }
 
     public int getRegisterData1() {

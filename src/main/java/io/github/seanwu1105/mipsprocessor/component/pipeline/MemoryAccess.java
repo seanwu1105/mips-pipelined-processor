@@ -43,7 +43,7 @@ public class MemoryAccess implements Stage {
         return exeMem.getRegisterWrite() == MainController.RegisterWrite.TRUE
                 || exeMem.getMemoryWrite() == MainController.MemoryWrite.TRUE
                 || exeMem.getMemoryRead() == MainController.MemoryRead.TRUE
-                || exeMem.shouldBranch();
+                || exeMem.getBranch() == MainController.Branch.TRUE;
     }
 
     private void passProperties() {

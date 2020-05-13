@@ -262,7 +262,7 @@ class ProcessorTest {
     @Test
     void testBranchOnEqualFalse() {
         final var instructions = List.of(
-                new Instruction("000100 00001 00010 0000000000000001"), // beq $1, $2, 1
+                new Instruction("000100 00001 00010 0000000000000001"), // beq $9, $8, 1
                 new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
                 new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
         );
@@ -276,8 +276,9 @@ class ProcessorTest {
     @Test
     void testBranchOnEqualTrue() {
         final var instructions = List.of(
-                new Instruction("000100 00001 00001 0000000000000001"), // beq $1, $1, 1
+                new Instruction("000100 00001 00001 0000000000000001"), // beq $9, $9, 2
                 new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
+                new Instruction("000000 00011 00100 00101 00000 100010"), // add $4, $6, $7
                 new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
         );
 

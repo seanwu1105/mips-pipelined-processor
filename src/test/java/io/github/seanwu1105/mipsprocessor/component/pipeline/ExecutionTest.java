@@ -32,14 +32,12 @@ class ExecutionTest {
 
     @BeforeEach
     void buildUp() {
-        final var programCounter = 0;
         forwardingUnit = mock(ForwardingUnit.class);
         idExe = mock(InstructionDecodeToExecutionRegister.class);
         exeMem = mock(ExecutionToMemoryAccessRegister.class);
         memWb = mock(MemoryAccessToWriteBackRegister.class);
         when(forwardingUnit.getOperand1ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_ID);
         when(forwardingUnit.getOperand2ForwardingSignal()).thenReturn(ForwardingUnit.ForwardingSignal.FROM_ID);
-        when(idExe.getProgramCounter()).thenReturn(programCounter);
         when(idExe.getRegisterData1()).thenReturn(registerData1);
         when(idExe.getRegisterData2()).thenReturn(registerData2);
         when(idExe.getImmediate()).thenReturn(immediate);

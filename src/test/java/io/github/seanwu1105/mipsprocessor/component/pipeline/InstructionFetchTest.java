@@ -22,6 +22,8 @@ class InstructionFetchTest {
     @NotNull
     private InstructionFetch instructionFetch;
     @NotNull
+    private InstructionDecode instructionDecode;
+    @NotNull
     private HazardDetectionUnit hazardDetectionUnit;
 
     @BeforeEach
@@ -29,10 +31,14 @@ class InstructionFetchTest {
         instructionMemory = new Memory();
         instructionMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
 
+        instructionDecode = mock(InstructionDecode.class);
+        when(instructionDecode.shouldBranch()).thenReturn(false);
+
         hazardDetectionUnit = mock(HazardDetectionUnit.class);
-        when(hazardDetectionUnit.needStalling()).thenReturn(false);
+        when(hazardDetectionUnit.mustStall()).thenReturn(false);
 
         instructionFetch = new InstructionFetch(instructionMemory);
+        instructionFetch.setInstructionDecode(instructionDecode);
         instructionFetch.setHazardDetectionUnit(hazardDetectionUnit);
     }
 
@@ -45,22 +51,12 @@ class InstructionFetchTest {
 
         setInstructions(instructions);
 
-        var number = 0;
+        var instructionCounter = 0;
         for (final var instruction : instructions) {
             instructionFetch.run();
-            assertEquals((number + 1) * 4, instructionFetch.getProgramCounter());
+            assertEquals((instructionCounter + 1) * 4, instructionFetch.getProgramCounter());
             assertEquals(instruction, instructionFetch.getInstruction());
-            number++;
-        }
-    }
-
-    private void setInstructions(@NotNull final Iterable<Instruction> instructions) {
-        final var initProgramCounter = 0;
-        var number = 0;
-        for (final var instruction : instructions) {
-            instructionMemory.setAddress(initProgramCounter + number * 4);
-            instructionMemory.write(instruction);
-            number++;
+            instructionCounter++;
         }
     }
 
@@ -73,11 +69,60 @@ class InstructionFetchTest {
 
         setInstructions(instructions);
 
-        when(hazardDetectionUnit.needStalling()).thenReturn(true);
+        when(hazardDetectionUnit.mustStall()).thenReturn(true);
 
         final var expectedProgramCounter = 0;
         instructionFetch.run();
         assertEquals(expectedProgramCounter, instructionFetch.getProgramCounter());
+    }
+
+    @Test
+    void testTakeBranch() {
+        final var instructions = List.of(
+                new Instruction("000000 00001 00000 00000 00000 100000"), // add $1, $0, $0
+                new Instruction("000000 00010 00000 00000 00000 100000"), // add $2, $0, $0
+                new Instruction("000000 00011 00000 00000 00000 100000")  // add $3, $0, $0
+        );
+
+        setInstructions(instructions);
+
+        final var programCounterOffset = 4;
+
+        when(instructionDecode.shouldBranch()).thenReturn(true);
+        when(instructionDecode.getBranchAdderResult()).thenReturn(programCounterOffset);
+
+        instructionFetch.run();
+        assertEquals(programCounterOffset + 4, instructionFetch.getProgramCounter());
+    }
+
+    @Test
+    void testTakeBranchWithStalling() {
+        final var instructions = List.of(
+                new Instruction("000000 00001 00000 00000 00000 100000"), // add $1, $0, $0
+                new Instruction("000000 00010 00000 00000 00000 100000"), // add $2, $0, $0
+                new Instruction("000000 00011 00000 00000 00000 100000")  // add $3, $0, $0
+        );
+
+        setInstructions(instructions);
+
+        final var programCounterOffset = 4;
+
+        when(hazardDetectionUnit.mustStall()).thenReturn(true);
+        when(instructionDecode.shouldBranch()).thenReturn(true);
+        when(instructionDecode.getBranchAdderResult()).thenReturn(programCounterOffset);
+
+        instructionFetch.run();
+        assertEquals(0, instructionFetch.getProgramCounter());
+    }
+
+    private void setInstructions(@NotNull final Iterable<Instruction> instructions) {
+        final var initProgramCounter = 0;
+        var number = 0;
+        for (final var instruction : instructions) {
+            instructionMemory.setAddress(initProgramCounter + number * 4);
+            instructionMemory.write(instruction);
+            number++;
+        }
     }
 
     @AfterEach

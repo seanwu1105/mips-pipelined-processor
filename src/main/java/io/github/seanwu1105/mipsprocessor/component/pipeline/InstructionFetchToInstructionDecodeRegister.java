@@ -10,15 +10,19 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
     @NotNull
     private final InstructionFetch instructionFetch;
     @Nullable
+    private InstructionDecode instructionDecode;
+    @Nullable
     private HazardDetectionUnit hazardDetectionUnit;
-
     private int programCounter;
-
     @NotNull
     private Instruction instruction = Instruction.NOP;
 
     public InstructionFetchToInstructionDecodeRegister(@NotNull final InstructionFetch instructionFetch) {
         this.instructionFetch = instructionFetch;
+    }
+
+    public void setInstructionDecode(@Nullable final InstructionDecode instructionDecode) {
+        this.instructionDecode = instructionDecode;
     }
 
     public void setHazardDetectionUnit(@NotNull final HazardDetectionUnit hazardDetectionUnit) {
@@ -38,8 +42,14 @@ public class InstructionFetchToInstructionDecodeRegister implements PipelineRegi
     public void update() {
         programCounter = instructionFetch.getProgramCounter();
 
+        assert instructionDecode != null;
         assert hazardDetectionUnit != null;
-        if (!hazardDetectionUnit.needStalling())
-            instruction = instructionFetch.getInstruction();
+        if (!hazardDetectionUnit.mustStall()) {
+            if (instructionDecode.shouldBranch()) {
+                instruction = Instruction.NOP;
+            } else {
+                instruction = instructionFetch.getInstruction();
+            }
+        }
     }
 }

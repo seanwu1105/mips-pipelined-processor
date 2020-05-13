@@ -26,3 +26,17 @@
 | Load Word       | `0`                   | `00`           | `1`         | `0`      | `1`          | `0`           | `1`             | `1`                |
 | Save Word       | don't care (`0`)      | `00`           | `1`         | `0`      | `0`          | `1`           | `0`             | don't care (`0`)   |
 | Branch On Equal | don't care (`0`)      | `01`           | `0`         | `1`      | `0`          | `0`           | `0`             | don't care (`0`)   |
+
+## Control Hazard
+
+Control hazard with data hazard: always stall. For instance,
+
+```mips
+add $1, $2, $2
+beq $9, $1, 4  # cannot get correct $1 for data hazard at ID stage --> stall 2 clock cycles 
+sub $6, $0, $0
+lw $5, 3($4)
+beq $9, $5, 4  # cannot get correct $5 for data hazard at ID stage --> stall 2 clock cycles
+sub $6, $7, $8
+sub $6, $0, $0
+```

@@ -34,7 +34,6 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     @NotNull
     private MainController.MemoryToRegister memoryToRegister = MainController.MemoryToRegister.FROM_ALU_RESULT;
 
-    private int programCounter;
     private int registerData1;
     private int registerData2;
     private int immediate;
@@ -60,7 +59,6 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
         registerWrite = instructionDecode.getRegisterWrite();
         memoryToRegister = instructionDecode.getMemoryToRegister();
 
-        programCounter = instructionDecode.getProgramCounter();
         registerData1 = instructionDecode.getRegisterData1();
         registerData2 = instructionDecode.getRegisterData2();
         immediate = instructionDecode.getImmediate();
@@ -110,9 +108,6 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
         return memoryToRegister;
     }
 
-    public int getProgramCounter() {
-        return programCounter;
-    }
 
     public int getRegisterData1() {
         return registerData1;

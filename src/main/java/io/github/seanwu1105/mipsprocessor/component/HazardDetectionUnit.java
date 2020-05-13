@@ -20,7 +20,7 @@ public class HazardDetectionUnit {
         this.idExe = idExe;
     }
 
-    public boolean needStalling() {
+    public boolean mustStall() {
         final var fetchedInstruction = ifId.getInstruction();
         return idExe.getMemoryRead() == MainController.MemoryRead.TRUE
                 && (idExe.getRt() == fetchedInstruction.getRs() || idExe.getRt() == fetchedInstruction.getRt());

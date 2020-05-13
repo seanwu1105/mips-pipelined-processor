@@ -144,7 +144,7 @@ public final class Processor {
         public Processor build() {
             final var instructionFetch = new InstructionFetch(instructionMemory);
             final var ifId = new InstructionFetchToInstructionDecodeRegister(instructionFetch);
-            final var instructionDecode = new InstructionDecode(ifId, new MainController(), register);
+            final var instructionDecode = new InstructionDecode(ifId, new MainController(), register, new Alu());
             final var idExe = new InstructionDecodeToExecutionRegister(instructionDecode);
             final var execution = new Execution(idExe, new Alu());
             final var exeMem = new ExecutionToMemoryAccessRegister(execution);
@@ -153,10 +153,11 @@ public final class Processor {
             final var writeBack = new WriteBack(memWb, register);
             final var hazardDetectionUnit = new HazardDetectionUnit(ifId, idExe);
 
+            instructionFetch.setInstructionDecode(instructionDecode);
             instructionFetch.setHazardDetectionUnit(hazardDetectionUnit);
+            ifId.setInstructionDecode(instructionDecode);
             ifId.setHazardDetectionUnit(hazardDetectionUnit);
             instructionDecode.setHazardDetectionUnit(hazardDetectionUnit);
-
             execution.setForwardingUnit(new ForwardingUnit(idExe, exeMem, memWb));
             execution.setExecutionToMemoryAccessRegister(exeMem);
             execution.setMemoryAccessToWriteBackRegister(memWb);
