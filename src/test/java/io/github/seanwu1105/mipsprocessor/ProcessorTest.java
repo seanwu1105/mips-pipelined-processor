@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -344,7 +345,7 @@ class ProcessorTest {
         assertEquals(initRegisterValues.get(3) - initRegisterValues.get(4), register.readData1());
     }
 
-    private void buildProcessorAndRun(@NotNull final Iterable<Instruction> instructions) {
+    private void buildProcessorAndRun(@NotNull final Collection<Instruction> instructions) {
         final var processor = processorBuilder
                 .setInstructions(instructions)
                 .build();

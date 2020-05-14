@@ -26,8 +26,12 @@ import java.util.Set;
 
 public final class Processor {
 
+    private final int instructionSize;
+    @NotNull
     private final Collection<Stage> stages = new ArrayList<>();
+    @NotNull
     private final Collection<PipelineRegister> pipelineRegisters = new ArrayList<>();
+    @NotNull
     private final Collection<ProcessorLogger> loggers = new ArrayList<>();
     @NotNull
     private final InstructionFetchToInstructionDecodeRegister ifId;
@@ -43,6 +47,7 @@ public final class Processor {
     private final MemoryAccess memoryAccess;
 
     private Processor(
+            final int instructionSize,
             @NotNull final Stage instructionFetch,
             @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
             @NotNull final InstructionDecode instructionDecode,
@@ -53,6 +58,7 @@ public final class Processor {
             @NotNull final MemoryAccessToWriteBackRegister memWb,
             @NotNull final Stage writeBack
     ) {
+        this.instructionSize = instructionSize;
         this.ifId = ifId;
         this.idExe = idExe;
         this.exeMem = exeMem;
@@ -71,11 +77,15 @@ public final class Processor {
     }
 
     public void run() {
-        do {
+        for (var i = 0; !isFinished(i); i++) {
             stages.forEach(Stage::run);
             pipelineRegisters.forEach(PipelineRegister::update);
             loggers.forEach(printer -> printer.onClockCycleFinished(this, ifId, idExe, exeMem, memWb));
-        } while (hasUnfinishedInstructions());
+        }
+    }
+
+    private boolean isFinished(final int counter) {
+        return counter >= instructionSize + stages.size() - 1 && !hasUnfinishedInstructions();
     }
 
     private boolean hasUnfinishedInstructions() {
@@ -110,13 +120,15 @@ public final class Processor {
 
         @NotNull
         private final Memory instructionMemory = new Memory();
+        private int instructionSize = 0;
         @NotNull
         private Register register = new Register();
         @NotNull
         private Memory dataMemory = new Memory();
 
         @NotNull
-        public Builder setInstructions(@NotNull final Iterable<Instruction> instructions) {
+        public Builder setInstructions(@NotNull final Collection<Instruction> instructions) {
+            instructionSize = instructions.size();
             instructionMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
             var address = 0x00;
             for (final var instruction : instructions) {
@@ -163,6 +175,7 @@ public final class Processor {
             execution.setMemoryAccessToWriteBackRegister(memWb);
 
             return new Processor(
+                    instructionSize,
                     instructionFetch,
                     ifId,
                     instructionDecode,
