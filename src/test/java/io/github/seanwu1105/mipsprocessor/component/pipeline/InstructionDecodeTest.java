@@ -60,7 +60,7 @@ class InstructionDecodeTest {
     }
 
     @Test
-    void testDecodeRType() {
+    void testDecodeAdd() {
         final var instruction = new Instruction("000000 00000 00001 00010 00000 100000"); // add $2, $0, $1
         when(ifId.getInstruction()).thenReturn(instruction);
 
@@ -81,6 +81,130 @@ class InstructionDecodeTest {
     }
 
     @Test
+    void testDecodeSubtract() {
+        final var instruction = new Instruction("000000 00000 00001 00010 00000 100010"); // sub $2, $0, $1
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.RegisterDestination.RD, instructionDecode.getRegisterDestination());
+        assertEquals(MainController.AluOperation.R_TYPE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.TRUE, instructionDecode.getRegisterWrite());
+        assertEquals(MainController.MemoryToRegister.FROM_ALU_RESULT, instructionDecode.getMemoryToRegister());
+        assertEquals(registerValues.get(0), instructionDecode.getRegisterData1());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData2());
+        assertEquals(FunctionCode.SUBTRACT, instructionDecode.getFunctionCode());
+        assertEquals(2, instructionDecode.getRd());
+    }
+
+    @Test
+    void testDecodeAnd() {
+        final var instruction = new Instruction("000000 00000 00001 00010 00000 100100"); // and $2, $0, $1
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.RegisterDestination.RD, instructionDecode.getRegisterDestination());
+        assertEquals(MainController.AluOperation.R_TYPE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.TRUE, instructionDecode.getRegisterWrite());
+        assertEquals(MainController.MemoryToRegister.FROM_ALU_RESULT, instructionDecode.getMemoryToRegister());
+        assertEquals(registerValues.get(0), instructionDecode.getRegisterData1());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData2());
+        assertEquals(FunctionCode.AND, instructionDecode.getFunctionCode());
+        assertEquals(2, instructionDecode.getRd());
+    }
+
+    @Test
+    void testDecodeOr() {
+        final var instruction = new Instruction("000000 00000 00001 00010 00000 100101"); // or $2, $0, $1
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.RegisterDestination.RD, instructionDecode.getRegisterDestination());
+        assertEquals(MainController.AluOperation.R_TYPE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.TRUE, instructionDecode.getRegisterWrite());
+        assertEquals(MainController.MemoryToRegister.FROM_ALU_RESULT, instructionDecode.getMemoryToRegister());
+        assertEquals(registerValues.get(0), instructionDecode.getRegisterData1());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData2());
+        assertEquals(FunctionCode.OR, instructionDecode.getFunctionCode());
+        assertEquals(2, instructionDecode.getRd());
+    }
+
+    @Test
+    void testDecodeSetOnLessThan() {
+        final var instruction = new Instruction("000000 00000 00001 00010 00000 101010"); // slt $2, $0, $1
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.RegisterDestination.RD, instructionDecode.getRegisterDestination());
+        assertEquals(MainController.AluOperation.R_TYPE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.TRUE, instructionDecode.getRegisterWrite());
+        assertEquals(MainController.MemoryToRegister.FROM_ALU_RESULT, instructionDecode.getMemoryToRegister());
+        assertEquals(registerValues.get(0), instructionDecode.getRegisterData1());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData2());
+        assertEquals(FunctionCode.SET_ON_LESS_THAN, instructionDecode.getFunctionCode());
+        assertEquals(2, instructionDecode.getRd());
+    }
+
+    @Test
+    void testDecodeAddImmediate() {
+        final var instruction = new Instruction("001000 00001 00010 0000000000000101"); // addi $2, $1, 5
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.RegisterDestination.RT, instructionDecode.getRegisterDestination());
+        assertEquals(MainController.AluOperation.I_TYPE_ADD, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.IMMEDIATE, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.TRUE, instructionDecode.getRegisterWrite());
+        assertEquals(MainController.MemoryToRegister.FROM_ALU_RESULT, instructionDecode.getMemoryToRegister());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData1());
+        assertEquals(5, instructionDecode.getImmediate());
+        assertEquals(2, instructionDecode.getRt());
+    }
+
+    @Test
+    void testDecodeAndImmediate() {
+        final var instruction = new Instruction("001100 00001 00010 0000000000000101"); // andi $2, $1, 5
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.RegisterDestination.RT, instructionDecode.getRegisterDestination());
+        assertEquals(MainController.AluOperation.I_TYPE_AND, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluSource.IMMEDIATE, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.TRUE, instructionDecode.getRegisterWrite());
+        assertEquals(MainController.MemoryToRegister.FROM_ALU_RESULT, instructionDecode.getMemoryToRegister());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData1());
+        assertEquals(5, instructionDecode.getImmediate());
+        assertEquals(2, instructionDecode.getRt());
+    }
+
+    @Test
     void testDecodeLoadWord() {
         final var instruction = new Instruction("100011 00001 00010 0000000000010100"); // lw $2, 20($1)
         when(ifId.getInstruction()).thenReturn(instruction);
@@ -88,7 +212,7 @@ class InstructionDecodeTest {
         instructionDecode.run();
 
         assertEquals(MainController.RegisterDestination.RT, instructionDecode.getRegisterDestination());
-        assertEquals(MainController.AluOperation.MEMORY_REFERENCE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluOperation.I_TYPE_ADD, instructionDecode.getAluOperation());
         assertEquals(MainController.AluSource.IMMEDIATE, instructionDecode.getAluSource());
         assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
         assertEquals(MainController.MemoryRead.TRUE, instructionDecode.getMemoryRead());
@@ -107,7 +231,7 @@ class InstructionDecodeTest {
 
         instructionDecode.run();
 
-        assertEquals(MainController.AluOperation.MEMORY_REFERENCE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluOperation.I_TYPE_ADD, instructionDecode.getAluOperation());
         assertEquals(MainController.AluSource.IMMEDIATE, instructionDecode.getAluSource());
         assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
         assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
@@ -134,7 +258,7 @@ class InstructionDecodeTest {
         assertEquals(registerValues.get(2), instructionDecode.getRegisterData2());
         assertEquals(20, instructionDecode.getImmediate());
 
-        assertEquals(MainController.AluOperation.BRANCH, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluOperation.I_TYPE_SUBTRACT, instructionDecode.getAluOperation());
         assertFalse(instructionDecode.shouldBranch());
         assertEquals(expectedProgramCounter + 20 * 4, instructionDecode.getBranchAdderResult());
     }
@@ -155,7 +279,49 @@ class InstructionDecodeTest {
         assertEquals(registerValues.get(1), instructionDecode.getRegisterData2());
         assertEquals(20, instructionDecode.getImmediate());
 
-        assertEquals(MainController.AluOperation.BRANCH, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluOperation.I_TYPE_SUBTRACT, instructionDecode.getAluOperation());
+        assertTrue(instructionDecode.shouldBranch());
+        assertEquals(expectedProgramCounter + 20 * 4, instructionDecode.getBranchAdderResult());
+    }
+
+    @Test
+    void testDecodeBranchOnNotEqualFalse() {
+        final var instruction = new Instruction("000101 00001 00001 0000000000010100"); // bne $1, $1, 20
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.TRUE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.FALSE, instructionDecode.getRegisterWrite());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData1());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData2());
+        assertEquals(20, instructionDecode.getImmediate());
+
+        assertEquals(MainController.AluOperation.I_TYPE_SUBTRACT, instructionDecode.getAluOperation());
+        assertFalse(instructionDecode.shouldBranch());
+        assertEquals(expectedProgramCounter + 20 * 4, instructionDecode.getBranchAdderResult());
+    }
+
+    @Test
+    void testDecodeBranchOnNotEqualTrue() {
+        final var instruction = new Instruction("000101 00001 00010 0000000000010100"); // bne $1, $2, 20
+        when(ifId.getInstruction()).thenReturn(instruction);
+
+        instructionDecode.run();
+
+        assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
+        assertEquals(MainController.Branch.TRUE, instructionDecode.getBranch());
+        assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());
+        assertEquals(MainController.MemoryWrite.FALSE, instructionDecode.getMemoryWrite());
+        assertEquals(MainController.RegisterWrite.FALSE, instructionDecode.getRegisterWrite());
+        assertEquals(registerValues.get(1), instructionDecode.getRegisterData1());
+        assertEquals(registerValues.get(2), instructionDecode.getRegisterData2());
+        assertEquals(20, instructionDecode.getImmediate());
+
+        assertEquals(MainController.AluOperation.I_TYPE_SUBTRACT, instructionDecode.getAluOperation());
         assertTrue(instructionDecode.shouldBranch());
         assertEquals(expectedProgramCounter + 20 * 4, instructionDecode.getBranchAdderResult());
     }
@@ -169,7 +335,7 @@ class InstructionDecodeTest {
         instructionDecode.run();
 
         assertEquals(MainController.RegisterDestination.RT, instructionDecode.getRegisterDestination());
-        assertEquals(MainController.AluOperation.MEMORY_REFERENCE, instructionDecode.getAluOperation());
+        assertEquals(MainController.AluOperation.I_TYPE_ADD, instructionDecode.getAluOperation());
         assertEquals(MainController.AluSource.REGISTER, instructionDecode.getAluSource());
         assertEquals(MainController.Branch.FALSE, instructionDecode.getBranch());
         assertEquals(MainController.MemoryRead.FALSE, instructionDecode.getMemoryRead());

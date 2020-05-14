@@ -14,7 +14,7 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     private MainController.RegisterDestination registerDestination = MainController.RegisterDestination.RT;
 
     @NotNull
-    private MainController.AluOperation aluOperation = MainController.AluOperation.MEMORY_REFERENCE;
+    private MainController.AluOperation aluOperation = MainController.AluOperation.I_TYPE_ADD;
 
     @NotNull
     private MainController.AluSource aluSource = MainController.AluSource.REGISTER;

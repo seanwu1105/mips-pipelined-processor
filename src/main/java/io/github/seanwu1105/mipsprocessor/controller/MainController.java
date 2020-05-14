@@ -16,22 +16,40 @@ public class MainController {
 
     @NotNull
     public AluOperation getAluOperation() {
-        if (instruction == Instruction.NOP) return AluOperation.MEMORY_REFERENCE;
+        if (instruction == Instruction.NOP)
+            return AluOperation.I_TYPE_ADD;
         switch (instruction.getOpCode()) {
             case R_TYPE:
                 return AluOperation.R_TYPE;
             case BRANCH_ON_EQUAL:
-                return AluOperation.BRANCH;
+            case BRANCH_ON_NOT_EQUAL:
+                return AluOperation.I_TYPE_SUBTRACT;
+            case AND_IMMEDIATE:
+                return AluOperation.I_TYPE_AND;
+            case LOAD_WORD:
+            case SAVE_WORD:
+            case ADD_IMMEDIATE:
             default:
-                return AluOperation.MEMORY_REFERENCE;
+                return AluOperation.I_TYPE_ADD;
         }
     }
 
     @NotNull
     public AluSource getAluSource() {
-        if (getAluOperation() == AluOperation.MEMORY_REFERENCE && instruction != Instruction.NOP)
-            return AluSource.IMMEDIATE;
-        return AluSource.REGISTER;
+        if (instruction == Instruction.NOP) return AluSource.REGISTER;
+        switch (instruction.getOpCode()) {
+            case R_TYPE:
+            case BRANCH_ON_EQUAL:
+            case BRANCH_ON_NOT_EQUAL:
+                return AluSource.REGISTER;
+            case ADD_IMMEDIATE:
+            case AND_IMMEDIATE:
+            case LOAD_WORD:
+            case SAVE_WORD:
+                return AluSource.IMMEDIATE;
+            default:
+                throw new IllegalStateException("Unknown OP code.");
+        }
     }
 
     @NotNull
@@ -66,22 +84,23 @@ public class MainController {
     @NotNull
     public RegisterWrite getRegisterWrite() {
         if (instruction == Instruction.NOP) return RegisterWrite.FALSE;
-        if (instruction.getOpCode() == OpCode.R_TYPE || instruction.getOpCode() == OpCode.LOAD_WORD)
-            return RegisterWrite.TRUE;
-        return RegisterWrite.FALSE;
+        if (instruction.getOpCode() == OpCode.SAVE_WORD || instruction.getOpCode() == OpCode.BRANCH_ON_EQUAL || instruction.getOpCode() == OpCode.BRANCH_ON_NOT_EQUAL)
+            return RegisterWrite.FALSE;
+        return RegisterWrite.TRUE;
     }
 
     @NotNull
     public Branch getBranch() {
-        if (getAluOperation() == AluOperation.BRANCH)
+        if (instruction.getOpCode() == OpCode.BRANCH_ON_EQUAL || instruction.getOpCode() == OpCode.BRANCH_ON_NOT_EQUAL)
             return Branch.TRUE;
         return Branch.FALSE;
     }
 
     public enum AluOperation implements Signal {
         R_TYPE("10"),
-        MEMORY_REFERENCE("00"),
-        BRANCH("01");
+        I_TYPE_ADD("00"),
+        I_TYPE_SUBTRACT("01"),
+        I_TYPE_AND("11");
 
         @NotNull
         private final String raw;

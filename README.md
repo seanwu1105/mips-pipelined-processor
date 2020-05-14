@@ -11,11 +11,12 @@
 
 ## Supported Instructions
 
-|                | `add`  | `sub`  | `and`  | `or`   | `slt`  | `lw`       | `sw`       | `beq`      |
-|:--------------:|:------:|:------:|:------:|:------:|:------:|:----------:|:----------:|:----------:|
-| OP Code        | 000000 | 000000 | 000000 | 000000 | 000000 | 100011     | 101011     | 000100     |
-| Function Code  | 100000 | 100010 | 100100 | 100101 | 101010 | don't care | don't care | don't care |
-| ALU Control    | 010    | 110    | 000    | 001    | 111    | 010        | 010        | 110        |
+|                | `add`  | `sub`  | `and`  | `or`   | `slt`  | `addi`     | `andi`     | `lw`       | `sw`       | `beq`      | `bne`      |
+|:--------------:|:------:|:------:|:------:|:------:|:------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
+| OP Code        | 000000 | 000000 | 000000 | 000000 | 000000 | 001000     | 001100     | 100011     | 101011     | 000100     | 000101     |
+| Function Code  | 100000 | 100010 | 100100 | 100101 | 101010 | don't care | don't care | don't care | don't care | don't care | don't care |
+| ALU Operation  | 10     | 10     | 10     | 10     | 10     | 00         | 11         | 00         | 00         | 01         | 01         |
+| ALU Control    | 010    | 110    | 000    | 001    | 111    | 010        | 000        | 010        | 010        | 110        | 110        |
 
 ## Control Signals
 
@@ -40,3 +41,7 @@ beq $9, $5, 4  # cannot get correct $5 for data hazard at ID stage --> stall 2 c
 sub $6, $7, $8
 sub $6, $0, $0
 ```
+
+## Reference
+
+https://opencores.org/projects/plasma/opcodes

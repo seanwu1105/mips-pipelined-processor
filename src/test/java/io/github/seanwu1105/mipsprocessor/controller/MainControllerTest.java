@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.BRANCH;
-import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.MEMORY_REFERENCE;
+import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.I_TYPE_ADD;
+import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.I_TYPE_SUBTRACT;
 import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluOperation.R_TYPE;
 import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluSource.IMMEDIATE;
 import static io.github.seanwu1105.mipsprocessor.controller.MainController.AluSource.REGISTER;
@@ -47,15 +47,15 @@ class MainControllerTest {
         assertEquals(MainController.Branch.FALSE, mainController.getBranch());
 
         mainController.setInstruction(saveWordSignal);
-        assertEquals(MEMORY_REFERENCE, mainController.getAluOperation());
+        assertEquals(I_TYPE_ADD, mainController.getAluOperation());
         mainController.setInstruction(branchOnEqualSignal);
-        assertEquals(BRANCH, mainController.getAluOperation());
+        assertEquals(I_TYPE_SUBTRACT, mainController.getAluOperation());
     }
 
     @Test
     void testGetSignalsWithLoadWord() {
         mainController.setInstruction(loadWordSignal);
-        assertEquals(MEMORY_REFERENCE, mainController.getAluOperation());
+        assertEquals(I_TYPE_ADD, mainController.getAluOperation());
         assertEquals(IMMEDIATE, mainController.getAluSource());
         assertEquals(MainController.MemoryRead.TRUE, mainController.getMemoryRead());
         assertEquals(MainController.MemoryWrite.FALSE, mainController.getMemoryWrite());
@@ -92,7 +92,7 @@ class MainControllerTest {
     void testGetSignalsWithNop() {
         mainController.setInstruction(Instruction.NOP);
         assertEquals(RT, mainController.getRegisterDestination());
-        assertEquals(MEMORY_REFERENCE, mainController.getAluOperation());
+        assertEquals(I_TYPE_ADD, mainController.getAluOperation());
         assertEquals(REGISTER, mainController.getAluSource());
         assertEquals(MainController.Branch.FALSE, mainController.getBranch());
         assertEquals(MainController.MemoryRead.FALSE, mainController.getMemoryRead());

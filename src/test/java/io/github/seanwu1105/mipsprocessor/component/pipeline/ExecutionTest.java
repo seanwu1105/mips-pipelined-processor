@@ -146,7 +146,7 @@ class ExecutionTest {
     @Test
     void testLoadWord() {
         when(idExe.getRegisterDestination()).thenReturn(MainController.RegisterDestination.RT);
-        when(idExe.getAluOperation()).thenReturn(MainController.AluOperation.MEMORY_REFERENCE);
+        when(idExe.getAluOperation()).thenReturn(MainController.AluOperation.I_TYPE_ADD);
         when(idExe.getAluSource()).thenReturn(MainController.AluSource.IMMEDIATE);
 
         execution.run();
@@ -157,7 +157,7 @@ class ExecutionTest {
 
     @Test
     void testSaveWord() {
-        when(idExe.getAluOperation()).thenReturn(MainController.AluOperation.MEMORY_REFERENCE);
+        when(idExe.getAluOperation()).thenReturn(MainController.AluOperation.I_TYPE_ADD);
         when(idExe.getAluSource()).thenReturn(MainController.AluSource.IMMEDIATE);
 
         execution.run();
@@ -167,7 +167,7 @@ class ExecutionTest {
 
     @Test
     void testBranchOnEqual() {
-        when(idExe.getAluOperation()).thenReturn(MainController.AluOperation.BRANCH);
+        when(idExe.getAluOperation()).thenReturn(MainController.AluOperation.I_TYPE_SUBTRACT);
         when(idExe.getAluSource()).thenReturn(MainController.AluSource.REGISTER);
 
         execution.run();

@@ -6,6 +6,7 @@ import io.github.seanwu1105.mipsprocessor.component.Register;
 import io.github.seanwu1105.mipsprocessor.controller.MainController;
 import io.github.seanwu1105.mipsprocessor.signal.FunctionCode;
 import io.github.seanwu1105.mipsprocessor.signal.Instruction;
+import io.github.seanwu1105.mipsprocessor.signal.OpCode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,7 +85,9 @@ public class InstructionDecode implements Stage {
     }
 
     public boolean shouldBranch() {
-        return getBranch() == MainController.Branch.TRUE && getRegisterData1() == getRegisterData2();
+        if (getBranch() == MainController.Branch.FALSE) return false;
+        return (currentInstruction.getOpCode() == OpCode.BRANCH_ON_EQUAL && getRegisterData1() == getRegisterData2())
+                || (currentInstruction.getOpCode() == OpCode.BRANCH_ON_NOT_EQUAL && getRegisterData1() != getRegisterData2());
     }
 
     public int getBranchAdderResult() {

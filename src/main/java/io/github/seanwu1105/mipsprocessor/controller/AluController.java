@@ -30,9 +30,11 @@ public class AluController {
                     default:
                         throw new IllegalStateException("Unknown function code.");
                 }
-            case MEMORY_REFERENCE:
+            case I_TYPE_ADD:
                 return Alu.AluControl.ADD;
-            case BRANCH:
+            case I_TYPE_AND:
+                return Alu.AluControl.AND;
+            case I_TYPE_SUBTRACT:
                 return Alu.AluControl.SUBTRACT;
             default:
                 throw new IllegalStateException("Unknown ALU operation code.");
