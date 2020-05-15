@@ -77,15 +77,11 @@ public final class Processor {
     }
 
     public void run() {
-        for (var i = 0; !isFinished(i); i++) {
+        while (hasUnfinishedInstructions()) {
             stages.forEach(Stage::run);
             pipelineRegisters.forEach(PipelineRegister::update);
             loggers.forEach(printer -> printer.onClockCycleFinished(this, ifId, idExe, exeMem, memWb));
         }
-    }
-
-    private boolean isFinished(final int counter) {
-        return counter >= instructionSize + stages.size() - 1 && !hasUnfinishedInstructions();
     }
 
     private boolean hasUnfinishedInstructions() {

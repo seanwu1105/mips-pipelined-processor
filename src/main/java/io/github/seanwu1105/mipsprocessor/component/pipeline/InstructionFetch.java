@@ -45,27 +45,27 @@ public class InstructionFetch implements Stage {
 
     @Override
     public void run() {
-        updateCurrentInstruction();
-
         assert hazardDetectionUnit != null;
         assert instructionDecode != null;
 
+        var nextAddress = programCounter.getCounter();
         if (!hazardDetectionUnit.mustStall()) {
-            if (instructionDecode.shouldBranch()) {
-                programCounter.setCounter(instructionDecode.getBranchAdderResult());
-            } else {
-                programCounter.setCounter(programCounter.getCounter() + 4);
-            }
+            if (instructionDecode.shouldBranch()) nextAddress = instructionDecode.getBranchAdderResult();
+            else nextAddress = programCounter.getCounter() + 4;
         }
+
+        programCounter.setCounter(nextAddress);
+
+        updateCurrentInstruction(nextAddress - 4);
     }
 
-    private void updateCurrentInstruction() {
-        instructionMemory.setAddress(programCounter.getCounter());
+    private void updateCurrentInstruction(final int currentAddress) {
+        instructionMemory.setAddress(currentAddress);
         currentInstruction = instructionMemory.readInstruction();
     }
 
     @Override
     public boolean hasInstruction() {
-        return currentInstruction != Instruction.NOP;
+        return currentInstruction != Instruction.NOP || programCounter.getCounter() <= instructionMemory.getWrittenAddresses().size() * 4;
     }
 }
