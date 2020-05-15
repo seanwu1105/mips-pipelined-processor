@@ -26,7 +26,6 @@ import java.util.Set;
 
 public final class Processor {
 
-    private final int instructionSize;
     @NotNull
     private final Collection<Stage> stages = new ArrayList<>();
     @NotNull
@@ -47,7 +46,6 @@ public final class Processor {
     private final MemoryAccess memoryAccess;
 
     private Processor(
-            final int instructionSize,
             @NotNull final Stage instructionFetch,
             @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
             @NotNull final InstructionDecode instructionDecode,
@@ -58,7 +56,6 @@ public final class Processor {
             @NotNull final MemoryAccessToWriteBackRegister memWb,
             @NotNull final Stage writeBack
     ) {
-        this.instructionSize = instructionSize;
         this.ifId = ifId;
         this.idExe = idExe;
         this.exeMem = exeMem;
@@ -116,15 +113,13 @@ public final class Processor {
 
         @NotNull
         private final Memory instructionMemory = new Memory();
-        private int instructionSize = 0;
         @NotNull
         private Register register = new Register();
         @NotNull
         private Memory dataMemory = new Memory();
 
         @NotNull
-        public Builder setInstructions(@NotNull final Collection<Instruction> instructions) {
-            instructionSize = instructions.size();
+        public Builder setInstructions(@NotNull final Iterable<Instruction> instructions) {
             instructionMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
             var address = 0x00;
             for (final var instruction : instructions) {
@@ -171,7 +166,6 @@ public final class Processor {
             execution.setMemoryAccessToWriteBackRegister(memWb);
 
             return new Processor(
-                    instructionSize,
                     instructionFetch,
                     ifId,
                     instructionDecode,
