@@ -44,4 +44,4 @@ sub $6, $0, $0
 
 ## Reference
 
-https://opencores.org/projects/plasma/opcodes
+* [OP Codes List](https://opencores.org/projects/plasma/opcodes)
