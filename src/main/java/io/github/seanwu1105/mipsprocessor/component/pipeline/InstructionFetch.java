@@ -52,7 +52,7 @@ public class InstructionFetch implements Stage {
 
         if (!hazardDetectionUnit.mustStall()) {
             if (instructionDecode.shouldBranch()) {
-                programCounter.setCounter(programCounter.getCounter() + 4 + instructionDecode.getBranchAdderResult());
+                programCounter.setCounter(instructionDecode.getBranchAdderResult());
             } else {
                 programCounter.setCounter(programCounter.getCounter() + 4);
             }

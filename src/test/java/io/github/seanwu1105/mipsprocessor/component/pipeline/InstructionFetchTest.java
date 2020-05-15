@@ -86,13 +86,13 @@ class InstructionFetchTest {
 
         setInstructions(instructions);
 
-        final var programCounterOffset = 4;
+        final var expect = 8;
 
         when(instructionDecode.shouldBranch()).thenReturn(true);
-        when(instructionDecode.getBranchAdderResult()).thenReturn(programCounterOffset);
+        when(instructionDecode.getBranchAdderResult()).thenReturn(expect);
 
         instructionFetch.run();
-        assertEquals(programCounterOffset + 4, instructionFetch.getProgramCounter());
+        assertEquals(expect, instructionFetch.getProgramCounter());
     }
 
     @Test

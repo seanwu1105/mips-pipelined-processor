@@ -274,8 +274,8 @@ class ProcessorTest {
     @Test
     void testDataHazardWithLoadWordInstruction() {
         final var instructions = List.of(
-                new Instruction("100011 00010 00001 0000000000001000"), // lw $1, 8($2)
-                new Instruction("000000 00001 00011 00100 00000 100010")  // sub $4, $1, $3
+                new Instruction("100011 00010 00001 0000000000001000"),  // lw $1, 8($2)
+                new Instruction("000000 00001 00011 00100 00000 100010") // sub $4, $1, $3
         );
 
         final var expectedRegister1 = initDataMemoryValues.get(initRegisterValues.get(2) + 8);
@@ -290,9 +290,9 @@ class ProcessorTest {
     @Test
     void testBranchOnEqualFalse() {
         final var instructions = List.of(
-                new Instruction("000100 01001 01000 0000000000000001"), // beq $9, $8, 1
+                new Instruction("000100 01001 01000 0000000000000001"),   // beq $9, $8, 1
                 new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
-                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
+                new Instruction("000000 00011 00100 00101 00000 100010")  // sub $5, $3, $4
         );
 
         buildProcessorAndRun(instructions);
@@ -304,10 +304,10 @@ class ProcessorTest {
     @Test
     void testBranchOnEqualTrue() {
         final var instructions = List.of(
-                new Instruction("000100 01001 01001 0000000000000001"), // beq $9, $9, 2
+                new Instruction("000100 01001 01001 0000000000000001"),   // beq $9, $9, 2
                 new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
                 new Instruction("000000 00011 00100 00101 00000 100010"), // add $4, $6, $7
-                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
+                new Instruction("000000 00011 00100 00101 00000 100010")  // sub $5, $3, $4
         );
 
         buildProcessorAndRun(instructions);
@@ -319,9 +319,9 @@ class ProcessorTest {
     @Test
     void testBranchOnNotEqualFalse() {
         final var instructions = List.of(
-                new Instruction("000101 01001 01001 0000000000000001"), // bne $9, $9, 1
+                new Instruction("000101 01001 01001 0000000000000001"),   // bne $9, $9, 1
                 new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
-                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
+                new Instruction("000000 00011 00100 00101 00000 100010")  // sub $5, $3, $4
         );
 
         buildProcessorAndRun(instructions);
@@ -333,10 +333,10 @@ class ProcessorTest {
     @Test
     void testBranchOnNotEqualTrue() {
         final var instructions = List.of(
-                new Instruction("000101 01001 01000 0000000000000001"), // bne $9, $8, 2
+                new Instruction("000101 01001 01000 0000000000000001"),   // bne $9, $8, 2
                 new Instruction("000000 00001 00010 00011 00000 100000"), // add $3, $1, $2
                 new Instruction("000000 00011 00100 00101 00000 100010"), // add $4, $6, $7
-                new Instruction("000000 00011 00100 00101 00000 100010") // sub $5, $3, $4
+                new Instruction("000000 00011 00100 00101 00000 100010")  // sub $5, $3, $4
         );
 
         buildProcessorAndRun(instructions);
