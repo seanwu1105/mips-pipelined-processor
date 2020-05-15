@@ -22,7 +22,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 public final class Processor {
 
@@ -77,7 +76,7 @@ public final class Processor {
         while (hasUnfinishedInstructions()) {
             stages.forEach(Stage::run);
             pipelineRegisters.forEach(PipelineRegister::update);
-            loggers.forEach(printer -> printer.onClockCycleFinished(this, ifId, idExe, exeMem, memWb));
+            loggers.forEach(printer -> printer.onClockCycleFinished(ifId, instructionDecode, idExe, exeMem, memoryAccess, memWb));
         }
     }
 
@@ -89,24 +88,6 @@ public final class Processor {
 
     public void addLogger(@NotNull final ProcessorLogger logger) {
         loggers.add(logger);
-    }
-
-    @NotNull
-    Set<Integer> getWrittenRegisterAddresses() {
-        return instructionDecode.getWrittenRegisterAddresses();
-    }
-
-    int readRegister(final int address) {
-        return instructionDecode.readRegister(address);
-    }
-
-    @NotNull
-    Set<Integer> getWrittenDataMemoryAddresses() {
-        return memoryAccess.getWrittenDataMemoryAddresses();
-    }
-
-    int readDataMemory(final int address) {
-        return memoryAccess.readDataMemory(address);
     }
 
     public static class Builder {

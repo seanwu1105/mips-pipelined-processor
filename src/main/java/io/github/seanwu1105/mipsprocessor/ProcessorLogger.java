@@ -1,8 +1,10 @@
 package io.github.seanwu1105.mipsprocessor;
 
 import io.github.seanwu1105.mipsprocessor.component.pipeline.ExecutionToMemoryAccessRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionDecode;
 import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionDecodeToExecutionRegister;
 import io.github.seanwu1105.mipsprocessor.component.pipeline.InstructionFetchToInstructionDecodeRegister;
+import io.github.seanwu1105.mipsprocessor.component.pipeline.MemoryAccess;
 import io.github.seanwu1105.mipsprocessor.component.pipeline.MemoryAccessToWriteBackRegister;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,17 +18,18 @@ class ProcessorLogger {
     private int clockCycle = 1;
 
     void onClockCycleFinished(
-            @NotNull final Processor processor,
             @NotNull final InstructionFetchToInstructionDecodeRegister ifId,
+            @NotNull final InstructionDecode instructionDecode,
             @NotNull final InstructionDecodeToExecutionRegister idExe,
             @NotNull final ExecutionToMemoryAccessRegister exeMem,
+            @NotNull final MemoryAccess memoryAccess,
             @NotNull final MemoryAccessToWriteBackRegister memWb
     ) {
         appendLine("CC" + clockCycle + ":");
         appendLine("");
-        logRegister(processor);
+        logRegister(instructionDecode);
         appendLine("");
-        logDataMemory(processor);
+        logDataMemory(memoryAccess);
         appendLine("");
         logIfId(ifId);
         appendLine("");
@@ -39,17 +42,17 @@ class ProcessorLogger {
         clockCycle++;
     }
 
-    private void logRegister(@NotNull final Processor processor) {
-        final Iterable<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenRegisterAddresses());
+    private void logRegister(@NotNull final InstructionDecode instructionDecode) {
+        final Iterable<Integer> sortedAddresses = new TreeSet<>(instructionDecode.getWrittenRegisterAddresses());
         appendLine("Registers:");
-        sortedAddresses.forEach((address) -> appendLine("$" + address + ": " + processor.readRegister(address)));
+        sortedAddresses.forEach((address) -> appendLine("$" + address + ": " + instructionDecode.readRegister(address)));
     }
 
-    private void logDataMemory(@NotNull final Processor processor) {
-        final Iterable<Integer> sortedAddresses = new TreeSet<>(processor.getWrittenDataMemoryAddresses());
+    private void logDataMemory(@NotNull final MemoryAccess memoryAccess) {
+        final Iterable<Integer> sortedAddresses = new TreeSet<>(memoryAccess.getWrittenDataMemoryAddresses());
         appendLine("Data memory:");
         sortedAddresses.forEach((address) ->
-                appendLine(String.format("0x%02X: %d", address, processor.readDataMemory(address)))
+                appendLine(String.format("0x%02X: %d", address, memoryAccess.readDataMemory(address)))
         );
     }
 
