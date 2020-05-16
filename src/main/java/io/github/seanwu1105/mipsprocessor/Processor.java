@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 public final class Processor {
 
@@ -118,9 +119,31 @@ public final class Processor {
             return this;
         }
 
+        @NotNull Builder setRegisterValues(@NotNull final Map<Integer, Integer> values) {
+            register.setRegisterWrite(MainController.RegisterWrite.TRUE);
+            values.forEach((key, value) -> {
+                if (key != 0) {
+                    register.setWriteAddress(key);
+                    register.write(value);
+                }
+            });
+            register.setRegisterWrite(MainController.RegisterWrite.FALSE);
+            return this;
+        }
+
         @NotNull
         public Builder setDataMemory(@NotNull final Memory dataMemory) {
             this.dataMemory = dataMemory;
+            return this;
+        }
+
+        @NotNull Builder setDataMemoryValues(@NotNull final Map<Integer, Integer> values) {
+            dataMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
+            values.forEach((key, value) -> {
+                dataMemory.setAddress(key);
+                dataMemory.write(value);
+            });
+            dataMemory.setMemoryWrite(MainController.MemoryWrite.FALSE);
             return this;
         }
 

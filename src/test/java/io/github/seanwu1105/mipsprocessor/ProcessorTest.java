@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -47,32 +46,12 @@ class ProcessorTest {
     @BeforeEach
     void buildUp() {
         register = new Register();
-        initializeRegister();
         dataMemory = new Memory();
-        initializeDataMemory();
         processorBuilder = new Processor.Builder()
                 .setRegister(register)
-                .setDataMemory(dataMemory);
-    }
-
-    private void initializeRegister() {
-        register.setRegisterWrite(MainController.RegisterWrite.TRUE);
-        initRegisterValues.forEach((key, value) -> {
-            if (key != 0) {
-                register.setWriteAddress(key);
-                register.write(value);
-            }
-        });
-        register.setRegisterWrite(MainController.RegisterWrite.FALSE);
-    }
-
-    private void initializeDataMemory() {
-        dataMemory.setMemoryWrite(MainController.MemoryWrite.TRUE);
-        initDataMemoryValues.forEach((key, value) -> {
-            dataMemory.setAddress(key);
-            dataMemory.write(value);
-        });
-        dataMemory.setMemoryWrite(MainController.MemoryWrite.FALSE);
+                .setRegisterValues(initRegisterValues)
+                .setDataMemory(dataMemory)
+                .setDataMemoryValues(initDataMemoryValues);
     }
 
     @Test
@@ -345,7 +324,7 @@ class ProcessorTest {
         assertEquals(initRegisterValues.get(3) - initRegisterValues.get(4), register.readData1());
     }
 
-    private void buildProcessorAndRun(@NotNull final Collection<Instruction> instructions) {
+    private void buildProcessorAndRun(@NotNull final Iterable<Instruction> instructions) {
         final var processor = processorBuilder
                 .setInstructions(instructions)
                 .build();
