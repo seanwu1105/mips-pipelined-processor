@@ -51,7 +51,7 @@ processor.addLogger(logger);
 // Start the pipeline.
 processor.run();
 
-// Get and pring the log.
+// Get and print the log.
 System.out.println(logger.getLog());
 ```
 
@@ -63,7 +63,7 @@ See [ProcessorTest](./src/test/java/io/github/seanwu1105/mipsprocessor/Processor
 
 Use [forwarding unit](./src/main/java/io/github/seanwu1105/mipsprocessor/component/ForwardingUnit.java) to resolve. For example:
 
-```
+```text
 00000000001000100000100000100000 // add $1, $1, $2
 00000000001000110000100000100000 // sub $1, $1, $3
 00000000001001000000100000100000 // sub $1, $1, $4
@@ -74,7 +74,7 @@ Use [forwarding unit](./src/main/java/io/github/seanwu1105/mipsprocessor/compone
 
 Use [hazard detection unit](./src/main/java/io/github/seanwu1105/mipsprocessor/component/HazardDetectionUnit.java) to resolve. Stall the instruction after the load word `lw` instruction for one clock cycle to wait the `lw` instruction has finished the memory access stage. For example:
 
-```
+```text
 10001100010000010000000000001000   // lw  $1, 8($2)
 000000000010001100100 00000 100010 // sub $4, $1, $3
 ```
@@ -83,7 +83,7 @@ Use [hazard detection unit](./src/main/java/io/github/seanwu1105/mipsprocessor/c
 
 To reduce the punishment of branch, the processor determine whether to branch in the instruction decode stage. Always assume the branch will __Not__ be taken. If branch, flush the latest instruction in the instruction fetch stage and stall the instruction after the branch instruction for one clock cycle. For example:
 
-```
+```text
 00010001001010010000000000000001 // beq $9, $9, 2
 00000000001000100001100000100000 // add $3, $1, $2
 00000000011001000010100000100010 // add $4, $6, $7
@@ -92,7 +92,7 @@ To reduce the punishment of branch, the processor determine whether to branch in
 
 #### Branch with Data Hazard
 
-**!!not yet implement!!**
+__!!not yet implement!!__
 
 Always stall. For instance:
 

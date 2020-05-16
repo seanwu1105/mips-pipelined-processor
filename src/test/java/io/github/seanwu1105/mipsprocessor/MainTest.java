@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 class MainTest {
 
     @Test
-    void testMain() {
+    void testMainNoError() {
         Main.main();
     }
 }

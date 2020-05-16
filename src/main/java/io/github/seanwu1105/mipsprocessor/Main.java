@@ -49,7 +49,7 @@ class Main {
         // Start the pipeline.
         processor.run();
 
-        // Get and pring the log.
+        // Get and print the log.
         logger.getLog();
     }
 }
