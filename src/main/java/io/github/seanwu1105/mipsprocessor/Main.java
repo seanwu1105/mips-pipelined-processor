@@ -34,14 +34,22 @@ class Main {
                 0x0C, 8,
                 0x10, 7
         );
+
+        // Create a MIPS pipelined processor with the given instructions, initial register values and data memory values.
         @NotNull final var processor = new Processor.Builder()
                 .setInstructions(instructions)
                 .setRegisterValues(initRegisterValues)
                 .setDataMemoryValues(initDataMemoryValues)
                 .build();
+
+        // Create and add a logger to log the variables in the processor.
         @NotNull final var logger = new ProcessorLogger();
         processor.addLogger(logger);
+
+        // Start the pipeline.
         processor.run();
-        System.out.println(logger.getLog());
+
+        // Get and pring the log.
+        logger.getLog();
     }
 }

@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -2970,7 +2969,7 @@ class ProcessorLoggerTest {
         assertEquals(expect, logger.getLog());
     }
 
-    private void buildProcessorAndRun(@NotNull final Collection<Instruction> instructions, @Nullable final ProcessorLogger logger) {
+    private void buildProcessorAndRun(@NotNull final Iterable<Instruction> instructions, @Nullable final ProcessorLogger logger) {
         final var processor = processorBuilder
                 .setInstructions(instructions)
                 .build();

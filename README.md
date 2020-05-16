@@ -90,7 +90,7 @@ To reduce the punishment of branch, the processor determine whether to branch in
 00000000011001000010100000100010 // sub $5, $3, $4
 ```
 
-#### Control Hazard With Data Hazard
+#### Branch with Data Hazard
 
 **!!not yet implement!!**
 
