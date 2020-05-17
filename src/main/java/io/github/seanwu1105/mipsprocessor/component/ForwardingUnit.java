@@ -45,6 +45,7 @@ public class ForwardingUnit {
             final int operandAddress
     ) {
         return exeMem.getRegisterWrite() == MainController.RegisterWrite.TRUE
+                && exeMem.getWriteRegisterAddress() != 0
                 && exeMem.getWriteRegisterAddress() == operandAddress;
     }
 
@@ -53,6 +54,7 @@ public class ForwardingUnit {
             final int operandAddress
     ) {
         return memWb.getRegisterWrite() == MainController.RegisterWrite.TRUE
+                && memWb.getWriteRegisterAddress() != 0
                 && memWb.getWriteRegisterAddress() == operandAddress;
     }
 

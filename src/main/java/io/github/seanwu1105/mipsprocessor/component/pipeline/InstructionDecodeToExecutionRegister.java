@@ -137,4 +137,10 @@ public class InstructionDecodeToExecutionRegister implements PipelineRegister {
     public int getRd() {
         return rd;
     }
+
+    public int getWriteRegisterAddress() {
+        if (getRegisterDestination() == MainController.RegisterDestination.RT)
+            return getRt();
+        return getRd();
+    }
 }

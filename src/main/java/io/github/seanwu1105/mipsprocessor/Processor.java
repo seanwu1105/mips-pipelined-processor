@@ -158,7 +158,7 @@ public final class Processor {
             final var memoryAccess = new MemoryAccess(exeMem, dataMemory);
             final var memWb = new MemoryAccessToWriteBackRegister(memoryAccess);
             final var writeBack = new WriteBack(memWb, register);
-            final var hazardDetectionUnit = new HazardDetectionUnit(ifId, idExe);
+            final var hazardDetectionUnit = new HazardDetectionUnit(ifId, idExe, exeMem, memWb);
 
             instructionFetch.setInstructionDecode(instructionDecode);
             instructionFetch.setHazardDetectionUnit(hazardDetectionUnit);

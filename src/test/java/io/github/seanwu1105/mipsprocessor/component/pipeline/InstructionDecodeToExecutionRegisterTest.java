@@ -71,5 +71,6 @@ class InstructionDecodeToExecutionRegisterTest {
         assertEquals(expectedFunctionCode, idExe.getFunctionCode());
         assertEquals(expectedRt, idExe.getRt());
         assertEquals(expectedRd, idExe.getRd());
+        assertEquals(expectedRd, idExe.getWriteRegisterAddress());
     }
 }
