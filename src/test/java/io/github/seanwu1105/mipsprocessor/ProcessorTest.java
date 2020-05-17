@@ -324,6 +324,32 @@ class ProcessorTest {
         assertEquals(initRegisterValues.get(3) - initRegisterValues.get(4), register.readData1());
     }
 
+    @Test
+    void testDataHazardWithBranchAndRType() {
+        final var instructions = List.of(
+                new Instruction("000000 00101 00101 00001 00000 100000"), // add $1, $5, $5  # $1 = 2+2
+                new Instruction("000100 00111 00001 0000000000000001"),   // beq $7, $1, 1   # $7 == 4 == $1 should branch
+                new Instruction("000000 00000 00000 00010 00000 100000"), // add $2, $0, $0  # $2 = 0
+                new Instruction("000000 00010 00000 00010 00000 100000")  // add $2, $2, $0  # $2 = 8
+        );
+        buildProcessorAndRun(instructions);
+        register.setReadAddress1(2);
+        assertEquals(initRegisterValues.get(2), register.readData1());
+    }
+
+    @Test
+    void testDataHazardWithBranchAndLoadWord() {
+        final var instructions = List.of(
+                new Instruction("000000 00101 00101 00001 00000 100000"), // lw $1, 6($5)  # $1 = 4
+                new Instruction("000100 00111 00001 0000000000000001"),   // beq $7, $1, 1   # $7 == 4 == $1 should branch
+                new Instruction("000000 00000 00000 00010 00000 100000"), // add $2, $0, $0  # $2 = 0
+                new Instruction("000000 00010 00000 00010 00000 100000")  // add $2, $2, $0  # $2 = 8
+        );
+        buildProcessorAndRun(instructions);
+        register.setReadAddress1(2);
+        assertEquals(initRegisterValues.get(2), register.readData1());
+    }
+
     private void buildProcessorAndRun(@NotNull final Iterable<Instruction> instructions) {
         final var processor = processorBuilder
                 .setInstructions(instructions)
