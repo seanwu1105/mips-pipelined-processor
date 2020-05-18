@@ -47,13 +47,10 @@ public class InstructionDecode implements Stage {
 
     @Override
     public void run() {
-        currentInstruction = ifId.getInstruction();
-
         assert hazardDetectionUnit != null;
-        if (hazardDetectionUnit.mustStall())
-            mainController.setInstruction(Instruction.NOP);
-        else
-            mainController.setInstruction(currentInstruction);
+        if (hazardDetectionUnit.mustStall()) currentInstruction = Instruction.NOP;
+        else currentInstruction = ifId.getInstruction();
+        mainController.setInstruction(currentInstruction);
     }
 
     @Override

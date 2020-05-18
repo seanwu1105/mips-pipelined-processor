@@ -79,6 +79,8 @@ Use [hazard detection unit](./src/main/java/io/github/seanwu1105/mipsprocessor/c
 000000000010001100100 00000 100010 // sub $4, $1, $3
 ```
 
+> In this implementation, we will flush all signals in instruction decode stage when stall instead of simply set control signals to zero.
+
 #### Control Hazard Only
 
 To reduce the punishment of branch, the processor determine whether to branch in the instruction decode stage. Always assume the branch will __Not__ be taken. If branch, flush the latest instruction in the instruction fetch stage and stall the instruction after the branch instruction for one clock cycle. For example:
@@ -92,16 +94,14 @@ To reduce the punishment of branch, the processor determine whether to branch in
 
 #### Branch with Data Hazard
 
-__!!not yet implement!!__
-
 Always stall. For instance:
 
 ```mips
 add $1, $2, $2
-beq $9, $1, 4  # cannot get correct $1 for data hazard at ID stage --> stall 2 clock cycles 
+beq $9, $1, 4  # cannot get correct $1 for data hazard at ID stage --> stall 3 clock cycles 
 sub $6, $0, $0
 lw $5, 3($4)
-beq $9, $5, 4  # cannot get correct $5 for data hazard at ID stage --> stall 2 clock cycles
+beq $9, $5, 4  # cannot get correct $5 for data hazard at ID stage --> stall 3 clock cycles
 sub $6, $7, $8
 sub $6, $0, $0
 ```
