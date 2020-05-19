@@ -76,7 +76,7 @@ Use [hazard detection unit](./src/main/java/io/github/seanwu1105/mipsprocessor/c
 
 ```text
 10001100010000010000000000001000   // lw  $1, 8($2)
-000000000010001100100 00000 100010 // sub $4, $1, $3
+00000000001000110010000000100010 // sub $4, $1, $3
 ```
 
 > In this implementation, we will flush all signals in instruction decode stage when stall instead of simply set control signals to zero.
@@ -112,12 +112,12 @@ Simulate the simple MIPS pipeline. Including structural, data and control hazard
 
 ### Supported Instructions
 
-|                | `add`  | `sub`  | `and`  | `or`   | `slt`  | `addi`     | `andi`     | `lw`       | `sw`       | `beq`      | `bne`      |
-|:--------------:|:------:|:------:|:------:|:------:|:------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
-| OP Code        | 000000 | 000000 | 000000 | 000000 | 000000 | 001000     | 001100     | 100011     | 101011     | 000100     | 000101     |
-| Function Code  | 100000 | 100010 | 100100 | 100101 | 101010 | don't care | don't care | don't care | don't care | don't care | don't care |
-| ALU Operation  | 10     | 10     | 10     | 10     | 10     | 00         | 11         | 00         | 00         | 01         | 01         |
-| ALU Control    | 010    | 110    | 000    | 001    | 111    | 010        | 000        | 010        | 010        | 110        | 110        |
+|                | `add`    | `sub`    | `and`    | `or`     | `slt`    | `addi`     | `andi`     | `lw`       | `sw`       | `beq`      | `bne`      |
+|:--------------:|:--------:|:--------:|:--------:|:--------:|:--------:|:----------:|:----------:|:----------:|:----------:|:----------:|:----------:|
+| OP Code        | `000000` | `000000` | `000000` | `000000` | `000000` | `001000`   | `001100`   | `100011`   | `101011`   | `000100`   | `000101`   |
+| Function Code  | `100000` | `100010` | `100100` | `100101` | `101010` | don't care | don't care | don't care | don't care | don't care | don't care |
+| ALU Operation  | `10`     | `10`     | `10`     | `10`     | `10`     | `00`       | `11`       | `00`       | `00`       | `01`       | `01`       |
+| ALU Control    | `010`    | `110`    | `000`    | `001`    | `111`    | `010`      | `000`      | `010`      | `010`      | `110`      | `110`      |
 
 ### Control Signals
 
